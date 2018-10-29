@@ -44,11 +44,11 @@ spring:
     max-open-prepared-statements: 20
 
   application:
-      name: service-hytrix
+      name: service-reading
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.github.prontera.entity
+  type-aliases-package: com.pq.reading.entity
 
 #sql 日志打印  root（项目）日志打印级别
 logging:
@@ -80,7 +80,7 @@ xxl:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-service1:8001/eureka/
+      defaultZone: http://eureka-service:8001/eureka/
 server:
   port: 8081
 
