@@ -55,10 +55,14 @@ logging:
   level:
 #    root: warn
     com:
-      github:
-        prontera:
+      pq:
+        reading:
           mapper: debug
+  config:
+    classpath: logback-spring.xml
 
+pq:
+  log-path: /Users/liutao/data/logs/pq-reading-service
 ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
 xxl:
   job:
@@ -82,7 +86,7 @@ eureka:
     serviceUrl:
       defaultZone: http://eureka-service:8001/eureka/
 server:
-  port: 8081
+  port: 8084
 
 #禁用注册服务
 #eureka:
