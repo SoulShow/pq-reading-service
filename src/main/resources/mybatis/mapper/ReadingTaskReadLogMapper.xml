@@ -45,7 +45,7 @@
     from pq_reading_task_read_log
   </select>
 
-  <select id="selectCountByTaskId" resultType="java.lang.Integer" >
+  <select id="selectCountByTaskIdAndStudentId" resultType="java.lang.Integer" >
     select count(id)
     from pq_reading_task_read_log
     where task_id = #{taskId}
