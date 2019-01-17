@@ -62,7 +62,7 @@
     and type = 1
     limit #{offset},#{size}
   </select>
-  <select id="selectByClassId" resultType="java.lang.Integer" >
+  <select id="selectCountByClassId" resultType="java.lang.Integer" >
     select count(id)
     from pq_reading_task
     where class_id = #{classId}
