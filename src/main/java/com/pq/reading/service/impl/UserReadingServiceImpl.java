@@ -46,7 +46,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             UserAlbumListDto userAlbumListDto = new UserAlbumListDto();
             userAlbumListDto.setName(bookUserAlbum.getName());
             userAlbumListDto.setImg(bookUserAlbum.getImg());
-
+            userAlbumListDto.setType(bookUserAlbum.getType());
             Integer count = readingRecordMapper.selectCountByUserAlbumId(bookUserAlbum.getId());
             userAlbumListDto.setCount(count==null?0:count);
             albumListDtoList.add(userAlbumListDto);
