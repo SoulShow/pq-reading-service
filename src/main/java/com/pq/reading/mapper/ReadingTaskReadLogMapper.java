@@ -16,7 +16,7 @@ public interface ReadingTaskReadLogMapper {
 
     int updateByPrimaryKey(ReadingTaskReadLog record);
 
-    Integer selectCountByTaskId(@Param("taskId")Long taskId);
+    Integer selectCountByTaskIdAndStudentId(@Param("taskId")Long taskId,@Param("studentId")Long studentId);
 
     Integer selectCountByUserIdAndStudentId(@Param("userId")String userId,
                                             @Param("studentId")Long studentId);

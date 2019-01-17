@@ -125,8 +125,8 @@ public class ReadingServiceImpl implements ReadingService {
             newReadingDto.setUserName(userResult.getData().getName());
             newReadingDto.setAvatar(userResult.getData().getAvatar());
 
-            Integer readCount = taskReadLogMapper.selectCountByTaskId(readingTask.getId());
-            if(readCount==null){
+            Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(),studentId);
+            if(readCount==null||readCount==0){
                 newReadingDto.setReadingState(0);
             }else {
                 newReadingDto.setReadingState(1);
