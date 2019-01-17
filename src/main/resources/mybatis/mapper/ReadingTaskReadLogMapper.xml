@@ -49,7 +49,9 @@
     select count(id)
     from pq_reading_task_read_log
     where task_id = #{taskId}
+    <if test="studentId!=null and studentId!=0">
     and student_id = #{studentId}
+    </if>
     and state = 1
   </select>
 

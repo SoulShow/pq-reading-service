@@ -81,8 +81,8 @@ public class ReadingServiceImpl implements ReadingService {
         for(ReadingTask readingTask:taskList){
             NewReadingDto newReadingDto = new NewReadingDto();
 
-            Integer readCount = taskReadLogMapper.selectCountByTaskId(readingTask.getId());
-            if(readCount==null){
+            Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(),null);
+            if(readCount==null||readCount==0){
                 readCount = 0;
             }
             ReadingResult<Integer> result = agencyFeign.getStudentCount(classId);
