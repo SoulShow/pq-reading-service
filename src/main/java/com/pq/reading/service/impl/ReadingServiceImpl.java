@@ -60,18 +60,18 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public void createReadingTask(CreateReadingTaskDto readingTaskDto){
         for(BookChapterDto bookChapterDto :readingTaskDto.getChapterList()){
+            for(Long classId:readingTaskDto.getClassIdList()){
             ReadingTask readingTask = new ReadingTask();
             readingTask.setChapterId(bookChapterDto.getChapterId());
             readingTask.setName(bookChapterDto.getName());
             readingTask.setUserId(readingTaskDto.getUserId());
-            for(Long classId:readingTaskDto.getClassIdList()){
-                readingTask.setClassId(classId);
-            }
+            readingTask.setClassId(classId);
             readingTask.setType(Constants.READING_TASK_TYPE_NORMAL);
             readingTask.setState(true);
             readingTask.setCreatedTime(DateUtil.currentTime());
             readingTask.setUpdatedTime(DateUtil.currentTime());
             readingTaskMapper.insert(readingTask);
+            }
         }
    }
     @Override
