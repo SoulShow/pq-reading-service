@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.reading.mapper.BookChapterMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.reading.entity.BookChapter" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="book_id" property="bookId" jdbcType="BIGINT" />
+    <result column="chapter" property="chapter" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
+    <result column="article_url" property="articleUrl" jdbcType="VARCHAR" />
+    <result column="read_count" property="readCount" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="BIT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_book_chapter
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.reading.entity.BookChapter" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_book_chapter (book_id, chapter, author, 
+      title, introduce, voice_url, 
+      article_url, read_count, state, 
+      created_time, updated_time)
+    values (#{bookId,jdbcType=BIGINT}, #{chapter,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{voiceUrl,jdbcType=VARCHAR}, 
+      #{articleUrl,jdbcType=VARCHAR}, #{readCount,jdbcType=INTEGER}, #{state,jdbcType=BIT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.BookChapter" >
+    update pq_book_chapter
+    set book_id = #{bookId,jdbcType=BIGINT},
+      chapter = #{chapter,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      voice_url = #{voiceUrl,jdbcType=VARCHAR},
+      article_url = #{articleUrl,jdbcType=VARCHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      state = #{state,jdbcType=BIT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, book_id, chapter, author, title, introduce, voice_url, article_url, read_count, 
+    state, created_time, updated_time
+    from pq_book_chapter
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, book_id, chapter, author, title, introduce, voice_url, article_url, read_count, 
+    state, created_time, updated_time
+    from pq_book_chapter
+  </select>
+
+  <select id="selectByBookId" resultMap="BaseResultMap" >
+    select id, book_id, chapter, author, title, introduce, voice_url, article_url, read_count,
+    state, created_time, updated_time
+    from pq_book_chapter
+    where book_id = #{bookId}
+    and state = 1
+    order by created_time desc
+    limit #{offset},#{size}
+  </select>
+</mapper>

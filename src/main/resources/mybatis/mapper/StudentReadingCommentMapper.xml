@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.reading.mapper.StudentReadingCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.reading.entity.StudentReadingComment" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="reading_record_id" property="readingRecordId" jdbcType="BIGINT" />
+    <result column="originator_user_id" property="originatorUserId" jdbcType="VARCHAR" />
+    <result column="originator_name" property="originatorName" jdbcType="VARCHAR" />
+    <result column="originator_student_id" property="originatorStudentId" jdbcType="BIGINT" />
+    <result column="receiver_user_id" property="receiverUserId" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiver_student_id" property="receiverStudentId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_student_reading_comment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.reading.entity.StudentReadingComment" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_student_reading_comment (reading_record_id, originator_user_id, 
+      originator_name, originator_student_id, receiver_user_id, 
+      receiver_name, receiver_student_id, content, 
+      state, created_time, updated_time
+      )
+    values (#{readingRecordId,jdbcType=BIGINT}, #{originatorUserId,jdbcType=VARCHAR}, 
+      #{originatorName,jdbcType=VARCHAR}, #{originatorStudentId,jdbcType=BIGINT}, #{receiverUserId,jdbcType=VARCHAR}, 
+      #{receiverName,jdbcType=VARCHAR}, #{receiverStudentId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.StudentReadingComment" >
+    update pq_student_reading_comment
+    set reading_record_id = #{readingRecordId,jdbcType=BIGINT},
+      originator_user_id = #{originatorUserId,jdbcType=VARCHAR},
+      originator_name = #{originatorName,jdbcType=VARCHAR},
+      originator_student_id = #{originatorStudentId,jdbcType=BIGINT},
+      receiver_user_id = #{receiverUserId,jdbcType=VARCHAR},
+      receiver_name = #{receiverName,jdbcType=VARCHAR},
+      receiver_student_id = #{receiverStudentId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, reading_record_id, originator_user_id, originator_name, originator_student_id, 
+    receiver_user_id, receiver_name, receiver_student_id, content, state, created_time, 
+    updated_time
+    from pq_student_reading_comment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, reading_record_id, originator_user_id, originator_name, originator_student_id, 
+    receiver_user_id, receiver_name, receiver_student_id, content, state, created_time, 
+    updated_time
+    from pq_student_reading_comment
+  </select>
+</mapper>

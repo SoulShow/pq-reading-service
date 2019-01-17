@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pq.reading.mapper.TaskReadingScoreLogMapper" >
+  <resultMap id="BaseResultMap" type="com.pq.reading.entity.TaskReadingScoreLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="student_id" property="studentId" jdbcType="BIGINT" />
+    <result column="reading_record_id" property="readingRecordId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pq_task_reading_score_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pq.reading.entity.TaskReadingScoreLog" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pq_task_reading_score_log (student_id, reading_record_id, user_id, 
+      score, created_time)
+    values (#{studentId,jdbcType=BIGINT}, #{readingRecordId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
+      #{score,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.TaskReadingScoreLog" >
+    update pq_task_reading_score_log
+    set student_id = #{studentId,jdbcType=BIGINT},
+      reading_record_id = #{readingRecordId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, student_id, reading_record_id, user_id, score, created_time
+    from pq_task_reading_score_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, student_id, reading_record_id, user_id, score, created_time
+    from pq_task_reading_score_log
+  </select>
+</mapper>
