@@ -137,6 +137,14 @@ public class UserReadingServiceImpl implements UserReadingService {
     @Override
     public List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId){
         List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumId(userAlbumId);
+        return getReadingDto(list);
+    }
+    @Override
+    public List<UserAlbumReadingDto> getUserPrivateReadingList(String userId,Long studentId){
+        List<StudentTaskReadingRecord> list = readingRecordMapper.selectPrivateByUserIdAndStudentId(userId,studentId);
+        return getReadingDto(list);
+    }
+    private List<UserAlbumReadingDto> getReadingDto(List<StudentTaskReadingRecord> list){
         List<UserAlbumReadingDto> readingDtoList = new ArrayList<>();
         for(StudentTaskReadingRecord readingRecord:list ){
             UserAlbumReadingDto userAlbumReadingDto = new UserAlbumReadingDto();
@@ -151,9 +159,5 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         return readingDtoList;
     }
-
-
-
-
 
 }

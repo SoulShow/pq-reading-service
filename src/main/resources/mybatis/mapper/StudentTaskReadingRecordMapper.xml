@@ -82,4 +82,13 @@
     where user_album_id = #{albumId}
     and state = 1
   </select>
+
+  <select id="selectPrivateByUserIdAndStudentId" resultMap="BaseResultMap" >
+    select * from pq_student_task_reading_record
+    where user_album_id = #{albumId}
+    and state = 1
+    and student_id = #{studentId}
+    and user_id = #{userId}
+    and is_private = 1
+  </select>
 </mapper>

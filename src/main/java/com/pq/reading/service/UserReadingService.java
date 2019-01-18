@@ -5,8 +5,6 @@ import com.pq.reading.dto.UserAlbumDto;
 import com.pq.reading.dto.UserAlbumListDto;
 import com.pq.reading.dto.UserAlbumReadingDto;
 import com.pq.reading.dto.UserReadingRecordDto;
-import com.pq.reading.entity.BookAlbum;
-
 import java.util.List;
 
 /**
@@ -60,5 +58,14 @@ public interface UserReadingService {
      * @return
      */
     List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId);
+
+    /**
+     * 获取个人隐私专辑
+     * @param userId
+     * @param studentId
+     * @return
+     */
+    List<UserAlbumReadingDto> getUserPrivateReadingList(String userId,Long studentId);
+
 
 }
