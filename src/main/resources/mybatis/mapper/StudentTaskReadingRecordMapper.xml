@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pq.reading.entity.StudentTaskReadingRecord" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="task_id" property="taskId" jdbcType="BIGINT" />
+    <result column="chapter_id" property="chapterId" jdbcType="BIGINT" />
     <result column="user_album_id" property="userAlbumIId" jdbcType="BIGINT" />
     <result column="student_id" property="studentId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -27,12 +28,12 @@
     </selectKey>
     insert into pq_student_task_reading_record (task_id, student_id, user_id, 
       voice_url, img_url, score, play_count,
-      state, created_time, updated_time, user_album_id,is_private,teacher_id
+      state, created_time, updated_time, user_album_id,is_private,teacher_id,chapter_id
       )
     values (#{taskId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
       #{voiceUrl,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR},#{score,jdbcType=INTEGER}, #{playCount,jdbcType=INTEGER},
       #{state,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{userAlbumIId},#{isPrivate},
-    #{teacherId}
+    #{teacherId},#{chapterId}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.StudentTaskReadingRecord" >
@@ -49,18 +50,19 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       user_album_id = #{userAlbumIId},
-      teacher_id = #{teacherId}
+      teacher_id = #{teacherId},
+      chapter_id = #{chapterId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time, 
-    updated_time, img_url, user_album_id,is_private,teacher_id
+    updated_time, img_url, user_album_id,is_private,teacher_id,chapter_id
     from pq_student_task_reading_record
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time, 
-    updated_time, img_url,user_album_id,is_private,teacher_id
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id
     from pq_student_task_reading_record
   </select>
 

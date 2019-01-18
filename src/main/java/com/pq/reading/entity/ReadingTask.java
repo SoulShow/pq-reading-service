@@ -7,6 +7,8 @@ public class ReadingTask {
 
     private String name;
 
+    private String bookName;
+
     private Long chapterId;
 
     private Long classId;
@@ -91,5 +93,13 @@ public class ReadingTask {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 }

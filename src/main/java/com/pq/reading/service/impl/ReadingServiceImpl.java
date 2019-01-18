@@ -63,7 +63,13 @@ public class ReadingServiceImpl implements ReadingService {
             for(Long classId:readingTaskDto.getClassIdList()){
             ReadingTask readingTask = new ReadingTask();
             readingTask.setChapterId(bookChapterDto.getChapterId());
-            readingTask.setName(bookChapterDto.getName());
+
+            BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(bookChapterDto.getChapterId());
+            readingTask.setName(bookChapter.getChapter()+"："+bookChapter.getTitle());
+            ReadingBook readingBook = readingBookMapper.selectByPrimaryKey(bookChapter.getBookId());
+            BookAlbum bookAlbum = bookAlbumMapper.selectByPrimaryKey(readingBook.getAlbumId());
+            readingTask.setBookName(bookAlbum.getName()+"·"+readingBook.getName());
+
             readingTask.setUserId(readingTaskDto.getUserId());
             readingTask.setClassId(classId);
             readingTask.setType(Constants.READING_TASK_TYPE_NORMAL);
@@ -151,7 +157,7 @@ public class ReadingServiceImpl implements ReadingService {
     }
 
     @Override
-    public BookChapter getReadingTaskDetail(Long taskId,Long studentId,String userId){
+    public BookChapterDetailDto getReadingTaskDetail(Long taskId,Long studentId,String userId){
         ReadingTask readingTask = readingTaskMapper.selectByPrimaryKey(taskId);
 
         ReadingTaskReadLog taskReadLog = new ReadingTaskReadLog();
@@ -163,7 +169,16 @@ public class ReadingServiceImpl implements ReadingService {
         taskReadLog.setUpdatedTime(DateUtil.currentTime());
         taskReadLogMapper.insert(taskReadLog);
 
-        return bookChapterMapper.selectByPrimaryKey(readingTask.getChapterId());
+        BookChapter bookChapter =  bookChapterMapper.selectByPrimaryKey(readingTask.getChapterId());
+
+        BookChapterDetailDto bookChapterDetailDto = new BookChapterDetailDto();
+        bookChapterDetailDto.setId(bookChapter.getId());
+        bookChapterDetailDto.setName(readingTask.getName());
+        bookChapterDetailDto.setBookName(readingTask.getBookName());
+        bookChapterDetailDto.setArticleUrl(bookChapter.getArticleUrl());
+        bookChapterDetailDto.setVoiceUrl(bookChapter.getVoiceUrl());
+        bookChapterDetailDto.setReadCount(bookChapter.getReadCount());
+        return bookChapterDetailDto;
     }
 
 }

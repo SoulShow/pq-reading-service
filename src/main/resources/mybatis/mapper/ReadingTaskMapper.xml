@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pq.reading.entity.ReadingTask" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="book_name" property="bookName" jdbcType="VARCHAR" />
     <result column="chapter_id" property="chapterId" jdbcType="BIGINT" />
     <result column="class_id" property="classId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -23,11 +24,11 @@
     insert into pq_reading_task (name,
       chapter_id, class_id, type,
       user_id, state,
-      created_time, updated_time)
+      created_time, updated_time,book_name)
     values (#{name,jdbcType=VARCHAR},
       #{chapterId,jdbcType=BIGINT}, #{classId,jdbcType=BIGINT}, #{type,jdbcType=BIT},
       #{userId,jdbcType=VARCHAR}, #{state,jdbcType=BIT},
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{bookName})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.ReadingTask" >
     update pq_reading_task
@@ -38,24 +39,25 @@
       user_id = #{userId,jdbcType=VARCHAR},
       state = #{state,jdbcType=BIT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      book_name = #{bookName}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, name, chapter_id, class_id, type, user_id, state,
-     created_time, updated_time
+     created_time, updated_time,book_name
     from pq_reading_task
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, name, chapter_id, class_id, type, user_id, state,
-     created_time, updated_time
+     created_time, updated_time,book_name
     from pq_reading_task
   </select>
 
   <select id="selectByClassId" resultMap="BaseResultMap" >
     select id, name, chapter_id, class_id, type, user_id, state,
-     created_time, updated_time
+     created_time, updated_time,book_name
     from pq_reading_task
     where class_id = #{classId}
     and state  = 1

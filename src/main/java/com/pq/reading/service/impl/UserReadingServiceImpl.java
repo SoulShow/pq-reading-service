@@ -4,13 +4,16 @@ import com.pq.common.util.DateUtil;
 import com.pq.reading.dto.UserAlbumDto;
 import com.pq.reading.dto.UserAlbumListDto;
 import com.pq.reading.dto.UserReadingRecordDto;
+import com.pq.reading.entity.BookChapter;
 import com.pq.reading.entity.BookUserAlbum;
 import com.pq.reading.entity.StudentTaskReadingRecord;
+import com.pq.reading.mapper.BookChapterMapper;
 import com.pq.reading.mapper.BookUserAlbumMapper;
 import com.pq.reading.mapper.StudentTaskReadingRecordMapper;
 import com.pq.reading.service.UserReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     private BookUserAlbumMapper userAlbumMapper;
     @Autowired
     private StudentTaskReadingRecordMapper readingRecordMapper;
+    @Autowired
+    private BookChapterMapper bookChapterMapper;
 
     @Override
     public void createUserAlbum(UserAlbumDto userAlbumDto){
@@ -54,6 +59,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         return albumListDtoList;
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void uploadUserReading(UserReadingRecordDto userReadingRecordDto){
         StudentTaskReadingRecord studentTaskReadingRecord = new StudentTaskReadingRecord();
         studentTaskReadingRecord.setTaskId(userReadingRecordDto.getTaskId()==null?0:userReadingRecordDto.getTaskId());
@@ -65,11 +71,16 @@ public class UserReadingServiceImpl implements UserReadingService {
         studentTaskReadingRecord.setTeacherId(userReadingRecordDto.getOneToOneUserId());
         studentTaskReadingRecord.setScore(0);
         studentTaskReadingRecord.setPlayCount(0);
+        studentTaskReadingRecord.setChapterId(userReadingRecordDto.getChapterId());
         studentTaskReadingRecord.setIsPrivate(userReadingRecordDto.getIsPrivate());
         studentTaskReadingRecord.setState(true);
         studentTaskReadingRecord.setCreatedTime(DateUtil.currentTime());
         studentTaskReadingRecord.setUpdatedTime(DateUtil.currentTime());
         readingRecordMapper.insert(studentTaskReadingRecord);
+
+        BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(userReadingRecordDto.getChapterId());
+        bookChapter.setReadCount(bookChapter.getReadCount()+1);
+        bookChapterMapper.updateByPrimaryKey(bookChapter);
     }
 
 

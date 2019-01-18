@@ -27,6 +27,7 @@ public class BookChapter {
 
     private Timestamp updatedTime;
 
+
     public Long getId() {
         return id;
     }

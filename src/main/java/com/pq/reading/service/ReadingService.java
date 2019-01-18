@@ -1,6 +1,7 @@
 package com.pq.reading.service;
 
 
+import com.pq.reading.dto.BookChapterDetailDto;
 import com.pq.reading.dto.CreateReadingTaskDto;
 import com.pq.reading.dto.NewReadingDto;
 import com.pq.reading.entity.BookAlbum;
@@ -90,6 +91,6 @@ public interface ReadingService {
      * @param studentId
      * @return
      */
-    BookChapter getReadingTaskDetail(Long taskId,Long studentId,String userId);
+    BookChapterDetailDto getReadingTaskDetail(Long taskId, Long studentId, String userId);
 
 }

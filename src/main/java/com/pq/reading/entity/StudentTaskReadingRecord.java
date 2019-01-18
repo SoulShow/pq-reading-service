@@ -31,6 +31,8 @@ public class StudentTaskReadingRecord {
 
     private Timestamp updatedTime;
 
+    private Long chapterId;
+
     public Long getId() {
         return id;
     }
@@ -141,5 +143,13 @@ public class StudentTaskReadingRecord {
 
     public void setTeacherId(String teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public Long getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Long chapterId) {
+        this.chapterId = chapterId;
     }
 }
