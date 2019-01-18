@@ -27,6 +27,7 @@ public class BookChapter {
 
     private Timestamp updatedTime;
 
+    private Integer orderId;
 
     public Long getId() {
         return id;
@@ -122,5 +123,13 @@ public class BookChapter {
 
     public void setUpdatedTime(Timestamp updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 }
