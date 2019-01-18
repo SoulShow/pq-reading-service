@@ -17,4 +17,6 @@ public interface BookChapterMapper {
     int updateByPrimaryKey(BookChapter record);
 
     List<BookChapter> selectByBookId(@Param("bookId") Long bookId, @Param("offset")int offset, @Param("size")int size);
+
+    List<BookChapter> selectByChapterNameAndType(@Param("name") String name,@Param("type") int type);
 }

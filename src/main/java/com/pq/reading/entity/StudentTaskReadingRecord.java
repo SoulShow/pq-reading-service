@@ -11,6 +11,10 @@ public class StudentTaskReadingRecord {
 
     private Long studentId;
 
+    private String name;
+
+    private String bookName;
+
     private String userId;
 
     private String voiceUrl;
@@ -151,5 +155,21 @@ public class StudentTaskReadingRecord {
 
     public void setChapterId(Long chapterId) {
         this.chapterId = chapterId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 }

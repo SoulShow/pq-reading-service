@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.pq.reading.entity.TaskReadingPlayLog" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="reading_record_id" property="readingRecordId" jdbcType="BIGINT" />
+    <result column="chapter_id" property="chapterId" jdbcType="BIGINT" />
+    <result column="student_id" property="studentId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -15,25 +17,28 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pq_task_reading_play_log (reading_record_id, user_id, created_time
+    insert into pq_task_reading_play_log (reading_record_id, user_id, created_time,chapter_id, student_id
       )
-    values (#{readingRecordId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+    values (#{readingRecordId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
+    #{chapterId},#{studentId}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.TaskReadingPlayLog" >
     update pq_task_reading_play_log
     set reading_record_id = #{readingRecordId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP}
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      chapter_id = #{chapterId},
+      student_id = #{studentId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, reading_record_id, user_id, created_time
+    select id, reading_record_id, user_id, created_time,chapter_id,student_id
     from pq_task_reading_play_log
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, reading_record_id, user_id, created_time
+    select id, reading_record_id, user_id, created_time,student_id,chapter_id
     from pq_task_reading_play_log
   </select>
 </mapper>

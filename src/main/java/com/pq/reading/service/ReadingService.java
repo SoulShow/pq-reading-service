@@ -1,9 +1,7 @@
 package com.pq.reading.service;
 
 
-import com.pq.reading.dto.BookChapterDetailDto;
-import com.pq.reading.dto.CreateReadingTaskDto;
-import com.pq.reading.dto.NewReadingDto;
+import com.pq.reading.dto.*;
 import com.pq.reading.entity.BookAlbum;
 import com.pq.reading.entity.BookChapter;
 import com.pq.reading.entity.ReadingBook;
@@ -92,5 +90,20 @@ public interface ReadingService {
      * @return
      */
     BookChapterDetailDto getReadingTaskDetail(Long taskId, Long studentId, String userId);
+
+
+    /**
+     * 获取章节列表
+     * @param name
+     * @return
+     */
+    ChapterSearchListDto searchChapter(String name);
+
+    /**
+     * 章节阅读/学生阅读播放
+     * @param taskReadingPlayLogDto
+     */
+    void chapterOrRecordPlay(TaskReadingPlayLogDto taskReadingPlayLogDto);
+
 
 }

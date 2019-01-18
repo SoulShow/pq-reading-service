@@ -70,4 +70,13 @@
     order by order_id asc
     limit #{offset},#{size}
   </select>
+
+  <select id="selectByChapterNameAndType" resultMap="BaseResultMap" >
+    select c.* from pq_book_chapter c,pq_reading_book b,pq_book_album a
+    where c.`book_id`=b.`id`
+    and b.album_id = a.id
+    and a.type=#{type}
+    and (c.chapter like CONCAT('%',#{name},'%') or  c.title like CONCAT('%',#{name},'%'))
+
+  </select>
 </mapper>

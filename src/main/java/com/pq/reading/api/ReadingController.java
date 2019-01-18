@@ -2,11 +2,9 @@ package com.pq.reading.api;
 
 import com.pq.common.exception.CommonErrors;
 import com.pq.reading.dto.CreateReadingTaskDto;
-import com.pq.reading.dto.UserAlbumDto;
-import com.pq.reading.dto.UserReadingRecordDto;
+import com.pq.reading.dto.TaskReadingPlayLogDto;
 import com.pq.reading.exception.ReadingException;
 import com.pq.reading.service.ReadingService;
-import com.pq.reading.service.UserReadingService;
 import com.pq.reading.utils.ReadingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class ReadingController {
 	@Autowired
 	private ReadingService readingService;
-	@Autowired
-	private UserReadingService userReadingService;
 
 	@GetMapping(value = "/album/list")
 	@ResponseBody
@@ -213,13 +209,12 @@ public class ReadingController {
 		return result;
 	}
 
-	@PostMapping(value = "/student/album/create")
+	@GetMapping(value = "/student/chapter/search")
 	@ResponseBody
-	public ReadingResult studentCreateAlbum(@RequestBody UserAlbumDto userAlbumDto) {
+	public ReadingResult searchChapter(@RequestParam("name") String name) {
 		ReadingResult result = new ReadingResult();
-
 		try{
-			userReadingService.createUserAlbum(userAlbumDto);
+			result.setData(readingService.searchChapter(name));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());
@@ -231,30 +226,12 @@ public class ReadingController {
 		return result;
 	}
 
-	@GetMapping(value = "/student/album/list")
+	@PostMapping(value = "/chapter/play")
 	@ResponseBody
-	public ReadingResult getUserAlbumList(@RequestParam("studentId") Long studentId,
-												  @RequestParam("userId") String userId) {
+	public ReadingResult chapterOrRecordPlay (@RequestBody TaskReadingPlayLogDto taskReadingPlayLogDto) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(userReadingService.getUserAlbumList(userId, studentId));
-		}catch (ReadingException e){
-			result.setStatus(e.getErrorCode().getErrorCode());
-			result.setMessage(e.getErrorCode().getErrorMsg());
-		}catch (Exception e) {
-			e.printStackTrace();
-			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
-			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
-		}
-		return result;
-	}
-
-	@PostMapping(value = "/student/upload")
-	@ResponseBody
-	public ReadingResult uploadUserReading (@RequestBody UserReadingRecordDto readingRecordDto) {
-		ReadingResult result = new ReadingResult();
-		try{
-			userReadingService.uploadUserReading(readingRecordDto);
+			readingService.chapterOrRecordPlay(taskReadingPlayLogDto);
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

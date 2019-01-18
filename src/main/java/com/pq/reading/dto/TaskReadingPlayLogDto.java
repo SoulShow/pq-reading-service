@@ -1,9 +1,6 @@
-package com.pq.reading.entity;
+package com.pq.reading.dto;
 
-import java.sql.Timestamp;
-
-public class TaskReadingPlayLog {
-    private Long id;
+public class TaskReadingPlayLogDto {
 
     private Long readingRecordId;
 
@@ -12,16 +9,6 @@ public class TaskReadingPlayLog {
     private Long studentId;
 
     private String userId;
-
-    private Timestamp createdTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getReadingRecordId() {
         return readingRecordId;
@@ -37,14 +24,6 @@ public class TaskReadingPlayLog {
 
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
-    }
-
-    public Timestamp getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Timestamp createdTime) {
-        this.createdTime = createdTime;
     }
 
     public Long getChapterId() {

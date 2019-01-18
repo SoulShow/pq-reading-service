@@ -34,7 +34,10 @@ public class ReadingServiceImpl implements ReadingService {
     @Autowired
     private ReadingTaskReadLogMapper taskReadLogMapper;
     @Autowired
-    private BookUserAlbumMapper userAlbumMapper;
+    private TaskReadingPlayLogMapper readingPlayLogMapper;
+    @Autowired
+    private StudentTaskReadingRecordMapper readingRecordMapper;
+
     @Autowired
     private AgencyFeign agencyFeign;
     @Autowired
@@ -160,15 +163,6 @@ public class ReadingServiceImpl implements ReadingService {
     public BookChapterDetailDto getReadingTaskDetail(Long taskId,Long studentId,String userId){
         ReadingTask readingTask = readingTaskMapper.selectByPrimaryKey(taskId);
 
-        ReadingTaskReadLog taskReadLog = new ReadingTaskReadLog();
-        taskReadLog.setTaskId(readingTask.getId());
-        taskReadLog.setStudentId(studentId);
-        taskReadLog.setUserId(userId);
-        taskReadLog.setState(true);
-        taskReadLog.setCreatedTime(DateUtil.currentTime());
-        taskReadLog.setUpdatedTime(DateUtil.currentTime());
-        taskReadLogMapper.insert(taskReadLog);
-
         BookChapter bookChapter =  bookChapterMapper.selectByPrimaryKey(readingTask.getChapterId());
 
         BookChapterDetailDto bookChapterDetailDto = new BookChapterDetailDto();
@@ -180,5 +174,54 @@ public class ReadingServiceImpl implements ReadingService {
         bookChapterDetailDto.setReadCount(bookChapter.getReadCount());
         return bookChapterDetailDto;
     }
+    @Override
+    public ChapterSearchListDto searchChapter(String name){
+        ChapterSearchListDto chapterSearchListDto = new ChapterSearchListDto();
+        List<BookChapter> chineseList = bookChapterMapper.selectByChapterNameAndType(name,Constants.READING_ALBUM_TYPE_CHINESE);
+        chapterSearchListDto.setChineseList(getDetail(chineseList));
+        List<BookChapter> readingList = bookChapterMapper.selectByChapterNameAndType(name,Constants.READING_ALBUM_TYPE_OUTSIDE_READING);
+        chapterSearchListDto.setChineseList(getDetail(readingList));
+        return chapterSearchListDto;
+    }
+    private List<BookChapterDetailDto> getDetail(List<BookChapter> list){
+        List<BookChapterDetailDto> detailDtoList = new ArrayList<>();
+        for(BookChapter bookChapter:list){
+            BookChapterDetailDto bookChapterDetailDto = new BookChapterDetailDto();
+            bookChapterDetailDto.setId(bookChapter.getId());
 
+            bookChapterDetailDto.setName(bookChapter.getChapter()+"："+bookChapter.getTitle());
+            ReadingBook readingBook = readingBookMapper.selectByPrimaryKey(bookChapter.getBookId());
+            BookAlbum bookAlbum = bookAlbumMapper.selectByPrimaryKey(readingBook.getAlbumId());
+            bookChapterDetailDto.setBookName(bookAlbum.getName()+"·"+readingBook.getName());
+
+            bookChapterDetailDto.setArticleUrl(bookChapter.getArticleUrl());
+            bookChapterDetailDto.setVoiceUrl(bookChapter.getVoiceUrl());
+            bookChapterDetailDto.setReadCount(bookChapter.getReadCount());
+            detailDtoList.add(bookChapterDetailDto);
+        }
+        return detailDtoList;
+    }
+
+    @Override
+    public void chapterOrRecordPlay(TaskReadingPlayLogDto taskReadingPlayLogDto){
+        TaskReadingPlayLog taskReadingPlayLog = new TaskReadingPlayLog();
+        taskReadingPlayLog.setReadingRecordId(taskReadingPlayLogDto.getReadingRecordId()==null?
+                0:taskReadingPlayLogDto.getReadingRecordId());
+        taskReadingPlayLog.setChapterId(taskReadingPlayLogDto.getChapterId());
+        taskReadingPlayLog.setUserId(taskReadingPlayLogDto.getUserId());
+        taskReadingPlayLog.setStudentId(taskReadingPlayLogDto.getStudentId()==null?
+                0:taskReadingPlayLogDto.getStudentId());
+        taskReadingPlayLog.setCreatedTime(DateUtil.currentTime());
+        readingPlayLogMapper.insert(taskReadingPlayLog);
+
+        if(taskReadingPlayLog.getReadingRecordId()==0){
+            BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(taskReadingPlayLogDto.getChapterId());
+            bookChapter.setReadCount(bookChapter.getReadCount()+1);
+            bookChapterMapper.updateByPrimaryKey(bookChapter);
+        }else {
+            StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(taskReadingPlayLogDto.getReadingRecordId());
+            readingRecord.setPlayCount(readingRecord.getPlayCount()+1);
+            readingRecordMapper.updateByPrimaryKey(readingRecord);
+        }
+    }
 }
