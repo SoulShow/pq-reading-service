@@ -46,4 +46,11 @@
     select id, reading_record_id, user_id, name, student_id, state, created_time, updated_time
     from pq_student_reading_praise
   </select>
+
+  <select id="selectCountByReadingId" resultType="java.lang.Integer" >
+    select count(id)
+    from pq_student_reading_praise
+    where state = 1
+    and reading_record_id = #{readingId}
+  </select>
 </mapper>

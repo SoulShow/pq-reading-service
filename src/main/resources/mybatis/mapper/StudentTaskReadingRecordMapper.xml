@@ -77,10 +77,13 @@
     and state = 1
   </select>
 
-  <select id="selectByUserAlbumId" resultMap="BaseResultMap" >
+  <select id="selectByUserAlbumIdAndPrivate" resultMap="BaseResultMap" >
     select * from pq_student_task_reading_record
     where user_album_id = #{albumId}
+    and is_private = #{isPrivate}
     and state = 1
+    order by created_time desc
+    limit #{offset},#{size}
   </select>
 
   <select id="selectPrivateByUserIdAndStudentId" resultMap="BaseResultMap" >

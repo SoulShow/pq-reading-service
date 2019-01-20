@@ -1,6 +1,7 @@
 package com.pq.reading.mapper;
 
 import com.pq.reading.entity.StudentReadingPraise;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface StudentReadingPraiseMapper {
     List<StudentReadingPraise> selectAll();
 
     int updateByPrimaryKey(StudentReadingPraise record);
+
+    Integer selectCountByReadingId(@Param("readingId")Long readingId);
 }

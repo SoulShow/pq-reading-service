@@ -1,13 +1,16 @@
 package com.pq.reading.service.impl;
 
+import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
-import com.pq.reading.dto.UserAlbumDto;
-import com.pq.reading.dto.UserAlbumListDto;
-import com.pq.reading.dto.UserAlbumReadingDto;
-import com.pq.reading.dto.UserReadingRecordDto;
+import com.pq.reading.dto.*;
 import com.pq.reading.entity.*;
+import com.pq.reading.exception.ReadingErrorCode;
+import com.pq.reading.exception.ReadingErrors;
+import com.pq.reading.exception.ReadingException;
+import com.pq.reading.feign.AgencyFeign;
 import com.pq.reading.mapper.*;
 import com.pq.reading.service.UserReadingService;
+import com.pq.reading.utils.ReadingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +37,12 @@ public class UserReadingServiceImpl implements UserReadingService {
     private ReadingBookMapper readingBookMapper;
     @Autowired
     private BookAlbumMapper bookAlbumMapper;
+    @Autowired
+    private StudentReadingCommentMapper readingCommentMapper;
+    @Autowired
+    private StudentReadingPraiseMapper praiseMapper;
+    @Autowired
+    private AgencyFeign agencyFeign;
 
     @Override
     public void createUserAlbum(UserAlbumDto userAlbumDto){
@@ -135,8 +144,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId){
-        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumId(userAlbumId);
+    public List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId,int isPrivate,int offset,int size){
+        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumIdAndPrivate(userAlbumId, isPrivate,offset,size);
         return getReadingDto(list);
     }
     @Override
@@ -159,5 +168,116 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         return readingDtoList;
     }
+    @Override
+    public MyReadingDto getUserReading(Long studentId, String userId){
+        ReadingResult<AgencyStudentDto> result = agencyFeign.getStudentInfo(studentId);
+
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+        }
+        MyReadingDto myReadingDto = new MyReadingDto();
+        myReadingDto.setAvatar(result.getData().getAvatar());
+        myReadingDto.setUserName(result.getData().getName());
+        myReadingDto.setClassName(result.getData().getClassName());
+        Integer count = readingCommentMapper.selectUnReadCountByStudentIdAndUserId(studentId,userId);
+        myReadingDto.setMessageCount(count==null?0:count);
+        return myReadingDto;
+    }
+
+    @Override
+    public MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId){
+
+        ReadingResult<AgencyStudentDto> result = agencyFeign.getStudentInfo(studentId);
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+        }
+        MyReadingDetailDto myReadingDetailDto = new MyReadingDetailDto();
+        myReadingDetailDto.setAvatar(result.getData().getAvatar());
+        myReadingDetailDto.setUserName(result.getData().getName());
+        myReadingDetailDto.setClassName(result.getData().getClassName());
+        StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
+        myReadingDetailDto.setPlayCount(readingRecord.getPlayCount());
+
+        Integer praiseCount = praiseMapper.selectCountByReadingId(readingId);
+        myReadingDetailDto.setPraiseCount(praiseCount==null?0:praiseCount);
+
+        Integer commentCount = readingCommentMapper.selectCountByReadingId(readingId);
+        myReadingDetailDto.setCommentCount(commentCount==null?0:commentCount);
+        if(commentId!=null && commentId!=0){
+            StudentReadingComment readingComment = readingCommentMapper.selectByPrimaryKey(commentId);
+            if(readingComment.getIsRead()==0){
+                readingComment.setIsRead(1);
+                readingComment.setCreatedTime(DateUtil.currentTime());
+                readingCommentMapper.updateByPrimaryKey(readingComment);
+            }
+        }
+        return myReadingDetailDto;
+    }
+
+    @Override
+    public List<StudentReadingCommentDto> getReadingCommentList(Long readingId){
+        List<StudentReadingComment> commentList = readingCommentMapper.selectByReadingId(readingId);
+
+        List<StudentReadingCommentDto> list = new ArrayList<>();
+        for(StudentReadingComment readingComment : commentList){
+            StudentReadingCommentDto studentReadingCommentDto = new StudentReadingCommentDto();
+            studentReadingCommentDto.setId(readingComment.getId());
+            studentReadingCommentDto.setOriginatorUserId(readingComment.getOriginatorUserId());
+            studentReadingCommentDto.setOriginatorStudentId(readingComment.getOriginatorStudentId());
+            studentReadingCommentDto.setOriginatorName(readingComment.getOriginatorName());
+
+            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+            }
+            studentReadingCommentDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
+            studentReadingCommentDto.setClassName(studentInfo.getData().getClassName());
+            studentReadingCommentDto.setReceiverUserId(readingComment.getReceiverUserId());
+            studentReadingCommentDto.setReceiverStudentId(readingComment.getReceiverStudentId());
+            studentReadingCommentDto.setReceiverName(readingComment.getReceiverName());
+            studentReadingCommentDto.setContent(readingComment.getContent());
+            studentReadingCommentDto.setCreatedTime(DateUtil.formatDate(readingComment.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
+            list.add(studentReadingCommentDto);
+        }
+        return list;
+    }
+    @Override
+    public List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId){
+        List<StudentReadingComment> commentList = readingCommentMapper.selectByReadingId(readingId);
+
+        List<CommentMessageDto> list = new ArrayList<>();
+        for(StudentReadingComment readingComment : commentList){
+            CommentMessageDto commentMessageDto = new CommentMessageDto();
+            commentMessageDto.setId(readingComment.getId());
+            commentMessageDto.setOriginatorUserId(readingComment.getOriginatorUserId());
+            commentMessageDto.setOriginatorStudentId(readingComment.getOriginatorStudentId());
+            commentMessageDto.setOriginatorName(readingComment.getOriginatorName());
+
+            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+            }
+            commentMessageDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
+            commentMessageDto.setClassName(studentInfo.getData().getClassName());
+            commentMessageDto.setReceiverUserId(readingComment.getReceiverUserId());
+            commentMessageDto.setReceiverStudentId(readingComment.getReceiverStudentId());
+            commentMessageDto.setReceiverName(readingComment.getReceiverName());
+            commentMessageDto.setContent(readingComment.getContent());
+            commentMessageDto.setCreatedTime(DateUtil.formatDate(readingComment.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
+            commentMessageDto.setIsRead(readingComment.getIsRead());
+
+            StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
+            if(readingRecord==null){
+                ReadingException.raise(ReadingErrors.READING_RECORD_IS_NOT_EXIST);
+            }
+            commentMessageDto.setReadingImg(readingRecord.getImgUrl());
+            commentMessageDto.setName(readingRecord.getName());
+            commentMessageDto.setBookName(readingRecord.getBookName());
+
+            list.add(commentMessageDto);
+        }
+        return list;
+    }
+
 
 }

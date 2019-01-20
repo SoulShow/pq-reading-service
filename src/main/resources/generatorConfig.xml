@@ -83,7 +83,7 @@
             <!--<columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
             <!--<columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
         <!--</table>-->
-        <table tableName="pq_user_album_reading" domainObjectName="UserAlbumReading">
+        <table tableName="pq_user_reading_banner" domainObjectName="UserReadingBanner">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
             <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>

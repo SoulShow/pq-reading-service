@@ -1,10 +1,7 @@
 package com.pq.reading.api;
 
 import com.pq.common.exception.CommonErrors;
-import com.pq.reading.dto.CreateReadingTaskDto;
-import com.pq.reading.dto.TaskReadingPlayLogDto;
-import com.pq.reading.dto.UserAlbumDto;
-import com.pq.reading.dto.UserReadingRecordDto;
+import com.pq.reading.dto.*;
 import com.pq.reading.exception.ReadingException;
 import com.pq.reading.service.ReadingService;
 import com.pq.reading.service.UserReadingService;
@@ -125,10 +122,20 @@ public class UserReadingController {
 
 	@GetMapping(value = "/student/album/reading/list")
 	@ResponseBody
-	public ReadingResult getUserAlbumReadingList(@RequestParam("albumId") Long albumId) {
+	public ReadingResult getUserAlbumReadingList(@RequestParam("albumId") Long albumId,
+												 @RequestParam("isPrivate") int isPrivate,
+												 @RequestParam(value = "page",required = false) Integer page,
+												 @RequestParam(value = "size",required = false) Integer size) {
 		ReadingResult result = new ReadingResult();
+		if (page == null || page < 1) {
+			page = 1;
+		}
+		if (size == null || size < 1) {
+			size = 10;
+		}
+		int offset = (page - 1) * size;
 		try{
-			result.setData(userReadingService.getUserAlbumReadingList(albumId));
+			result.setData(userReadingService.getUserAlbumReadingList(albumId,isPrivate,offset,size));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());
@@ -140,13 +147,32 @@ public class UserReadingController {
 		return result;
 	}
 
-	@GetMapping(value = "/student/private/reading/list")
+	@GetMapping(value = "/student/reading")
 	@ResponseBody
-	public ReadingResult getUserPrivateReadingList(@RequestParam("studentId") Long studentId,
-												   @RequestParam("userId") String userId) {
+	public ReadingResult<MyReadingDto> getUserPrivateReadingList(@RequestParam("studentId") Long studentId,
+                                                                 @RequestParam("userId") String userId) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(userReadingService.getUserPrivateReadingList(userId,studentId));
+			result.setData(userReadingService.getUserReading(studentId,userId));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@GetMapping(value = "/student/reading/detail")
+	@ResponseBody
+	public ReadingResult<MyReadingDetailDto> getUserReadingDetail(@RequestParam("studentId") Long studentId,
+																  @RequestParam("readingId") Long readingId,
+																  @RequestParam(value = "readingId",required = false) Long commentId) {
+		ReadingResult result = new ReadingResult();
+		try{
+			result.setData(userReadingService.getUserReadingDetail(studentId,readingId,commentId));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

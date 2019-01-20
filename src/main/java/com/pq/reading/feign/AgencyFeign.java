@@ -2,6 +2,7 @@ package com.pq.reading.feign;
 
 
 import com.pq.reading.dto.AgencyClassDto;
+import com.pq.reading.dto.AgencyStudentDto;
 import com.pq.reading.utils.ReadingResult;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +33,13 @@ public interface AgencyFeign {
      */
     @RequestMapping(value = "/agency/class/info", method = RequestMethod.GET)
     ReadingResult<AgencyClassDto> getAgencyClassInfo(@RequestParam(value = "agencyClassId") Long agencyClassId);
+
+    /**
+     * 获取学生信息
+     * @param studentId
+     * @return
+     */
+    @RequestMapping(value = "/agency/student/info", method = RequestMethod.GET)
+    ReadingResult<AgencyStudentDto> getStudentInfo(@RequestParam(value = "studentId") Long studentId);
 }
 

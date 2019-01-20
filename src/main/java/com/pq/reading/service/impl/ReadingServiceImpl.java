@@ -5,6 +5,7 @@ import com.pq.common.util.DateUtil;
 import com.pq.reading.dto.*;
 import com.pq.reading.entity.*;
 import com.pq.reading.exception.ReadingErrorCode;
+import com.pq.reading.exception.ReadingErrors;
 import com.pq.reading.exception.ReadingException;
 import com.pq.reading.feign.AgencyFeign;
 import com.pq.reading.feign.UserFeign;
@@ -162,7 +163,9 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public BookChapterDetailDto getReadingTaskDetail(Long taskId,Long studentId,String userId){
         ReadingTask readingTask = readingTaskMapper.selectByPrimaryKey(taskId);
-
+        if(readingTask==null){
+            ReadingException.raise(ReadingErrors.READING_TASK_IS_NOT_EXIST);
+        }
         BookChapter bookChapter =  bookChapterMapper.selectByPrimaryKey(readingTask.getChapterId());
 
         BookChapterDetailDto bookChapterDetailDto = new BookChapterDetailDto();

@@ -1,17 +1,17 @@
-package com.pq.reading.entity;
+package com.pq.reading.dto;
 
-import java.sql.Timestamp;
-
-public class StudentReadingComment {
+public class StudentReadingCommentDto {
     private Long id;
-
-    private Long readingRecordId;
 
     private String originatorUserId;
 
     private String originatorName;
 
     private Long originatorStudentId;
+
+    private String originatorAvatar;
+
+    private String className;
 
     private String receiverUserId;
 
@@ -21,13 +21,8 @@ public class StudentReadingComment {
 
     private String content;
 
-    private int isRead;
+    private String createdTime;
 
-    private Integer state;
-
-    private Timestamp createdTime;
-
-    private Timestamp updatedTime;
 
     public Long getId() {
         return id;
@@ -35,14 +30,6 @@ public class StudentReadingComment {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getReadingRecordId() {
-        return readingRecordId;
-    }
-
-    public void setReadingRecordId(Long readingRecordId) {
-        this.readingRecordId = readingRecordId;
     }
 
     public String getOriginatorUserId() {
@@ -101,35 +88,27 @@ public class StudentReadingComment {
         this.content = content == null ? null : content.trim();
     }
 
-    public Integer getState() {
-        return state;
+    public String getOriginatorAvatar() {
+        return originatorAvatar;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setOriginatorAvatar(String originatorAvatar) {
+        this.originatorAvatar = originatorAvatar;
     }
 
-    public Timestamp getCreatedTime() {
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Timestamp createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public Timestamp getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Timestamp updatedTime) {
-        this.updatedTime = updatedTime;
-    }
-
-    public int getIsRead() {
-        return isRead;
-    }
-
-    public void setIsRead(int isRead) {
-        this.isRead = isRead;
     }
 }

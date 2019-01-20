@@ -1,6 +1,7 @@
 package com.pq.reading.mapper;
 
 import com.pq.reading.entity.StudentReadingComment;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +15,10 @@ public interface StudentReadingCommentMapper {
     List<StudentReadingComment> selectAll();
 
     int updateByPrimaryKey(StudentReadingComment record);
+
+    Integer selectUnReadCountByStudentIdAndUserId(@Param("studentId") Long studentId, @Param("userId") String userId);
+
+    Integer selectCountByReadingId(@Param("readingId")Long readingId);
+
+    List<StudentReadingComment> selectByReadingId(@Param("readingId")Long readingId);
 }

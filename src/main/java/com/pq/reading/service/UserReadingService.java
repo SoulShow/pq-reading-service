@@ -1,10 +1,8 @@
 package com.pq.reading.service;
 
 
-import com.pq.reading.dto.UserAlbumDto;
-import com.pq.reading.dto.UserAlbumListDto;
-import com.pq.reading.dto.UserAlbumReadingDto;
-import com.pq.reading.dto.UserReadingRecordDto;
+import com.pq.reading.dto.*;
+
 import java.util.List;
 
 /**
@@ -55,9 +53,12 @@ public interface UserReadingService {
     /**
      * 获取专辑阅读列表
      * @param userAlbumId
+     * @param isPrivate
+     * @param offset
+     * @param size
      * @return
      */
-    List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId);
+    List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId,int isPrivate,int offset,int size);
 
     /**
      * 获取个人隐私专辑
@@ -66,6 +67,39 @@ public interface UserReadingService {
      * @return
      */
     List<UserAlbumReadingDto> getUserPrivateReadingList(String userId,Long studentId);
+
+
+    /**
+     * 我的阅读
+     * @param studentId
+     * @param userId
+     * @return
+     */
+    MyReadingDto getUserReading(Long studentId,String userId);
+
+    /**
+     * 获取个人阅读详情
+     * @param studentId
+     * @param readingId
+     * @param commentId
+     * @return
+     */
+    MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId);
+
+    /**
+     * 获取阅读详情评论列表
+     * @param readingId
+     * @return
+     */
+    List<StudentReadingCommentDto> getReadingCommentList(Long readingId);
+
+    /**
+     * 获取消息列表
+     * @param studentId
+     * @param readingId
+     * @return
+     */
+    List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId);
 
 
 }
