@@ -167,7 +167,7 @@ public class UserReadingController {
 		return result;
 	}
 
-	@GetMapping(value = "/student/reading/detail")
+	@GetMapping(value = "/student/my/reading/detail")
 	@ResponseBody
 	public ReadingResult<MyReadingDetailDto> getUserReadingDetail(@RequestParam("studentId") Long studentId,
 																  @RequestParam("readingId") Long readingId,

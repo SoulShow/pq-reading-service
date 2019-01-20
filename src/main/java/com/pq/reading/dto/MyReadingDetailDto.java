@@ -1,7 +1,5 @@
 package com.pq.reading.dto;
 
-import java.util.List;
-
 public class MyReadingDetailDto {
 
    private String userName;
