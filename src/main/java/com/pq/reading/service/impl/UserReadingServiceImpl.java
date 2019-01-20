@@ -243,7 +243,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         return list;
     }
     @Override
-    public List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId,int offset,int size){
+    public List<CommentMessageDto> getCommentMessageList(Long studentId,int offset,int size){
         List<StudentReadingComment> commentList = readingCommentMapper.selectByStudentId(studentId,offset,size);
 
         List<CommentMessageDto> list = new ArrayList<>();
@@ -267,14 +267,14 @@ public class UserReadingServiceImpl implements UserReadingService {
             commentMessageDto.setCreatedTime(DateUtil.formatDate(readingComment.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
             commentMessageDto.setIsRead(readingComment.getIsRead());
 
-            StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
+            StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingComment.getReadingRecordId());
             if(readingRecord==null){
                 ReadingException.raise(ReadingErrors.READING_RECORD_IS_NOT_EXIST);
             }
             commentMessageDto.setReadingImg(readingRecord.getImgUrl());
             commentMessageDto.setName(readingRecord.getName());
             commentMessageDto.setBookName(readingRecord.getBookName());
-
+            commentMessageDto.setReadingId(readingRecord.getId());
             list.add(commentMessageDto);
         }
         return list;
