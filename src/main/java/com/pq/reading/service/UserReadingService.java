@@ -89,17 +89,35 @@ public interface UserReadingService {
     /**
      * 获取阅读详情评论列表
      * @param readingId
+     * @param offset
+     * @param size
      * @return
      */
-    List<StudentReadingCommentDto> getReadingCommentList(Long readingId);
+    List<StudentReadingCommentDto> getReadingCommentList(Long readingId,int offset,int size);
 
     /**
      * 获取消息列表
      * @param studentId
      * @param readingId
+     * @param offset
+     * @param size
      * @return
      */
-    List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId);
+    List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId,int offset,int size);
+
+    /**
+     * 点赞
+     * @param praiseDto
+     * @return
+     */
+    void praise(PraiseDto praiseDto);
+
+    /**
+     * 发表评论
+     * @param commentDto
+     * @return
+     */
+    void createComment(CommentDto commentDto);
 
 
 }

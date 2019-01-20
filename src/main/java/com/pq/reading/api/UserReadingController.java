@@ -9,6 +9,8 @@ import com.pq.reading.utils.ReadingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/reading")
 public class UserReadingController {
@@ -169,10 +171,98 @@ public class UserReadingController {
 	@ResponseBody
 	public ReadingResult<MyReadingDetailDto> getUserReadingDetail(@RequestParam("studentId") Long studentId,
 																  @RequestParam("readingId") Long readingId,
-																  @RequestParam(value = "readingId",required = false) Long commentId) {
+																  @RequestParam(value = "commentId",required = false) Long commentId) {
 		ReadingResult result = new ReadingResult();
 		try{
 			result.setData(userReadingService.getUserReadingDetail(studentId,readingId,commentId));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@GetMapping(value = "/student/reading/comment")
+	@ResponseBody
+	public ReadingResult<List<StudentReadingCommentDto>> getReadingCommentList(@RequestParam("readingId") Long readingId,
+																			   @RequestParam(value = "page",required = false) Integer page,
+																			   @RequestParam(value = "size",required = false) Integer size) {
+		ReadingResult result = new ReadingResult();
+		if (page == null || page < 1) {
+			page = 1;
+		}
+		if (size == null || size < 1) {
+			size = 10;
+		}
+		int offset = (page - 1) * size;
+		try{
+			result.setData(userReadingService.getReadingCommentList(readingId,offset,size));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@GetMapping(value = "/student/message/list")
+	@ResponseBody
+	public ReadingResult<List<CommentMessageDto>> getCommentMessageList(@RequestParam("readingId") Long readingId,
+																		@RequestParam("studentId") Long studentId,
+																		@RequestParam(value = "page",required = false) Integer page,
+																		@RequestParam(value = "size",required = false) Integer size) {
+		ReadingResult result = new ReadingResult();
+		if (page == null || page < 1) {
+			page = 1;
+		}
+		if (size == null || size < 1) {
+			size = 10;
+		}
+		int offset = (page - 1) * size;
+
+		try{
+			result.setData(userReadingService.getCommentMessageList(studentId,readingId,offset,size));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@PostMapping(value = "/student/praise")
+	@ResponseBody
+	public ReadingResult praise(@RequestBody PraiseDto praiseDto) {
+		ReadingResult result = new ReadingResult();
+		try{
+			userReadingService.praise(praiseDto);
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@PostMapping(value = "/student/comment")
+	@ResponseBody
+	public ReadingResult createComment(@RequestBody CommentDto commentDto) {
+		ReadingResult result = new ReadingResult();
+		try{
+			userReadingService.createComment(commentDto);
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

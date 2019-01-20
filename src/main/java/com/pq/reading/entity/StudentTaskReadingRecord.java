@@ -29,6 +29,8 @@ public class StudentTaskReadingRecord {
 
     private int isPrivate;
 
+    private String duration;
+
     private Boolean state;
 
     private Timestamp createdTime;
@@ -171,5 +173,13 @@ public class StudentTaskReadingRecord {
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

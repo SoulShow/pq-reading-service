@@ -91,6 +91,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         studentTaskReadingRecord.setState(true);
         studentTaskReadingRecord.setCreatedTime(DateUtil.currentTime());
         studentTaskReadingRecord.setUpdatedTime(DateUtil.currentTime());
+        studentTaskReadingRecord.setDuration(userReadingRecordDto.getDuration());
 
         BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(userReadingRecordDto.getChapterId());
         studentTaskReadingRecord.setName(bookChapter.getChapter()+"："+bookChapter.getTitle());
@@ -215,8 +216,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public List<StudentReadingCommentDto> getReadingCommentList(Long readingId){
-        List<StudentReadingComment> commentList = readingCommentMapper.selectByReadingId(readingId);
+    public List<StudentReadingCommentDto> getReadingCommentList(Long readingId,int offset,int size){
+        List<StudentReadingComment> commentList = readingCommentMapper.selectByReadingId(readingId,offset,size);
 
         List<StudentReadingCommentDto> list = new ArrayList<>();
         for(StudentReadingComment readingComment : commentList){
@@ -242,8 +243,8 @@ public class UserReadingServiceImpl implements UserReadingService {
         return list;
     }
     @Override
-    public List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId){
-        List<StudentReadingComment> commentList = readingCommentMapper.selectByReadingId(readingId);
+    public List<CommentMessageDto> getCommentMessageList(Long studentId,Long readingId,int offset,int size){
+        List<StudentReadingComment> commentList = readingCommentMapper.selectByStudentId(studentId,offset,size);
 
         List<CommentMessageDto> list = new ArrayList<>();
         for(StudentReadingComment readingComment : commentList){
@@ -277,6 +278,36 @@ public class UserReadingServiceImpl implements UserReadingService {
             list.add(commentMessageDto);
         }
         return list;
+    }
+    @Override
+    public void praise(PraiseDto praiseDto){
+        StudentReadingPraise praise = new StudentReadingPraise();
+        praise.setReadingRecordId(praiseDto.getReadingId());
+        praise.setUserId(praiseDto.getUserId());
+        praise.setName(praiseDto.getName());
+        praise.setStudentId(praiseDto.getStudentId());
+        praise.setState(1);
+        praise.setCreatedTime(DateUtil.currentTime());
+        praise.setUpdatedTime(DateUtil.currentTime());
+        praiseMapper.insert(praise);
+    }
+
+    @Override
+    public void createComment(CommentDto commentDto){
+        StudentReadingComment studentReadingComment = new StudentReadingComment();
+        studentReadingComment.setReadingRecordId(commentDto.getReadingId());
+        studentReadingComment.setOriginatorUserId(commentDto.getOriginatorUserId());
+        studentReadingComment.setOriginatorName(commentDto.getOriginatorName());
+        studentReadingComment.setOriginatorStudentId(commentDto.getOriginatorStudentId());
+        studentReadingComment.setReceiverName(commentDto.getReceiverName());
+        studentReadingComment.setReceiverUserId(commentDto.getReceiverUserId());
+        studentReadingComment.setReceiverStudentId(commentDto.getReceiverStudentId());
+        studentReadingComment.setContent(commentDto.getContent());
+        studentReadingComment.setIsRead(0);
+        studentReadingComment.setState(1);
+        studentReadingComment.setCreatedTime(DateUtil.currentTime());
+        studentReadingComment.setUpdatedTime(DateUtil.currentTime());
+        readingCommentMapper.insert(studentReadingComment);
     }
 
 

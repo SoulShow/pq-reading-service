@@ -20,5 +20,11 @@ public interface StudentReadingCommentMapper {
 
     Integer selectCountByReadingId(@Param("readingId")Long readingId);
 
-    List<StudentReadingComment> selectByReadingId(@Param("readingId")Long readingId);
+    List<StudentReadingComment> selectByReadingId(@Param("readingId")Long readingId,
+                                                  @Param("offset") int offset,
+                                                  @Param("size") int size);
+
+    List<StudentReadingComment> selectByStudentId(@Param("studentId")Long studentId,
+                                                  @Param("offset") int offset,
+                                                  @Param("size") int size);
 }

@@ -90,6 +90,16 @@
     and state = 1
     order by created_time desc
     limit #{offset},#{size}
+  </select>
 
+  <select id="selectByStudentId" resultMap="BaseResultMap" >
+    select id, reading_record_id, originator_user_id, originator_name, originator_student_id,
+    receiver_user_id, receiver_name, receiver_student_id, content, state, created_time,
+    updated_time,is_read
+    from pq_student_reading_comment
+    where receiver_student_id = #{studentId}
+    and state = 1
+    order by created_time desc
+    limit #{offset},#{size}
   </select>
 </mapper>
