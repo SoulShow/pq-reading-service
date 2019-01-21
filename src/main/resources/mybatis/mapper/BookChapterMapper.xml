@@ -76,7 +76,7 @@
     where c.`book_id`=b.`id`
     and b.album_id = a.id
     and a.type=#{type}
-    and (c.chapter like CONCAT('%',#{name},'%') or  c.title like CONCAT('%',#{name},'%'))
-
+    and (c.chapter like CONCAT('%',#{name},'%') or c.title like CONCAT('%',#{name},'%'))
+    and c.state = 1
   </select>
 </mapper>
