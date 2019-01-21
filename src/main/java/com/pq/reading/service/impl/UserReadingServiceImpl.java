@@ -360,7 +360,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         if(readingRecord == null){
             ReadingException.raise(ReadingErrors.READING_RECORD_IS_NOT_EXIST);
         }
-        if(readingRecord.getStudentId().equals(studentId)){
+        if(!readingRecord.getStudentId().equals(studentId)){
             ReadingException.raise(ReadingErrors.READING_RECORD_STUDENT_NOT_MATCH);
         }
         readingRecord.setState(false);
