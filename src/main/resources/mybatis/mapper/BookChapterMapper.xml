@@ -12,6 +12,7 @@
     <result column="article_url" property="articleUrl" jdbcType="VARCHAR" />
     <result column="read_count" property="readCount" jdbcType="INTEGER" />
     <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="with_pinyin" property="withPinyin" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="BIT" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
@@ -27,11 +28,11 @@
     insert into pq_book_chapter (book_id, chapter, author, 
       title, introduce, voice_url, 
       article_url, read_count, state, 
-      created_time, updated_time,order_id)
+      created_time, updated_time,order_id,with_pinyin)
     values (#{bookId,jdbcType=BIGINT}, #{chapter,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
       #{title,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{voiceUrl,jdbcType=VARCHAR}, 
       #{articleUrl,jdbcType=VARCHAR}, #{readCount,jdbcType=INTEGER}, #{state,jdbcType=BIT}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{orderId})
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{orderId},#{withPinyin})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.BookChapter" >
     update pq_book_chapter
@@ -46,24 +47,25 @@
       state = #{state,jdbcType=BIT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-      order_id = #{orderId}
+      order_id = #{orderId},
+      with_pinyin = #{withPinyin}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, book_id, chapter, author, title, introduce, voice_url, article_url, read_count, 
-    state, created_time, updated_time,order_id
+    state, created_time, updated_time,order_id, with_pinyin
     from pq_book_chapter
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, book_id, chapter, author, title, introduce, voice_url, article_url, read_count, 
-    state, created_time, updated_time,order_id
+    state, created_time, updated_time,order_id, with_pinyin
     from pq_book_chapter
   </select>
 
   <select id="selectByBookId" resultMap="BaseResultMap" >
     select id, book_id, chapter, author, title, introduce, voice_url, article_url, read_count,
-    state, created_time, updated_time,order_id
+    state, created_time, updated_time,order_id,with_pinyin
     from pq_book_chapter
     where book_id = #{bookId}
     and state = 1

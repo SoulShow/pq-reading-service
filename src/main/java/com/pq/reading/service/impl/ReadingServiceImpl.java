@@ -175,6 +175,10 @@ public class ReadingServiceImpl implements ReadingService {
         bookChapterDetailDto.setArticleUrl(bookChapter.getArticleUrl());
         bookChapterDetailDto.setVoiceUrl(bookChapter.getVoiceUrl());
         bookChapterDetailDto.setReadCount(bookChapter.getReadCount());
+        StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByTaskIdAndStudentId(taskId,studentId);
+        if(readingRecord!=null){
+            bookChapterDetailDto.setReadingId(readingRecord.getId());
+        }
         return bookChapterDetailDto;
     }
     @Override

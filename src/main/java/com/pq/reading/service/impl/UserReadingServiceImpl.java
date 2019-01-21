@@ -192,11 +192,19 @@ public class UserReadingServiceImpl implements UserReadingService {
         if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
             throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
         }
+        StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
         MyReadingDetailDto myReadingDetailDto = new MyReadingDetailDto();
+        myReadingDetailDto.setReadingId(readingId);
+        myReadingDetailDto.setName(readingRecord.getName());
+        myReadingDetailDto.setBookName(readingRecord.getBookName());
+        myReadingDetailDto.setImg(readingRecord.getImgUrl());
+        myReadingDetailDto.setVoiceUrl(readingRecord.getVoiceUrl());
+        myReadingDetailDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
+        myReadingDetailDto.setDuration(readingRecord.getDuration());
+
         myReadingDetailDto.setAvatar(result.getData().getAvatar());
         myReadingDetailDto.setUserName(result.getData().getName());
         myReadingDetailDto.setClassName(result.getData().getClassName());
-        StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
         myReadingDetailDto.setPlayCount(readingRecord.getPlayCount());
 
         Integer praiseCount = praiseMapper.selectCountByReadingId(readingId);
@@ -309,6 +317,43 @@ public class UserReadingServiceImpl implements UserReadingService {
         studentReadingComment.setUpdatedTime(DateUtil.currentTime());
         readingCommentMapper.insert(studentReadingComment);
     }
+    @Override
+    public List<AgencyStudentDto> getReadingRankingList(Long chapterId,Long classId,int type,int offset,int size){
+        List<AgencyStudentDto> studentDtos = new ArrayList<>();
+        //阅读之星
+        if(type==1){
+            studentDtos = getAgencyStudentDtoList(chapterId,null,offset,size);
+        }
+        //同班同学
+        if(type==2){
+            ReadingResult<List<Long>> result = agencyFeign.getStudentInfoList(classId);
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+            }
+            studentDtos = getAgencyStudentDtoList(chapterId,result.getData(),offset,size);
+        }
+        return studentDtos;
+    }
+
+    private List<AgencyStudentDto> getAgencyStudentDtoList(Long chapterId,List<Long> studentList,int offset,int size){
+        List<AgencyStudentDto> studentDtos = new ArrayList<>();
+        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByChapterIdAndStudentList(chapterId,studentList,offset,size);
+        for(StudentTaskReadingRecord readingRecord:list){
+            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingRecord.getStudentId());
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+            }
+            AgencyStudentDto agencyStudentDto = new AgencyStudentDto();
+            agencyStudentDto.setStudentId(studentInfo.getData().getStudentId());
+            agencyStudentDto.setAvatar(studentInfo.getData().getAvatar());
+            agencyStudentDto.setClassName(studentInfo.getData().getClassName());
+            agencyStudentDto.setName(studentInfo.getData().getName());
+            agencyStudentDto.setReadingId(readingRecord.getId());
+            studentDtos.add(agencyStudentDto);
+        }
+        return studentDtos;
+    }
+
 
 
 }

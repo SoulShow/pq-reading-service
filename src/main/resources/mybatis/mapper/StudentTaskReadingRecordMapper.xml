@@ -96,4 +96,24 @@
     and is_private = 1
     order by created_time desc
   </select>
+
+  <select id="selectByTaskIdAndStudentId" resultMap="BaseResultMap" >
+    select * from pq_student_task_reading_record
+    where state = 1
+    and student_id = #{studentId}
+    and task_id = #{taskId}
+  </select>
+
+  <select id="selectByChapterIdAndStudentList" resultMap="BaseResultMap" >
+    select * from pq_student_task_reading_record
+    where state = 1
+    and chapter_id = #{chapterId}
+    <if test="studentList !=null">
+      and student_id in
+      <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
+    </if>
+    order by play_count desc ,created_time desc
+    limit #{offset},#{size}
+  </select>
+
 </mapper>

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * 机构服务
  * @author liutao
@@ -41,5 +43,13 @@ public interface AgencyFeign {
      */
     @RequestMapping(value = "/agency/student/info", method = RequestMethod.GET)
     ReadingResult<AgencyStudentDto> getStudentInfo(@RequestParam(value = "studentId") Long studentId);
+
+    /**
+     * 获取班级学生列表
+     * @param classId
+     * @return
+     */
+    @RequestMapping(value = "/agency/student/list", method = RequestMethod.GET)
+    ReadingResult<List<Long>> getStudentInfoList(@RequestParam(value = "classId") Long classId);
 }
 

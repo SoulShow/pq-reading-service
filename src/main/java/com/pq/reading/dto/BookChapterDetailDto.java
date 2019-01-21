@@ -13,6 +13,8 @@ public class BookChapterDetailDto {
 
     private Integer readCount;
 
+    private Long readingId;
+
     public Long getId() {
         return id;
     }
@@ -60,5 +62,13 @@ public class BookChapterDetailDto {
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
+    }
+
+    public Long getReadingId() {
+        return readingId;
+    }
+
+    public void setReadingId(Long readingId) {
+        this.readingId = readingId;
     }
 }

@@ -118,5 +118,16 @@ public interface UserReadingService {
      */
     void createComment(CommentDto commentDto);
 
+    /**
+     * 阅读排行榜
+     * @param classId
+     * @param chapterId
+     * @param type
+     * @param offset
+     * @param size
+     * @return
+     */
+    List<AgencyStudentDto> getReadingRankingList(Long chapterId,Long classId,int type,int offset,int size);
+
 
 }

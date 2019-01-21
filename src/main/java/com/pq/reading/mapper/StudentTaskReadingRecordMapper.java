@@ -24,4 +24,11 @@ public interface StudentTaskReadingRecordMapper {
 
     List<StudentTaskReadingRecord> selectPrivateByUserIdAndStudentId(@Param("userId")String userId,
                                                               @Param("studentId")Long studentId);
+
+    StudentTaskReadingRecord selectByTaskIdAndStudentId(@Param("taskId")Long taskId,
+                                                        @Param("studentId")Long studentId);
+
+    List<StudentTaskReadingRecord>  selectByChapterIdAndStudentList(@Param("chapterId")Long chapterId,@Param("studentList")List<Long> studentList,
+                                                                    @Param("offset")int offset, @Param("size")int size);
+
 }

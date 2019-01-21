@@ -29,6 +29,8 @@ public class BookChapter {
 
     private Integer orderId;
 
+    private Integer withPinyin;
+
     public Long getId() {
         return id;
     }
@@ -131,5 +133,13 @@ public class BookChapter {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getWithPinyin() {
+        return withPinyin;
+    }
+
+    public void setWithPinyin(Integer withPinyin) {
+        this.withPinyin = withPinyin;
     }
 }

@@ -272,4 +272,33 @@ public class UserReadingController {
 		}
 		return result;
 	}
+
+	@GetMapping(value = "/student/reading/ranking/list")
+	@ResponseBody
+	public ReadingResult<List<AgencyStudentDto>> getReadingRankingList(@RequestParam("chapterId") Long chapterId,
+																	   @RequestParam(value = "classId",required = false) Long classId,
+																	   @RequestParam("type") int type,
+																		@RequestParam(value = "page",required = false) Integer page,
+																		@RequestParam(value = "size",required = false) Integer size) {
+		ReadingResult result = new ReadingResult();
+		if (page == null || page < 1) {
+			page = 1;
+		}
+		if (size == null || size < 1) {
+			size = 10;
+		}
+		int offset = (page - 1) * size;
+
+		try{
+			result.setData(userReadingService.getReadingRankingList(chapterId,classId,type,offset,size));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
 }
