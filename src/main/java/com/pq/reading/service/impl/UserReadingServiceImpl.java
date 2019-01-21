@@ -104,16 +104,16 @@ public class UserReadingServiceImpl implements UserReadingService {
         bookChapterMapper.updateByPrimaryKey(bookChapter);
 
         ReadingTask readingTask = readingTaskMapper.selectByPrimaryKey(userReadingRecordDto.getTaskId());
-
-        ReadingTaskReadLog taskReadLog = new ReadingTaskReadLog();
-        taskReadLog.setTaskId(readingTask.getId());
-        taskReadLog.setStudentId(userReadingRecordDto.getStudentId());
-        taskReadLog.setUserId(userReadingRecordDto.getUserId());
-        taskReadLog.setState(true);
-        taskReadLog.setCreatedTime(DateUtil.currentTime());
-        taskReadLog.setUpdatedTime(DateUtil.currentTime());
-        taskReadLogMapper.insert(taskReadLog);
-
+        if(readingTask!=null){
+            ReadingTaskReadLog taskReadLog = new ReadingTaskReadLog();
+            taskReadLog.setTaskId(readingTask.getId());
+            taskReadLog.setStudentId(userReadingRecordDto.getStudentId());
+            taskReadLog.setUserId(userReadingRecordDto.getUserId());
+            taskReadLog.setState(true);
+            taskReadLog.setCreatedTime(DateUtil.currentTime());
+            taskReadLog.setUpdatedTime(DateUtil.currentTime());
+            taskReadLogMapper.insert(taskReadLog);
+        }
     }
 
     @Override
