@@ -301,4 +301,22 @@ public class UserReadingController {
 		}
 		return result;
 	}
+
+	@PostMapping(value = "/student/reading/delete")
+	@ResponseBody
+	public ReadingResult delStudentReading(@RequestBody DelUserReadingDto delUserReadingDto) {
+		ReadingResult result = new ReadingResult();
+
+		try{
+			userReadingService.delUserReading(delUserReadingDto.getReadingId(),delUserReadingDto.getStudentId());
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
 }

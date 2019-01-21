@@ -354,6 +354,21 @@ public class UserReadingServiceImpl implements UserReadingService {
         return studentDtos;
     }
 
+    @Override
+    public void delUserReading(Long readingId,Long studentId){
+        StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
+        if(readingRecord == null){
+            ReadingException.raise(ReadingErrors.READING_RECORD_IS_NOT_EXIST);
+        }
+        if(readingRecord.getStudentId().equals(studentId)){
+            ReadingException.raise(ReadingErrors.READING_RECORD_STUDENT_NOT_MATCH);
+        }
+        readingRecord.setState(false);
+        readingRecord.setUpdatedTime(DateUtil.currentTime());
+        readingRecordMapper.updateByPrimaryKey(readingRecord);
+    }
+
+
 
 
 }

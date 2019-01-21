@@ -130,4 +130,11 @@ public interface UserReadingService {
     List<AgencyStudentDto> getReadingRankingList(Long chapterId,Long classId,int type,int offset,int size);
 
 
+    /**
+     * 删除个人阅读
+     * @param readingId
+     * @param studentId
+     */
+    void delUserReading(Long readingId,Long studentId);
+
 }
