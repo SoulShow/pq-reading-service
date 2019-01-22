@@ -57,8 +57,8 @@
   <select id="selectByReadingIdAndUserInfo" resultMap="BaseResultMap" >
     select id, reading_record_id, user_id, name, student_id, state, created_time, updated_time
     from pq_student_reading_praise
-    where reading_record_id = #{readingId},
-    and user_id = #{praiseUserId},
+    where reading_record_id = #{readingId}
+    and user_id = #{praiseUserId}
     and student_id = #{praiseStudentId}
     and state = 1
   </select>
