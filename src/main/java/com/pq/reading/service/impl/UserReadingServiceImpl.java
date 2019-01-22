@@ -186,7 +186,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId){
+    public MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId,
+                                                   String praiseUserId,Long praiseStudentId){
 
         ReadingResult<AgencyStudentDto> result = agencyFeign.getStudentInfo(studentId);
         if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
@@ -220,6 +221,9 @@ public class UserReadingServiceImpl implements UserReadingService {
                 readingCommentMapper.updateByPrimaryKey(readingComment);
             }
         }
+        StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(readingId,praiseUserId,praiseStudentId);
+
+        myReadingDetailDto.setIsPraise(readingPraise==null?0:1);
         return myReadingDetailDto;
     }
 
@@ -299,6 +303,19 @@ public class UserReadingServiceImpl implements UserReadingService {
         praise.setUpdatedTime(DateUtil.currentTime());
         praiseMapper.insert(praise);
     }
+
+    @Override
+    public void praiseCancel(PraiseDto praiseDto){
+        StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(praiseDto.getReadingId(),
+                praiseDto.getUserId(),praiseDto.getStudentId());
+        if(praiseDto==null){
+            ReadingException.raise(ReadingErrors.READING_PRAISE_IS_NOT_EXIST);
+        }
+        readingPraise.setState(0);
+        readingPraise.setUpdatedTime(DateUtil.currentTime());
+        praiseMapper.updateByPrimaryKey(readingPraise);
+    }
+
 
     @Override
     public void createComment(CommentDto commentDto){

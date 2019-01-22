@@ -104,6 +104,7 @@ public class ReadingServiceImpl implements ReadingService {
             newReadingDto.setUnCommitCount(studentCount-readCount);
             newReadingDto.setTaskId(readingTask.getId());
             newReadingDto.setName(readingTask.getName());
+            newReadingDto.setBookName(readingTask.getBookName());
             newReadingDto.setCreateTime(DateUtil.formatDate(readingTask.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
             list.add(newReadingDto);
         }
@@ -119,6 +120,7 @@ public class ReadingServiceImpl implements ReadingService {
             NewReadingDto newReadingDto = new NewReadingDto();
             newReadingDto.setTaskId(readingTask.getId());
             newReadingDto.setName(readingTask.getName());
+            newReadingDto.setBookName(readingTask.getBookName());
             newReadingDto.setCreateTime(DateUtil.formatDate(readingTask.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
 
             ReadingResult<AgencyClassDto> result = agencyFeign.getAgencyClassInfo(classId);

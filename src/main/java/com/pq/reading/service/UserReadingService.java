@@ -82,9 +82,12 @@ public interface UserReadingService {
      * @param studentId
      * @param readingId
      * @param commentId
+     * @param praiseStudentId
+     * @param praiseUserId
      * @return
      */
-    MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId);
+    MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId,
+                                            String praiseUserId,Long praiseStudentId);
 
     /**
      * 获取阅读详情评论列表
@@ -110,6 +113,12 @@ public interface UserReadingService {
      * @return
      */
     void praise(PraiseDto praiseDto);
+
+    /**
+     * 取消点赞
+     * @param praiseDto
+     */
+    void praiseCancel(PraiseDto praiseDto);
 
     /**
      * 发表评论

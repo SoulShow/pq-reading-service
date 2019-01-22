@@ -171,10 +171,13 @@ public class UserReadingController {
 	@ResponseBody
 	public ReadingResult<MyReadingDetailDto> getUserReadingDetail(@RequestParam("studentId") Long studentId,
 																  @RequestParam("readingId") Long readingId,
-																  @RequestParam(value = "commentId",required = false) Long commentId) {
+																  @RequestParam(value = "commentId",required = false) Long commentId,
+																  @RequestParam("praiseUserId") String praiseUserId,
+																  @RequestParam(value = "praiseStudentId",
+																		  defaultValue = "0",required = false) Long praiseStudentId) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(userReadingService.getUserReadingDetail(studentId,readingId,commentId));
+			result.setData(userReadingService.getUserReadingDetail(studentId,readingId,commentId,praiseUserId,praiseStudentId));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());
@@ -245,6 +248,23 @@ public class UserReadingController {
 		ReadingResult result = new ReadingResult();
 		try{
 			userReadingService.praise(praiseDto);
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@PostMapping(value = "/student/praise/cancel")
+	@ResponseBody
+	public ReadingResult cancelPraise(@RequestBody PraiseDto praiseDto){
+		ReadingResult result = new ReadingResult();
+		try{
+			userReadingService.praiseCancel(praiseDto);
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

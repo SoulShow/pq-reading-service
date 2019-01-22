@@ -17,4 +17,8 @@ public interface StudentReadingPraiseMapper {
     int updateByPrimaryKey(StudentReadingPraise record);
 
     Integer selectCountByReadingId(@Param("readingId")Long readingId);
+
+    StudentReadingPraise selectByReadingIdAndUserInfo(@Param("readingId")Long readingId,
+                                                      @Param("praiseUserId")String praiseUserId,
+                                                      @Param("praiseStudentId")Long praiseStudentId);
 }
