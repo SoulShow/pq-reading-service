@@ -90,7 +90,7 @@ public class ReadingServiceImpl implements ReadingService {
         List<NewReadingDto> list = new ArrayList<>();
         for(ReadingTask readingTask:taskList){
             NewReadingDto newReadingDto = new NewReadingDto();
-
+            newReadingDto.setChapterId(readingTask.getChapterId());
             Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(),null);
             if(readCount==null||readCount==0){
                 readCount = 0;
@@ -122,7 +122,7 @@ public class ReadingServiceImpl implements ReadingService {
             newReadingDto.setName(readingTask.getName());
             newReadingDto.setBookName(readingTask.getBookName());
             newReadingDto.setCreateTime(DateUtil.formatDate(readingTask.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
-
+            newReadingDto.setChapterId(readingTask.getChapterId());
             ReadingResult<AgencyClassDto> result = agencyFeign.getAgencyClassInfo(classId);
             if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
                 throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
