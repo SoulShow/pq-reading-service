@@ -293,6 +293,11 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
     @Override
     public void praise(PraiseDto praiseDto){
+        StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(praiseDto.getReadingId(),
+                praiseDto.getUserId(),praiseDto.getStudentId());
+        if(readingPraise!=null){
+            ReadingException.raise(ReadingErrors.READING_PRAISE_IS_EXIST);
+        }
         StudentReadingPraise praise = new StudentReadingPraise();
         praise.setReadingRecordId(praiseDto.getReadingId());
         praise.setUserId(praiseDto.getUserId());
