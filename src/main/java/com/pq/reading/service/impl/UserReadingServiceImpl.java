@@ -421,6 +421,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         List<NewReadingDto> readingDtos = new ArrayList<>();
         for(StudentTaskReadingRecord taskReadingRecord:list){
             NewReadingDto newReadingDto = new NewReadingDto();
+            newReadingDto.setTaskId(taskReadingRecord.getTaskId());
             newReadingDto.setChapterId(taskReadingRecord.getChapterId());
             newReadingDto.setName(taskReadingRecord.getName());
             newReadingDto.setBookName(taskReadingRecord.getBookName());
