@@ -389,7 +389,90 @@ public class UserReadingServiceImpl implements UserReadingService {
         readingRecord.setUpdatedTime(DateUtil.currentTime());
         readingRecordMapper.updateByPrimaryKey(readingRecord);
     }
+    @Override
+    public List<NewReadingDto> getTeacherOnoToOneList(Long classId,String userId, int offset,int size){
+        ReadingResult<List<Long>> result = agencyFeign.getStudentInfoList(classId);
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+        }
+        if(result.getData()==null||result.getData().size()==0){
+            return null;
+        }
+        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByTeacherUserIdAndStudentId(userId,result.getData(),offset,size);
 
+        return getReadingList(list,userId);
+    }
+
+    @Override
+    public NewReadingListDto getTeacherCommitList(String userId,Long classId, Long taskId){
+        ReadingResult<List<Long>> result = agencyFeign.getStudentInfoList(classId);
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+        }
+        List<StudentTaskReadingRecord> readingRecordList = readingRecordMapper.selectByTaskId(taskId);
+        NewReadingListDto newReadingListDto = new NewReadingListDto();
+        List<NewReadingDto> readingDtos = getReadingList(readingRecordList,userId);
+        newReadingListDto.setList(readingDtos);
+        newReadingListDto.setCount(readingDtos.size());
+        return newReadingListDto;
+    }
+
+    private List<NewReadingDto> getReadingList(List<StudentTaskReadingRecord> list, String userId){
+        List<NewReadingDto> readingDtos = new ArrayList<>();
+        for(StudentTaskReadingRecord taskReadingRecord:list){
+            NewReadingDto newReadingDto = new NewReadingDto();
+            newReadingDto.setChapterId(taskReadingRecord.getChapterId());
+            newReadingDto.setName(taskReadingRecord.getName());
+            newReadingDto.setBookName(taskReadingRecord.getBookName());
+            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(taskReadingRecord.getStudentId());
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+            }
+            newReadingDto.setClassName(studentInfo.getData().getClassName());
+            newReadingDto.setUserName(studentInfo.getData().getName());
+            newReadingDto.setAvatar(studentInfo.getData().getAvatar());
+            newReadingDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
+
+            Integer readCount = taskReadLogMapper.selectCountByUserIdAndStudentId(userId,0L);
+            if(readCount==null||readCount==0){
+                newReadingDto.setReadingState(0);
+            }else {
+                newReadingDto.setReadingState(1);
+            }
+            newReadingDto.setReadingId(taskReadingRecord.getId());
+
+            readingDtos.add(newReadingDto);
+        }
+        return readingDtos;
+    }
+
+    @Override
+    public AgencyStudentListDto getTeacherUnCommitList(String userId, Long classId, Long taskId){
+        ReadingResult<List<Long>> result = agencyFeign.getStudentInfoList(classId);
+        if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+        }
+        AgencyStudentListDto agencyStudentListDto = new AgencyStudentListDto();
+        List<AgencyStudentDto> list = new ArrayList<>();
+        for(Long studentId:result.getData()){
+            StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByTaskIdAndStudentId(taskId,studentId);
+            if(readingRecord==null){
+                ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(studentId);
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+                }
+                AgencyStudentDto agencyStudentDto = new AgencyStudentDto();
+                agencyStudentDto.setStudentId(studentId);
+                agencyStudentDto.setName(studentInfo.getData().getName());
+                agencyStudentDto.setClassName(studentInfo.getData().getClassName());
+                agencyStudentDto.setAvatar(studentInfo.getData().getAvatar());
+                list.add(agencyStudentDto);
+            }
+        }
+        agencyStudentListDto.setList(list);
+        agencyStudentListDto.setCount(result.getData().size()-list.size());
+        return agencyStudentListDto;
+    }
 
 
 

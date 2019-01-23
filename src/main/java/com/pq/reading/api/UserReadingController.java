@@ -339,4 +339,70 @@ public class UserReadingController {
 		}
 		return result;
 	}
+	@GetMapping(value = "/teacher/oneToOne/list")
+	@ResponseBody
+	public ReadingResult<List<NewReadingDto>> getTeacherOnoToOneList(@RequestParam("classId") Long classId,
+																	@RequestParam("userId") String userId,
+																	@RequestParam(value = "page",required = false) Integer page,
+																	@RequestParam(value = "size",required = false) Integer size) {
+		ReadingResult result = new ReadingResult();
+		if (page == null || page < 1) {
+			page = 1;
+		}
+		if (size == null || size < 1) {
+			size = 10;
+		}
+		int offset = (page - 1) * size;
+
+		try{
+			result.setData(userReadingService.getTeacherOnoToOneList(classId,userId,offset,size));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+	@GetMapping(value = "/teacher/commit/list")
+	@ResponseBody
+	public ReadingResult<NewReadingListDto> getTeacherCommitList(@RequestParam("classId") Long classId,
+																 @RequestParam("taskId") Long taskId,
+																 @RequestParam("userId") String userId) {
+		ReadingResult result = new ReadingResult();
+
+		try{
+			result.setData(userReadingService.getTeacherCommitList(userId,classId,taskId));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
+	@GetMapping(value = "/teacher/unCommit/list")
+	@ResponseBody
+	public ReadingResult<AgencyStudentListDto> getTeacherUnCommitList(@RequestParam("classId") Long classId,
+																      @RequestParam("taskId") Long taskId,
+																	  @RequestParam("userId") String userId) {
+		ReadingResult result = new ReadingResult();
+		try{
+			result.setData(userReadingService.getTeacherUnCommitList(userId,classId,taskId));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
 }

@@ -116,4 +116,23 @@
     limit #{offset},#{size}
   </select>
 
+  <select id="selectByTeacherUserIdAndStudentId" resultMap="BaseResultMap" >
+    select * from pq_student_task_reading_record
+    where state = 1
+    and teacher_id = #{userId}
+    <if test="studentList !=null">
+      and student_id in
+      <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
+    </if>
+    order by created_time desc
+    limit #{offset},#{size}
+  </select>
+
+  <select id="selectByTaskId" resultMap="BaseResultMap" >
+    select * from pq_student_task_reading_record
+    where state = 1
+    and task_id = #{taskId}
+    order by created_time desc
+  </select>
+
 </mapper>

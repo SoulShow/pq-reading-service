@@ -146,4 +146,36 @@ public interface UserReadingService {
      */
     void delUserReading(Long readingId,Long studentId);
 
+    /**
+     * 获取一对一阅读列表
+     * @param classId
+     * @param userId
+     * @param offset
+     * @param size
+     * @return
+     */
+    List<NewReadingDto> getTeacherOnoToOneList(Long classId,String userId, int offset,int size);
+
+    /**
+     * 获取提交列表
+     * @param userId
+     * @param classId
+     * @param taskId
+     * @return
+     */
+    NewReadingListDto getTeacherCommitList(String userId, Long classId, Long taskId);
+
+
+    /**
+     * 获取未提交信息
+     * @param userId
+     * @param classId
+     * @param taskId
+     * @return
+     */
+    AgencyStudentListDto getTeacherUnCommitList(String userId, Long classId, Long taskId);
+
+
+
+
 }
