@@ -471,7 +471,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             }
         }
         agencyStudentListDto.setList(list);
-        agencyStudentListDto.setCount(result.getData().size()-list.size());
+        agencyStudentListDto.setCount(list.size());
         return agencyStudentListDto;
     }
 
