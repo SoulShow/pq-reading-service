@@ -433,6 +433,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             newReadingDto.setUserName(studentInfo.getData().getName());
             newReadingDto.setAvatar(studentInfo.getData().getAvatar());
             newReadingDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
+            newReadingDto.setStudentId(taskReadingRecord.getStudentId());
 
             Integer readCount = taskReadLogMapper.selectCountByUserIdAndStudentId(userId,0L);
             if(readCount==null||readCount==0){
