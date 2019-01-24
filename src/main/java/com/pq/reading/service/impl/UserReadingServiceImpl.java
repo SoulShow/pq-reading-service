@@ -8,6 +8,7 @@ import com.pq.reading.exception.ReadingErrorCode;
 import com.pq.reading.exception.ReadingErrors;
 import com.pq.reading.exception.ReadingException;
 import com.pq.reading.feign.AgencyFeign;
+import com.pq.reading.feign.UserFeign;
 import com.pq.reading.mapper.*;
 import com.pq.reading.service.UserReadingService;
 import com.pq.reading.utils.ReadingResult;
@@ -43,6 +44,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     private StudentReadingPraiseMapper praiseMapper;
     @Autowired
     private AgencyFeign agencyFeign;
+    @Autowired
+    private UserFeign userFeign;
 
     @Override
     public void createUserAlbum(UserAlbumDto userAlbumDto){
@@ -228,7 +231,7 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public List<StudentReadingCommentDto> getReadingCommentList(Long readingId,int offset,int size){
+    public List<StudentReadingCommentDto> getReadingCommentList(Long readingId,Long classId,int offset,int size){
         List<StudentReadingComment> commentList = readingCommentMapper.selectByReadingId(readingId,offset,size);
 
         List<StudentReadingCommentDto> list = new ArrayList<>();
@@ -238,13 +241,29 @@ public class UserReadingServiceImpl implements UserReadingService {
             studentReadingCommentDto.setOriginatorUserId(readingComment.getOriginatorUserId());
             studentReadingCommentDto.setOriginatorStudentId(readingComment.getOriginatorStudentId());
             studentReadingCommentDto.setOriginatorName(readingComment.getOriginatorName());
+            if(readingComment.getOriginatorStudentId()==null||readingComment.getOriginatorStudentId()==0){
+                ReadingResult<UserDto> result = userFeign.getUserInfo(readingComment.getOriginatorUserId());
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+                }
+                studentReadingCommentDto.setOriginatorAvatar(result.getData().getAvatar());
+                studentReadingCommentDto.setOriginatorName(result.getData().getName());
 
-            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
-            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
-                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+                ReadingResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+                }
+                studentReadingCommentDto.setClassName(classInfo.getData().getName());
+
+            }else {
+                ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+                }
+                studentReadingCommentDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
+                studentReadingCommentDto.setClassName(studentInfo.getData().getClassName());
             }
-            studentReadingCommentDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
-            studentReadingCommentDto.setClassName(studentInfo.getData().getClassName());
+
             studentReadingCommentDto.setReceiverUserId(readingComment.getReceiverUserId());
             studentReadingCommentDto.setReceiverStudentId(readingComment.getReceiverStudentId());
             studentReadingCommentDto.setReceiverName(readingComment.getReceiverName());

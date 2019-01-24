@@ -92,11 +92,12 @@ public interface UserReadingService {
     /**
      * 获取阅读详情评论列表
      * @param readingId
+     * @param classId
      * @param offset
      * @param size
      * @return
      */
-    List<StudentReadingCommentDto> getReadingCommentList(Long readingId,int offset,int size);
+    List<StudentReadingCommentDto> getReadingCommentList(Long readingId,Long classId, int offset,int size);
 
     /**
      * 获取消息列表
