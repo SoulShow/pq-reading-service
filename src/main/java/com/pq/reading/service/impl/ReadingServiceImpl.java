@@ -60,7 +60,8 @@ public class ReadingServiceImpl implements ReadingService {
         List<BookChapter> list = bookChapterMapper.selectByBookId(bookId,offset,size);
         for(BookChapter bookChapter:list){
             ReadingBook readingBook = readingBookMapper.selectByPrimaryKey(bookChapter.getBookId());
-            bookChapter.setBookName(readingBook.getName());
+            BookAlbum bookAlbum = bookAlbumMapper.selectByPrimaryKey(readingBook.getAlbumId());
+            bookChapter.setBookName(bookAlbum.getName()+"·"+readingBook.getName());
         }
         return list;
     }
