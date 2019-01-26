@@ -57,8 +57,12 @@ public class ReadingServiceImpl implements ReadingService {
 
     @Override
     public List<BookChapter> getBookChapterList(Long bookId, int offset, int size){
-        return bookChapterMapper.selectByBookId(bookId,offset,size);
-
+        List<BookChapter> list = bookChapterMapper.selectByBookId(bookId,offset,size);
+        for(BookChapter bookChapter:list){
+            ReadingBook readingBook = readingBookMapper.selectByPrimaryKey(bookChapter.getBookId());
+            bookChapter.setBookName(readingBook.getName());
+        }
+        return list;
     }
 
     @Override
@@ -207,6 +211,8 @@ public class ReadingServiceImpl implements ReadingService {
             bookChapterDetailDto.setArticleUrl(bookChapter.getArticleUrl());
             bookChapterDetailDto.setVoiceUrl(bookChapter.getVoiceUrl());
             bookChapterDetailDto.setReadCount(bookChapter.getReadCount());
+            bookChapterDetailDto.setChapterId(bookChapter.getId());
+            bookChapterDetailDto.setWithPinyin(bookChapter.getWithPinyin());
             detailDtoList.add(bookChapterDetailDto);
         }
         return detailDtoList;
