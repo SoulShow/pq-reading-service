@@ -105,9 +105,9 @@ public class ReadingServiceImpl implements ReadingService {
                 throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
             }
             Integer studentCount = result.getData();
-            Integer count = taskReadLogMapper.selectCountByUserIdAndStudentId(userId,0L);
+            ReadingTaskReadLog taskReadLog = taskReadLogMapper.selectByUserIdAndTaskId(userId,readingTask.getId());
 
-            newReadingDto.setReadingState(count==null||count==0?0:1);
+            newReadingDto.setReadingState(taskReadLog==null?0:1);
             newReadingDto.setUnCommitCount(studentCount-readCount);
             newReadingDto.setTaskId(readingTask.getId());
             newReadingDto.setName(readingTask.getName());
