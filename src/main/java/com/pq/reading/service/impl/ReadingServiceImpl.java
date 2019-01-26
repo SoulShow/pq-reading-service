@@ -90,7 +90,7 @@ public class ReadingServiceImpl implements ReadingService {
         }
    }
     @Override
-    public List<NewReadingDto> getTeacherNewReadingList(Long classId, int offset, int size){
+    public List<NewReadingDto> getTeacherNewReadingList(Long classId, String userId, int offset, int size){
         List<ReadingTask> taskList = readingTaskMapper.selectByClassId(classId,offset,size);
         List<NewReadingDto> list = new ArrayList<>();
         for(ReadingTask readingTask:taskList){
@@ -105,7 +105,9 @@ public class ReadingServiceImpl implements ReadingService {
                 throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
             }
             Integer studentCount = result.getData();
+            Integer count = taskReadLogMapper.selectCountByUserIdAndStudentId(userId,0L);
 
+            newReadingDto.setReadingState(count==null||count==0?0:1);
             newReadingDto.setUnCommitCount(studentCount-readCount);
             newReadingDto.setTaskId(readingTask.getId());
             newReadingDto.setName(readingTask.getName());

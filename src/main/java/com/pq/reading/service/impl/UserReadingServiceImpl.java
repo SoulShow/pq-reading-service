@@ -1,5 +1,6 @@
 package com.pq.reading.service.impl;
 
+import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
 import com.pq.reading.dto.*;
@@ -42,6 +43,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     private StudentReadingCommentMapper readingCommentMapper;
     @Autowired
     private StudentReadingPraiseMapper praiseMapper;
+    @Autowired
+    private TeacherReadingReadLogMapper teacherReadingReadLogMapper;
     @Autowired
     private AgencyFeign agencyFeign;
     @Autowired
@@ -194,8 +197,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId,
-                                                   String praiseUserId,Long praiseStudentId){
+    public MyReadingDetailDto getUserReadingDetail(String userId, Long studentId,Long readingId,Long commentId,
+                                                   String praiseUserId,Long praiseStudentId,int role){
 
         ReadingResult<AgencyStudentDto> result = agencyFeign.getStudentInfo(studentId);
         if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
@@ -230,8 +233,18 @@ public class UserReadingServiceImpl implements UserReadingService {
             }
         }
         StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(readingId,praiseUserId,praiseStudentId);
-
         myReadingDetailDto.setIsPraise(readingPraise==null?0:1);
+
+        if(role==CommonConstants.PQ_LOGIN_ROLE_TEACHER){
+            TeacherReadingReadLog teacherReadingReadLog = teacherReadingReadLogMapper.selectByUserId(userId);
+            if(teacherReadingReadLog==null){
+                teacherReadingReadLog = new TeacherReadingReadLog();
+                teacherReadingReadLog.setUserId(userId);
+                teacherReadingReadLog.setReadingRecordId(readingId);
+                teacherReadingReadLog.setCreatedTime(DateUtil.currentTime());
+                teacherReadingReadLogMapper.insert(teacherReadingReadLog);
+            }
+        }
         return myReadingDetailDto;
     }
 
@@ -438,6 +451,16 @@ public class UserReadingServiceImpl implements UserReadingService {
         List<NewReadingDto> readingDtos = getReadingList(readingRecordList,userId);
         newReadingListDto.setList(readingDtos);
         newReadingListDto.setCount(readingDtos.size());
+
+        ReadingTaskReadLog readingTaskReadLog = new ReadingTaskReadLog();
+        readingTaskReadLog.setTaskId(taskId);
+        readingTaskReadLog.setUserId(userId);
+        readingTaskReadLog.setState(true);
+        readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
+        readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
+        readingTaskReadLog.setStudentId(0L);
+        taskReadLogMapper.insert(readingTaskReadLog);
+
         return newReadingListDto;
     }
 
@@ -458,15 +481,10 @@ public class UserReadingServiceImpl implements UserReadingService {
             newReadingDto.setAvatar(studentInfo.getData().getAvatar());
             newReadingDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
             newReadingDto.setStudentId(taskReadingRecord.getStudentId());
-
-            Integer readCount = taskReadLogMapper.selectCountByUserIdAndStudentId(userId,0L);
-            if(readCount==null||readCount==0){
-                newReadingDto.setReadingState(0);
-            }else {
-                newReadingDto.setReadingState(1);
-            }
             newReadingDto.setReadingId(taskReadingRecord.getId());
 
+            TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserId(userId);
+            newReadingDto.setReadingState(readingReadLog==null?0:1);
             readingDtos.add(newReadingDto);
         }
         return readingDtos;

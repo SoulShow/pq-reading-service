@@ -79,15 +79,17 @@ public interface UserReadingService {
 
     /**
      * 获取个人阅读详情
+     * @param userId
      * @param studentId
      * @param readingId
      * @param commentId
      * @param praiseStudentId
      * @param praiseUserId
+     * @param role
      * @return
      */
-    MyReadingDetailDto getUserReadingDetail(Long studentId,Long readingId,Long commentId,
-                                            String praiseUserId,Long praiseStudentId);
+    MyReadingDetailDto getUserReadingDetail(String userId,Long studentId,Long readingId,Long commentId,
+                                            String praiseUserId,Long praiseStudentId,int role);
 
     /**
      * 获取阅读详情评论列表

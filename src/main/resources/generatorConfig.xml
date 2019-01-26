@@ -83,10 +83,9 @@
             <!--<columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
             <!--<columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
         <!--</table>-->
-        <table tableName="pq_user_reading_banner" domainObjectName="UserReadingBanner">
+        <table tableName="pq_teacher_reading_read_log" domainObjectName="TeacherReadingReadLog">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <columnOverride column="created_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
-            <columnOverride column="updated_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
         </table>
         <!--<table tableName="pq_reading_task_one_to_one" domainObjectName="ReadingTaskOneToOne">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->

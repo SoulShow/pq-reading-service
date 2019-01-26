@@ -98,6 +98,7 @@ public class ReadingController {
 	@GetMapping(value = "/teacher/reading/list")
 	@ResponseBody
 	public ReadingResult getTeacherNewReadingList(@RequestParam("classId") Long classId,
+												  @RequestParam("userId") String userId,
 											@RequestParam(value = "page",required = false) Integer page,
 											@RequestParam(value = "size",required = false) Integer size) {
 		ReadingResult result = new ReadingResult();
@@ -110,7 +111,7 @@ public class ReadingController {
 		int offset = (page - 1) * size;
 
 		try{
-			result.setData(readingService.getTeacherNewReadingList(classId,offset,size));
+			result.setData(readingService.getTeacherNewReadingList(classId,userId,offset,size));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

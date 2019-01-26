@@ -52,6 +52,7 @@
     <if test="studentId!=null and studentId!=0">
     and student_id = #{studentId}
     </if>
+    and student_id !=0
     and state = 1
   </select>
 

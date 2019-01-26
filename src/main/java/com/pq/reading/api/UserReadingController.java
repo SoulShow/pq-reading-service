@@ -170,14 +170,16 @@ public class UserReadingController {
 	@GetMapping(value = "/student/my/reading/detail")
 	@ResponseBody
 	public ReadingResult<MyReadingDetailDto> getUserReadingDetail(@RequestParam("studentId") Long studentId,
+																  @RequestParam("userId") String userId,
 																  @RequestParam("readingId") Long readingId,
 																  @RequestParam(value = "commentId",required = false) Long commentId,
 																  @RequestParam("praiseUserId") String praiseUserId,
 																  @RequestParam(value = "praiseStudentId",
-																		  defaultValue = "0",required = false) Long praiseStudentId) {
+																		  defaultValue = "0",required = false) Long praiseStudentId,
+																  @RequestParam("role") int role) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(userReadingService.getUserReadingDetail(studentId,readingId,commentId,praiseUserId,praiseStudentId));
+			result.setData(userReadingService.getUserReadingDetail(userId,studentId,readingId,commentId,praiseUserId,praiseStudentId,role));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

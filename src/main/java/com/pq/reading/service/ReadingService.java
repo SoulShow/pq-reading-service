@@ -54,11 +54,12 @@ public interface ReadingService {
     /**
      * 获取老师新阅读列表
      * @param classId
+     * @param userId
      * @param offset
      * @param size
      * @return
      */
-    List<NewReadingDto> getTeacherNewReadingList(Long classId,int offset, int size);
+    List<NewReadingDto> getTeacherNewReadingList(Long classId,String userId, int offset, int size);
 
 
     /**
