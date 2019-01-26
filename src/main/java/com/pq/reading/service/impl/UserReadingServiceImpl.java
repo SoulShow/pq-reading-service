@@ -111,14 +111,18 @@ public class UserReadingServiceImpl implements UserReadingService {
 
         ReadingTask readingTask = readingTaskMapper.selectByPrimaryKey(userReadingRecordDto.getTaskId());
         if(readingTask!=null){
-            ReadingTaskReadLog taskReadLog = new ReadingTaskReadLog();
-            taskReadLog.setTaskId(readingTask.getId());
-            taskReadLog.setStudentId(userReadingRecordDto.getStudentId());
-            taskReadLog.setUserId(userReadingRecordDto.getUserId());
-            taskReadLog.setState(true);
-            taskReadLog.setCreatedTime(DateUtil.currentTime());
-            taskReadLog.setUpdatedTime(DateUtil.currentTime());
-            taskReadLogMapper.insert(taskReadLog);
+           Integer count = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(),
+                    userReadingRecordDto.getStudentId());
+            if(count==null||count==0){
+                ReadingTaskReadLog taskReadLog= new ReadingTaskReadLog();
+                taskReadLog.setTaskId(readingTask.getId());
+                taskReadLog.setStudentId(userReadingRecordDto.getStudentId());
+                taskReadLog.setUserId(userReadingRecordDto.getUserId());
+                taskReadLog.setState(true);
+                taskReadLog.setCreatedTime(DateUtil.currentTime());
+                taskReadLog.setUpdatedTime(DateUtil.currentTime());
+                taskReadLogMapper.insert(taskReadLog);
+            }
         }
         return studentTaskReadingRecord.getId();
     }
@@ -453,15 +457,17 @@ public class UserReadingServiceImpl implements UserReadingService {
         newReadingListDto.setList(readingDtos);
         newReadingListDto.setCount(readingDtos.size());
 
-        ReadingTaskReadLog readingTaskReadLog = new ReadingTaskReadLog();
-        readingTaskReadLog.setTaskId(taskId);
-        readingTaskReadLog.setUserId(userId);
-        readingTaskReadLog.setState(true);
-        readingTaskReadLog.setCreatedTime(DateUtil.currentTime());
-        readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
-        readingTaskReadLog.setStudentId(0L);
-        taskReadLogMapper.insert(readingTaskReadLog);
-
+        ReadingTaskReadLog readingTaskReadLog = taskReadLogMapper.selectByUserIdAndTaskId(userId,taskId);
+        if(readingTaskReadLog==null){
+            readingTaskReadLog = new ReadingTaskReadLog();
+            readingTaskReadLog.setTaskId(taskId);
+            readingTaskReadLog.setUserId(userId);
+            readingTaskReadLog.setState(true);
+            readingTaskReadLog.setCreatedTime(DateUtil.currentTime());
+            readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
+            readingTaskReadLog.setStudentId(0L);
+            taskReadLogMapper.insert(readingTaskReadLog);
+        }
         return newReadingListDto;
     }
 

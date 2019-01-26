@@ -23,4 +23,5 @@ public interface ReadingTaskReadLogMapper {
 
     ReadingTaskReadLog selectByUserIdAndTaskId(@Param("userId")String userId,
                                                @Param("taskId")Long taskId);
+
 }
