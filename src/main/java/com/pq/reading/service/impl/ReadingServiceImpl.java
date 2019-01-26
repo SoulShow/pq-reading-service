@@ -152,7 +152,6 @@ public class ReadingServiceImpl implements ReadingService {
             }else {
                 newReadingDto.setReadingState(1);
             }
-
             list.add(newReadingDto);
         }
         return list;

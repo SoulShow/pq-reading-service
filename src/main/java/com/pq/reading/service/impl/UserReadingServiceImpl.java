@@ -456,7 +456,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         readingTaskReadLog.setTaskId(taskId);
         readingTaskReadLog.setUserId(userId);
         readingTaskReadLog.setState(true);
-        readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
+        readingTaskReadLog.setCreatedTime(DateUtil.currentTime());
         readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
         readingTaskReadLog.setStudentId(0L);
         taskReadLogMapper.insert(readingTaskReadLog);
