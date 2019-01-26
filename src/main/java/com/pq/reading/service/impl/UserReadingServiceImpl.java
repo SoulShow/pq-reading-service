@@ -81,7 +81,7 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void uploadUserReading(UserReadingRecordDto userReadingRecordDto){
+    public Long uploadUserReading(UserReadingRecordDto userReadingRecordDto){
         StudentTaskReadingRecord studentTaskReadingRecord = new StudentTaskReadingRecord();
         studentTaskReadingRecord.setTaskId(userReadingRecordDto.getTaskId()==null?0:userReadingRecordDto.getTaskId());
         studentTaskReadingRecord.setUserAlbumIId(userReadingRecordDto.getUserAlbumId());
@@ -120,6 +120,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             taskReadLog.setUpdatedTime(DateUtil.currentTime());
             taskReadLogMapper.insert(taskReadLog);
         }
+        return studentTaskReadingRecord.getId();
     }
 
     @Override

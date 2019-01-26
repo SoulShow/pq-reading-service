@@ -28,8 +28,9 @@ public interface UserReadingService {
     /**
      * 上传阅读
      * @param userReadingRecordDto
+     * @return
      */
-    void uploadUserReading(UserReadingRecordDto userReadingRecordDto);
+    Long uploadUserReading(UserReadingRecordDto userReadingRecordDto);
 
     /**
      * 获取专辑详情

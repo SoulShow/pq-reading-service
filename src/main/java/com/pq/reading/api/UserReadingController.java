@@ -58,7 +58,7 @@ public class UserReadingController {
 	public ReadingResult uploadUserReading (@RequestBody UserReadingRecordDto readingRecordDto) {
 		ReadingResult result = new ReadingResult();
 		try{
-			userReadingService.uploadUserReading(readingRecordDto);
+			result.setData(userReadingService.uploadUserReading(readingRecordDto));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());
