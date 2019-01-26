@@ -16,5 +16,6 @@ public interface TeacherReadingReadLogMapper {
 
     int updateByPrimaryKey(TeacherReadingReadLog record);
 
-    TeacherReadingReadLog selectByUserId(@Param("userId")String userId);
+    TeacherReadingReadLog selectByUserIdAndReadingId(@Param("userId")String userId,
+                                                     @Param("readingId")Long readingId);
 }

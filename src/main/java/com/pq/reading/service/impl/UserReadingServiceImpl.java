@@ -237,7 +237,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         myReadingDetailDto.setIsPraise(readingPraise==null?0:1);
 
         if(role==CommonConstants.PQ_LOGIN_ROLE_TEACHER){
-            TeacherReadingReadLog teacherReadingReadLog = teacherReadingReadLogMapper.selectByUserId(userId);
+            TeacherReadingReadLog teacherReadingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,readingId);
             if(teacherReadingReadLog==null){
                 teacherReadingReadLog = new TeacherReadingReadLog();
                 teacherReadingReadLog.setUserId(userId);
@@ -484,7 +484,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             newReadingDto.setStudentId(taskReadingRecord.getStudentId());
             newReadingDto.setReadingId(taskReadingRecord.getId());
 
-            TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserId(userId);
+            TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,taskReadingRecord.getId());
             newReadingDto.setReadingState(readingReadLog==null?0:1);
             readingDtos.add(newReadingDto);
         }

@@ -37,9 +37,10 @@
     from pq_teacher_reading_read_log
   </select>
 
-  <select id="selectByUserId" resultMap="BaseResultMap" >
+  <select id="selectByUserIdAndReadingId" resultMap="BaseResultMap" >
     select id, reading_record_id, user_id, created_time
     from pq_teacher_reading_read_log
     where user_id = #{userId}
+    and reading_record_id = #{readingId}
   </select>
 </mapper>
