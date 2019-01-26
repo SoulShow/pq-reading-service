@@ -168,6 +168,9 @@ public class UserReadingServiceImpl implements UserReadingService {
             userAlbumReadingDto.setVoiceUrl(readingRecord.getVoiceUrl());
             userAlbumReadingDto.setCreateTime(DateUtil.formatDate(readingRecord.getCreatedTime(),
                     DateUtil.DEFAULT_TIME_MINUTE));
+            userAlbumReadingDto.setChapterId(readingRecord.getChapterId());
+            BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(readingRecord.getChapterId());
+            userAlbumReadingDto.setWithPinyin(bookChapter.getWithPinyin());
             readingDtoList.add(userAlbumReadingDto);
         }
         return readingDtoList;
