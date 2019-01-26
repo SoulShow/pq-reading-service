@@ -171,6 +171,8 @@ public class UserReadingServiceImpl implements UserReadingService {
             userAlbumReadingDto.setChapterId(readingRecord.getChapterId());
             BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(readingRecord.getChapterId());
             userAlbumReadingDto.setWithPinyin(bookChapter.getWithPinyin());
+            userAlbumReadingDto.setAuthor(bookChapter.getAuthor());
+            userAlbumReadingDto.setArticleUrl(bookChapter.getArticleUrl());
             readingDtoList.add(userAlbumReadingDto);
         }
         return readingDtoList;
