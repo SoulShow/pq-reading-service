@@ -1,8 +1,11 @@
 package com.pq.reading.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
+import com.pq.common.util.HttpUtil;
 import com.pq.reading.dto.*;
 import com.pq.reading.entity.*;
 import com.pq.reading.exception.ReadingErrorCode;
@@ -12,12 +15,16 @@ import com.pq.reading.feign.AgencyFeign;
 import com.pq.reading.feign.UserFeign;
 import com.pq.reading.mapper.*;
 import com.pq.reading.service.UserReadingService;
+import com.pq.reading.utils.Constants;
 import com.pq.reading.utils.ReadingResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,9 +53,13 @@ public class UserReadingServiceImpl implements UserReadingService {
     @Autowired
     private TeacherReadingReadLogMapper teacherReadingReadLogMapper;
     @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
     private AgencyFeign agencyFeign;
     @Autowired
     private UserFeign userFeign;
+    @Value("${php.url}")
+    private String phpUrl;
 
     @Override
     public void createUserAlbum(UserAlbumDto userAlbumDto){
@@ -522,7 +533,52 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         agencyStudentListDto.setList(list);
         agencyStudentListDto.setCount(list.size());
+        redisTemplate.opsForValue().set(Constants.READING_TASK_USER_INFO+taskId,JSON.toJSON(list).toString());
         return agencyStudentListDto;
+    }
+    @Override
+    public  void unCommitListPush(String userId,Long taskId,Long classId){
+        List<AgencyStudentDto> list = new ArrayList<>();
+        if(redisTemplate.hasKey(Constants.READING_TASK_USER_INFO+taskId)){
+            list = JSON.parseObject((String) redisTemplate.opsForValue().get(Constants.READING_TASK_USER_INFO+taskId),
+                    new TypeReference<List<AgencyStudentDto>>() {
+            });
+        }else {
+            AgencyStudentListDto studentListDto = getTeacherUnCommitList( userId, classId, taskId);
+            list = studentListDto.getList();
+        }
+
+        ReadingResult<UserDto> userResult = userFeign.getUserInfo(userId);
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(userResult.getStatus(), userResult.getMessage()));
+        }
+
+        UserDto userDto = userResult.getData();
+        for(AgencyStudentDto studentDto:list){
+            HashMap<String, Object> paramMap = new HashMap<>();
+            paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
+            paramMap.put("user", userDto.getHuanxinId());
+            paramMap.put("form", userDto.getHuanxinId());
+            paramMap.put("teacherName", userDto.getName());
+            paramMap.put("title", "八点阅读");
+
+            StudentNoticeDto studentNoticeDto = new StudentNoticeDto();
+            studentNoticeDto.setTaskId(taskId);
+            studentNoticeDto.setStudent_id(studentDto.getStudentId());
+            studentNoticeDto.setStudent_name(studentDto.getName());
+            paramMap.put("ext", studentNoticeDto);
+
+            String huanxResult = null;
+            try {
+                huanxResult = HttpUtil.sendJson(phpUrl + "push", new HashMap<>(), JSON.toJSONString(paramMap));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ReadingResult pushResult = JSON.parseObject(huanxResult, ReadingResult.class);
+            if (pushResult == null || !CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
+                ReadingException.raise(ReadingErrors.READING_PUSH_ERROR);
+            }
+        }
     }
 
 

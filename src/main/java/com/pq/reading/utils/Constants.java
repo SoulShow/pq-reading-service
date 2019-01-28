@@ -18,6 +18,12 @@ public class Constants {
     public static final int READING_ALBUM_TYPE_CHINESE = 1;
     public static final int READING_ALBUM_TYPE_OUTSIDE_READING = 2;
 
+    public static final Long PUSH_TEMPLATE_ID_NOTICE_2 = 2L;
+
+    public static final String READING_TASK_USER_INFO = "READING_TASK_USER_INFO:";
+
+
+
 
 
 }

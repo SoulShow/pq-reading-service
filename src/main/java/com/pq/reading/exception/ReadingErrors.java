@@ -14,6 +14,7 @@ public class ReadingErrors extends CommonErrors {
     public final static ErrorCode READING_RECORD_STUDENT_NOT_MATCH = new ReadingErrorCode("0003", "该用户无删除权限");
     public final static ErrorCode READING_PRAISE_IS_NOT_EXIST = new ReadingErrorCode("0004", "该点赞不存在");
     public final static ErrorCode READING_PRAISE_IS_EXIST = new ReadingErrorCode("0005", "抱歉，该用户已经点过赞");
+    public final static ErrorCode READING_PUSH_ERROR = new ReadingErrorCode("0006", "8点阅读推送失败");
 
 
 

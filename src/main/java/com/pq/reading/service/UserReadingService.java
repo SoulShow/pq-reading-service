@@ -179,7 +179,13 @@ public interface UserReadingService {
      */
     AgencyStudentListDto getTeacherUnCommitList(String userId, Long classId, Long taskId);
 
-
+    /**
+     * 未提交阅读提醒
+     * @param userId
+     * @param taskId
+     * @param classId
+     */
+    void unCommitListPush(String userId,Long taskId,Long classId);
 
 
 }

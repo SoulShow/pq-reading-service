@@ -408,4 +408,23 @@ public class UserReadingController {
 		return result;
 	}
 
+	@GetMapping(value = "/teacher/unCommit/push")
+	@ResponseBody
+	public ReadingResult push(@RequestParam("classId") Long classId,
+							  @RequestParam("taskId") Long taskId,
+							  @RequestParam("userId") String userId) {
+		ReadingResult result = new ReadingResult();
+		try{
+			userReadingService.unCommitListPush(userId,classId,taskId);
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
 }
