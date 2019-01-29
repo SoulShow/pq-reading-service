@@ -38,4 +38,6 @@ public interface StudentTaskReadingRecordMapper {
 
     List<StudentTaskReadingRecord> selectByTeacherId(@Param("teacherId")String teacherId);
 
+    Integer selectCountByTaskId(@Param("taskId")Long taskId);
+
 }

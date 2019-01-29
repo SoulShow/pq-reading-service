@@ -42,6 +42,8 @@ public class ReadingServiceImpl implements ReadingService {
     private TaskReadingPlayLogMapper readingPlayLogMapper;
     @Autowired
     private StudentTaskReadingRecordMapper readingRecordMapper;
+    @Autowired
+    private TeacherReadingReadLogMapper teacherReadingReadLogMapper;
 
     @Autowired
     private AgencyFeign agencyFeign;
@@ -146,19 +148,19 @@ public class ReadingServiceImpl implements ReadingService {
         for (ReadingTask readingTask : taskList) {
             NewReadingDto newReadingDto = new NewReadingDto();
             newReadingDto.setChapterId(readingTask.getChapterId());
-            Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(), null);
-            if (readCount == null || readCount == 0) {
-                readCount = 0;
-            }
-            ReadingResult<Integer> result = agencyFeign.getStudentCount(classId);
-            if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
-                throw new ReadingException(new ReadingErrorCode(result.getStatus(), result.getMessage()));
-            }
-            Integer studentCount = result.getData();
+
             ReadingTaskReadLog taskReadLog = taskReadLogMapper.selectByUserIdAndTaskId(userId, readingTask.getId());
 
             newReadingDto.setReadingState(taskReadLog == null ? 0 : 1);
-            newReadingDto.setUnCommitCount(studentCount - readCount);
+            int unCommitCount = 0;
+            List<StudentTaskReadingRecord> readingRecordList = readingRecordMapper.selectByTaskId(readingTask.getId());
+            for(StudentTaskReadingRecord readingRecord:readingRecordList){
+                TeacherReadingReadLog readLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,readingRecord.getId());
+                if(readLog==null){
+                    unCommitCount = unCommitCount+1;
+                }
+            }
+            newReadingDto.setUnCommitCount(unCommitCount);
             newReadingDto.setTaskId(readingTask.getId());
             newReadingDto.setName(readingTask.getName());
             newReadingDto.setBookName(readingTask.getBookName());

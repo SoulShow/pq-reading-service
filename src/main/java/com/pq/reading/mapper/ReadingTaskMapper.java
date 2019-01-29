@@ -19,5 +19,7 @@ public interface ReadingTaskMapper {
     List<ReadingTask> selectByClassId(@Param("classId") Long classId, @Param("offset") int offset,
                                       @Param("size") int size);
 
+    List<ReadingTask> selectAllByClassId(@Param("classId") Long classId);
+
     Integer selectCountByClassId(@Param("classId") Long classId);
 }

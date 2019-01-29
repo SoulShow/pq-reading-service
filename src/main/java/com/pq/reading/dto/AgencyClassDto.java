@@ -9,6 +9,8 @@ public class AgencyClassDto {
 
     private String img;
 
+    private int count;
+
     public Long getId() {
         return id;
     }
@@ -39,5 +41,13 @@ public class AgencyClassDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

@@ -52,8 +52,9 @@
   <select id="selectValidAlbum" resultMap="BaseResultMap" >
     select id, name, img, type, state, created_time, updated_time,student_id,user_id
     from pq_book_user_album
-    where student_id = #{studentId}
-    and user_id = #{userId}
+    where ((student_id = #{studentId}
+    and user_id = #{userId})
+    or (student_id=0 and user_id=0))
     and state =1
     order by created_time desc
   </select>

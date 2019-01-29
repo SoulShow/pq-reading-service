@@ -445,4 +445,24 @@ public class UserReadingController {
 		return result;
 	}
 
+    @GetMapping(value = "/teacher/class/unRead")
+    @ResponseBody
+    public ReadingResult<List<AgencyClassDto>> getTeacherClassUnReadCount(@RequestParam("type") int type,
+                                                                          @RequestParam("userId") String userId) {
+        ReadingResult result = new ReadingResult();
+        try{
+            result.setData(userReadingService.getTeacherClassUnReadCount(userId,type));
+        }catch (ReadingException e){
+            result.setStatus(e.getErrorCode().getErrorCode());
+            result.setMessage(e.getErrorCode().getErrorMsg());
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+            result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+        }
+        return result;
+    }
+
+	
+
 }

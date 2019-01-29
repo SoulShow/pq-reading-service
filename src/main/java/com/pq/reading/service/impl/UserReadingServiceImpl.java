@@ -1,8 +1,6 @@
 package com.pq.reading.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.google.gson.annotations.JsonAdapter;
 import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
@@ -18,7 +16,6 @@ import com.pq.reading.mapper.*;
 import com.pq.reading.service.UserReadingService;
 import com.pq.reading.utils.Constants;
 import com.pq.reading.utils.ReadingResult;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +55,6 @@ public class UserReadingServiceImpl implements UserReadingService {
     private StudentReadingPraiseMapper praiseMapper;
     @Autowired
     private TeacherReadingReadLogMapper teacherReadingReadLogMapper;
-    @Autowired
-    private RedisTemplate redisTemplate;
     @Autowired
     private AgencyFeign agencyFeign;
     @Autowired
@@ -606,6 +601,36 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         return readingIndexDto;
     }
+
+    @Override
+    public List<AgencyClassDto> getTeacherClassUnReadCount(String userId,int type){
+        ReadingResult<List<AgencyClassDto>> result = agencyFeign.getTeacherClassList(userId);
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(), result.getMessage()));
+        }
+        int count = 0;
+        List<AgencyClassDto> classDtos = result.getData();
+//        for(AgencyClassDto agencyClassDto:classDtos){
+//            //新阅读
+//            if(type==1){
+//                List<ReadingTask> list = readingTaskMapper.selectAllByClassId(agencyClassDto.getId());
+//                for(ReadingTask readingTask:list){
+//                    ReadingTaskReadLog taskReadLog = taskReadLogMapper.selectByUserIdAndTaskId(userId,readingTask.getId());
+//                    if(taskReadLog==null){
+//                        count = count+1;
+//                    }
+//                }
+//            }
+//            //1对1
+//            if(type==2){
+//                readingRecordMapper.
+//
+//            }
+//            agencyClassDto.setCount(count);
+//        }
+        return classDtos;
+    }
+
 
 
 }

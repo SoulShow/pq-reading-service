@@ -142,4 +142,11 @@
     where teacher_id = #{teacherId}
     and state = 1
   </select>
+
+  <select id="selectCountByTaskId" resultType="java.lang.Integer" >
+    select count(id)
+    from pq_student_task_reading_record
+    where task_id = #{taskId}
+    and state = 1
+  </select>
 </mapper>

@@ -72,4 +72,14 @@
     and state  = 1
     and type = 1
   </select>
+
+  <select id="selectAllByClassId" resultMap="BaseResultMap" >
+    select id, name, chapter_id, class_id, type, user_id, state,
+     created_time, updated_time,book_name
+    from pq_reading_task
+    where class_id = #{classId}
+    and state  = 1
+    and type = 1
+    order by created_time desc
+  </select>
 </mapper>

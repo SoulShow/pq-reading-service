@@ -196,4 +196,13 @@ public interface UserReadingService {
     TeacherReadingIndexDto getIndexStatus(String userId,Long classId);
 
 
+    /**
+     * 获取老师班级未读信息
+     * @param userId
+     * @param type
+     * @return
+     */
+    List<AgencyClassDto> getTeacherClassUnReadCount(String userId,int type);
+
+
 }
