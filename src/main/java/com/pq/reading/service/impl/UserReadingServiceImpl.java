@@ -18,6 +18,7 @@ import com.pq.reading.mapper.*;
 import com.pq.reading.service.UserReadingService;
 import com.pq.reading.utils.Constants;
 import com.pq.reading.utils.ReadingResult;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -586,6 +587,25 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
     }
 
+    @Override
+    public TeacherReadingIndexDto getIndexStatus(String userId,Long classId){
+        TeacherReadingIndexDto readingIndexDto = new TeacherReadingIndexDto();
+        List<ReadingTask> taskList = readingTaskMapper.selectByClassId(classId, 1, 1000);
+        for (ReadingTask readingTask : taskList) {
+            Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(), null);
+            if (readCount == null || readCount == 0) {
+                readingIndexDto.setReadingTaskStatus(1);
+                break;
+            }
+        }
+        List<StudentTaskReadingRecord> oneToOneList = readingRecordMapper.selectByTeacherId(userId);
+        for(StudentTaskReadingRecord taskReadingRecord:oneToOneList) {
+            TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,taskReadingRecord.getId());
+            readingIndexDto.setOneToOneStatus(readingReadLog==null?1:0);
+            break;
+        }
+        return readingIndexDto;
+    }
 
 
 }

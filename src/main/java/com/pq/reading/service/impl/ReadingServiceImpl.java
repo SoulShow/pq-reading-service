@@ -240,6 +240,20 @@ public class ReadingServiceImpl implements ReadingService {
         if (readingRecord != null) {
             bookChapterDetailDto.setReadingId(readingRecord.getId());
         }
+        bookChapterDetailDto.setCreateTime(DateUtil.formatDate(readingTask.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
+
+        ReadingResult<UserDto> userResult = userFeign.getUserInfo(readingTask.getUserId());
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(userResult.getStatus(), userResult.getMessage()));
+        }
+        bookChapterDetailDto.setTeacherName(userResult.getData().getName());
+
+        ReadingResult<AgencyClassDto> result = agencyFeign.getAgencyClassInfo(readingTask.getClassId());
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(), result.getMessage()));
+        }
+        bookChapterDetailDto.setClassName(result.getData().getName());
+
         return bookChapterDetailDto;
     }
 

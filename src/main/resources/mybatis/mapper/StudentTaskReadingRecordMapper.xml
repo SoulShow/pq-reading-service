@@ -67,7 +67,7 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time, 
+    select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
     updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
     from pq_student_task_reading_record
   </select>
@@ -135,4 +135,11 @@
     order by created_time desc
   </select>
 
+  <select id="selectByTeacherId" resultMap="BaseResultMap" >
+    select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
+    from pq_student_task_reading_record
+    where teacher_id = #{teacherId}
+    and state = 1
+  </select>
 </mapper>

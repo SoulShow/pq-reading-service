@@ -427,4 +427,22 @@ public class UserReadingController {
 		return result;
 	}
 
+	@GetMapping(value = "/teacher/index")
+	@ResponseBody
+	public ReadingResult<TeacherReadingIndexDto> getIndexStatus(@RequestParam("classId") Long classId,
+																@RequestParam("userId") String userId) {
+		ReadingResult result = new ReadingResult();
+		try{
+			result.setData(userReadingService.getIndexStatus(userId,classId));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
+
 }

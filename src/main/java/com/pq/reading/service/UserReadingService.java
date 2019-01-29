@@ -187,5 +187,13 @@ public interface UserReadingService {
      */
     void unCommitListPush(String userId,Long taskId,Long classId);
 
+    /**
+     * 获取老师阅读首页状态
+     * @param userId
+     * @param classId
+     * @return
+     */
+    TeacherReadingIndexDto getIndexStatus(String userId,Long classId);
+
 
 }
