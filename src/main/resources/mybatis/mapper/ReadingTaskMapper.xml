@@ -62,6 +62,7 @@
     where class_id = #{classId}
     and state  = 1
     and type = 1
+    order by created_time desc
     limit #{offset},#{size}
   </select>
   <select id="selectCountByClassId" resultType="java.lang.Integer" >
