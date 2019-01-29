@@ -555,28 +555,30 @@ public class UserReadingServiceImpl implements UserReadingService {
 
         UserDto userDto = userResult.getData();
         for(AgencyStudentDto studentDto:list){
-            HashMap<String, Object> paramMap = new HashMap<>();
-            paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
-            paramMap.put("user", userDto.getHuanxinId());
-            paramMap.put("form", userDto.getHuanxinId());
-            paramMap.put("teacherName", userDto.getName());
-            paramMap.put("title", "八点阅读");
+            for(ParentDto parentDto:studentDto.getParentList()){
+                HashMap<String, Object> paramMap = new HashMap<>();
+                paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
+                paramMap.put("user", parentDto.getHuanxinId());
+                paramMap.put("form", userDto.getHuanxinId());
+                paramMap.put("teacherName", userDto.getName());
+                paramMap.put("title", "八点阅读");
 
-            StudentNoticeDto studentNoticeDto = new StudentNoticeDto();
-            studentNoticeDto.setTaskId(taskId);
-            studentNoticeDto.setStudent_id(studentDto.getStudentId());
-            studentNoticeDto.setStudent_name(studentDto.getName());
-            paramMap.put("ext", studentNoticeDto);
+                StudentNoticeDto studentNoticeDto = new StudentNoticeDto();
+                studentNoticeDto.setTaskId(taskId);
+                studentNoticeDto.setStudent_id(studentDto.getStudentId());
+                studentNoticeDto.setStudent_name(studentDto.getName());
+                paramMap.put("ext", studentNoticeDto);
 
-            String huanxResult = null;
-            try {
-                huanxResult = HttpUtil.sendJson(phpUrl + "push", new HashMap<>(), JSON.toJSONString(paramMap));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            ReadingResult pushResult = JSON.parseObject(huanxResult, ReadingResult.class);
-            if (pushResult == null || !CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
-                ReadingException.raise(ReadingErrors.READING_PUSH_ERROR);
+                String huanxResult = null;
+                try {
+                    huanxResult = HttpUtil.sendJson(phpUrl + "push", new HashMap<>(), JSON.toJSONString(paramMap));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ReadingResult pushResult = JSON.parseObject(huanxResult, ReadingResult.class);
+                if (pushResult == null || !CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
+                    ReadingException.raise(ReadingErrors.READING_PUSH_ERROR);
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.pq.reading.dto;
 
+import java.util.List;
+
 public class AgencyStudentDto {
     private Long studentId;
     private String avatar;
@@ -7,6 +9,9 @@ public class AgencyStudentDto {
     private int sex;
     private String className;
     private Long readingId;
+
+    private List<ParentDto> parentList;
+
 
     public Long getStudentId() {
         return studentId;
@@ -54,5 +59,13 @@ public class AgencyStudentDto {
 
     public void setReadingId(Long readingId) {
         this.readingId = readingId;
+    }
+
+    public List<ParentDto> getParentList() {
+        return parentList;
+    }
+
+    public void setParentList(List<ParentDto> parentList) {
+        this.parentList = parentList;
     }
 }
