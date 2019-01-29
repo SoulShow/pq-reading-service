@@ -415,7 +415,7 @@ public class UserReadingController {
 							  @RequestParam("userId") String userId) {
 		ReadingResult result = new ReadingResult();
 		try{
-			userReadingService.unCommitListPush(userId,classId,taskId);
+			userReadingService.unCommitListPush(userId,taskId,classId);
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

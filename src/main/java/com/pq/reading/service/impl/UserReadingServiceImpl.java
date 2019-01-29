@@ -539,7 +539,6 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         agencyStudentListDto.setList(list);
         agencyStudentListDto.setCount(list.size());
-        redisTemplate.opsForValue().set(Constants.READING_TASK_USER_INFO+taskId,JSON.toJSON(list).toString());
         return agencyStudentListDto;
     }
     @Override
