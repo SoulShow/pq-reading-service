@@ -2,6 +2,7 @@ package com.pq.reading.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.google.gson.annotations.JsonAdapter;
 import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
@@ -557,9 +558,11 @@ public class UserReadingServiceImpl implements UserReadingService {
         if (!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
             throw new ReadingException(new ReadingErrorCode(userResult.getStatus(), userResult.getMessage()));
         }
+        LOGGER.info("学生列表为：————————————"+JSON.toJSON(list));
 
         UserDto userDto = userResult.getData();
         for(AgencyStudentDto studentDto:list){
+            LOGGER.info("家长列表为：————————————"+JSON.toJSON(studentDto.getParentList()));
             for(ParentDto parentDto:studentDto.getParentList()){
                 LOGGER.info("家长环信id为：————————————"+parentDto.getHuanxinId());
                 HashMap<String, Object> paramMap = new HashMap<>();
