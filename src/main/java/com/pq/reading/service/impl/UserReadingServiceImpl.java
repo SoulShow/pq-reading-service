@@ -17,6 +17,8 @@ import com.pq.reading.mapper.*;
 import com.pq.reading.service.UserReadingService;
 import com.pq.reading.utils.Constants;
 import com.pq.reading.utils.ReadingResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,6 +34,8 @@ import java.util.List;
  */
 @Service
 public class UserReadingServiceImpl implements UserReadingService {
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserReadingServiceImpl.class);
+
     @Autowired
     private BookUserAlbumMapper userAlbumMapper;
     @Autowired
@@ -60,6 +64,7 @@ public class UserReadingServiceImpl implements UserReadingService {
     private UserFeign userFeign;
     @Value("${php.url}")
     private String phpUrl;
+
 
     @Override
     public void createUserAlbum(UserAlbumDto userAlbumDto){
@@ -556,6 +561,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         UserDto userDto = userResult.getData();
         for(AgencyStudentDto studentDto:list){
             for(ParentDto parentDto:studentDto.getParentList()){
+                LOGGER.info("家长环信id为：————————————"+parentDto.getHuanxinId());
                 HashMap<String, Object> paramMap = new HashMap<>();
                 paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
                 paramMap.put("user", parentDto.getHuanxinId());
