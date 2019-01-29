@@ -544,15 +544,9 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
     @Override
     public  void unCommitListPush(String userId,Long taskId,Long classId){
-        List<AgencyStudentDto> list = new ArrayList<>();
-        if(redisTemplate.hasKey(Constants.READING_TASK_USER_INFO+taskId)){
-            list = JSON.parseObject((String) redisTemplate.opsForValue().get(Constants.READING_TASK_USER_INFO+taskId),
-                    new TypeReference<List<AgencyStudentDto>>() {
-            });
-        }else {
-            AgencyStudentListDto studentListDto = getTeacherUnCommitList( userId, classId, taskId);
-            list = studentListDto.getList();
-        }
+        AgencyStudentListDto studentListDto = getTeacherUnCommitList( userId, classId, taskId);
+        List<AgencyStudentDto> list = studentListDto.getList();
+
 
         ReadingResult<UserDto> userResult = userFeign.getUserInfo(userId);
         if (!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
