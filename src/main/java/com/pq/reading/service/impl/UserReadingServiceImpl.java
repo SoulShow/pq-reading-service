@@ -534,6 +534,7 @@ public class UserReadingServiceImpl implements UserReadingService {
                 agencyStudentDto.setName(studentInfo.getData().getName());
                 agencyStudentDto.setClassName(studentInfo.getData().getClassName());
                 agencyStudentDto.setAvatar(studentInfo.getData().getAvatar());
+                agencyStudentDto.setParentList(studentInfo.getData().getParentList());
                 list.add(agencyStudentDto);
             }
         }

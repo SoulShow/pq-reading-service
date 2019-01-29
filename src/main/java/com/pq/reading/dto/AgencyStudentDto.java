@@ -9,7 +9,6 @@ public class AgencyStudentDto {
     private int sex;
     private String className;
     private Long readingId;
-
     private List<ParentDto> parentList;
 
 
