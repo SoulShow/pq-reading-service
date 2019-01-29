@@ -104,33 +104,35 @@ public class ReadingServiceImpl implements ReadingService {
 
                 UserDto userDto = userResult.getData();
                 for (Long studentId : result.getData()) {
-                    HashMap<String, Object> paramMap = new HashMap<>();
-                    paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
-                    paramMap.put("user", userDto.getHuanxinId());
-                    paramMap.put("form", userDto.getHuanxinId());
-                    paramMap.put("teacherName", userDto.getName());
-                    paramMap.put("title", "八点阅读");
-
-                    StudentNoticeDto studentNoticeDto = new StudentNoticeDto();
-                    studentNoticeDto.setWorkId(readingTask.getId());
 
                     ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(studentId);
-                    if (!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())) {
-                        throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(), studentInfo.getMessage()));
+                    if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                        throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
                     }
-                    studentNoticeDto.setStudent_id(studentId);
-                    studentNoticeDto.setStudent_name(studentInfo.getData().getName());
-                    paramMap.put("ext", studentNoticeDto);
+                    for(ParentDto parentDto:studentInfo.getData().getParentList()) {
+                        HashMap<String, Object> paramMap = new HashMap<>();
+                        paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
+                        paramMap.put("user",parentDto.getHuanxinId() );
+                        paramMap.put("form", userDto.getHuanxinId());
+                        paramMap.put("teacherName", userDto.getName());
+                        paramMap.put("title", "八点阅读");
 
-                    String huanxResult = null;
-                    try {
-                        huanxResult = HttpUtil.sendJson(phpUrl + "push", new HashMap<>(), JSON.toJSONString(paramMap));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    ReadingResult pushResult = JSON.parseObject(huanxResult, ReadingResult.class);
-                    if (pushResult == null || !CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
-                        ReadingException.raise(ReadingErrors.READING_PUSH_ERROR);
+                        StudentNoticeDto studentNoticeDto = new StudentNoticeDto();
+                        studentNoticeDto.setWorkId(readingTask.getId());
+                        studentNoticeDto.setStudent_id(studentId);
+                        studentNoticeDto.setStudent_name(studentInfo.getData().getName());
+                        paramMap.put("ext", studentNoticeDto);
+
+                        String huanxResult = null;
+                        try {
+                            huanxResult = HttpUtil.sendJson(phpUrl + "push", new HashMap<>(), JSON.toJSONString(paramMap));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        ReadingResult pushResult = JSON.parseObject(huanxResult, ReadingResult.class);
+                        if (pushResult == null || !CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
+                            ReadingException.raise(ReadingErrors.READING_PUSH_ERROR);
+                        }
                     }
                 }
             }

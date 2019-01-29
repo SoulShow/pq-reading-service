@@ -567,7 +567,7 @@ public class UserReadingServiceImpl implements UserReadingService {
                 paramMap.put("title", "八点阅读");
 
                 StudentNoticeDto studentNoticeDto = new StudentNoticeDto();
-                studentNoticeDto.setTaskId(taskId);
+                studentNoticeDto.setWorkId(taskId);
                 studentNoticeDto.setStudent_id(studentDto.getStudentId());
                 studentNoticeDto.setStudent_name(studentDto.getName());
                 paramMap.put("ext", studentNoticeDto);

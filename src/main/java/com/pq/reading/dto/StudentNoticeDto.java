@@ -12,7 +12,6 @@ public class StudentNoticeDto implements Serializable {
 
     private String student_name;
 
-    private Long taskId;
 
     public Long getStudent_id() {
         return student_id;
@@ -36,13 +35,5 @@ public class StudentNoticeDto implements Serializable {
 
     public void setWorkId(Long workId) {
         this.workId = workId;
-    }
-
-    public Long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
     }
 }
