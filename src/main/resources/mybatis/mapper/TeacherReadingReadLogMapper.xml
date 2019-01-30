@@ -46,7 +46,7 @@
     and reading_record_id = #{readingId}
   </select>
 
-  <select id="selectCountByClassIdAndTeacherId" resultMap="java.lang.Integer" >
+  <select id="selectCountByClassIdAndTeacherId" resultType="java.lang.Integer" >
   select count(id)
   from pq_teacher_reading_read_log
   where user_id = #{userId}
