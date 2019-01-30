@@ -211,7 +211,13 @@ public class ReadingServiceImpl implements ReadingService {
 
     @Override
     public int getUnReadCount(Long classId, String userId, Long studentId) {
-        Integer taskCount = readingTaskMapper.selectCountByClassIdAndUserId(classId,userId);
+        Integer taskCount = 0;
+        if(studentId!=null&& studentId>0){
+            taskCount = readingTaskMapper.selectCountByClassIdAndUserId(classId,null);
+        }else {
+            taskCount = readingTaskMapper.selectCountByClassIdAndUserId(classId,userId);
+        }
+
         if (taskCount == null) {
             taskCount = 0;
         }

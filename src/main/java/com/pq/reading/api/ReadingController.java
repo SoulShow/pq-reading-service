@@ -178,7 +178,7 @@ public class ReadingController {
 		ReadingResult result = new ReadingResult();
 
 		try{
-			result.setData(readingService.getUnReadCount(studentId, userId, classId));
+			result.setData(readingService.getUnReadCount(classId, userId, studentId));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

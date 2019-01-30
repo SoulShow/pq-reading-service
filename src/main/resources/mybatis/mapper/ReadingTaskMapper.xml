@@ -90,7 +90,9 @@
     select count(id)
     from pq_reading_task
     where class_id = #{classId}
+    <if test="userId!=null">
     and user_id = #{userId}
+    </if>
     and state  = 1
     and type = 1
   </select>
