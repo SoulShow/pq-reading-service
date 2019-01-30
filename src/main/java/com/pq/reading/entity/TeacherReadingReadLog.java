@@ -9,6 +9,8 @@ public class TeacherReadingReadLog {
 
     private String userId;
 
+    private Long classId;
+
     private Timestamp createdTime;
 
     public Long getId() {
@@ -41,5 +43,13 @@ public class TeacherReadingReadLog {
 
     public void setCreatedTime(Timestamp createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 }

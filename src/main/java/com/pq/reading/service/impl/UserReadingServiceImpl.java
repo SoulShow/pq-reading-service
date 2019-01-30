@@ -111,7 +111,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         studentTaskReadingRecord.setCreatedTime(DateUtil.currentTime());
         studentTaskReadingRecord.setUpdatedTime(DateUtil.currentTime());
         studentTaskReadingRecord.setDuration(userReadingRecordDto.getDuration());
-
+        studentTaskReadingRecord.setClassId(userReadingRecordDto.getClassId());
         BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(userReadingRecordDto.getChapterId());
         studentTaskReadingRecord.setName(bookChapter.getChapter()+"："+bookChapter.getTitle());
         ReadingBook readingBook = readingBookMapper.selectByPrimaryKey(bookChapter.getBookId());
@@ -130,6 +130,7 @@ public class UserReadingServiceImpl implements UserReadingService {
                 ReadingTaskReadLog taskReadLog= new ReadingTaskReadLog();
                 taskReadLog.setTaskId(readingTask.getId());
                 taskReadLog.setStudentId(userReadingRecordDto.getStudentId());
+                taskReadLog.setClassId(userReadingRecordDto.getClassId());
                 taskReadLog.setUserId(userReadingRecordDto.getUserId());
                 taskReadLog.setState(true);
                 taskReadLog.setCreatedTime(DateUtil.currentTime());
@@ -259,6 +260,7 @@ public class UserReadingServiceImpl implements UserReadingService {
                 teacherReadingReadLog = new TeacherReadingReadLog();
                 teacherReadingReadLog.setUserId(userId);
                 teacherReadingReadLog.setReadingRecordId(readingId);
+                teacherReadingReadLog.setClassId(readingRecord.getClassId());
                 teacherReadingReadLog.setCreatedTime(DateUtil.currentTime());
                 teacherReadingReadLogMapper.insert(teacherReadingReadLog);
             }
@@ -475,6 +477,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             readingTaskReadLog = new ReadingTaskReadLog();
             readingTaskReadLog.setTaskId(taskId);
             readingTaskReadLog.setUserId(userId);
+            readingTaskReadLog.setClassId(classId);
             readingTaskReadLog.setState(true);
             readingTaskReadLog.setCreatedTime(DateUtil.currentTime());
             readingTaskReadLog.setUpdatedTime(DateUtil.currentTime());
@@ -610,24 +613,36 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         int count = 0;
         List<AgencyClassDto> classDtos = result.getData();
-//        for(AgencyClassDto agencyClassDto:classDtos){
-//            //新阅读
-//            if(type==1){
-//                List<ReadingTask> list = readingTaskMapper.selectAllByClassId(agencyClassDto.getId());
-//                for(ReadingTask readingTask:list){
-//                    ReadingTaskReadLog taskReadLog = taskReadLogMapper.selectByUserIdAndTaskId(userId,readingTask.getId());
-//                    if(taskReadLog==null){
-//                        count = count+1;
-//                    }
-//                }
-//            }
-//            //1对1
-//            if(type==2){
-//                readingRecordMapper.
-//
-//            }
-//            agencyClassDto.setCount(count);
-//        }
+        for(AgencyClassDto agencyClassDto:classDtos){
+            //新阅读
+            if(type==1){
+                Integer taskCount = readingTaskMapper.selectCountByClassIdAndUserId(agencyClassDto.getId(),userId);
+                if(taskCount==null||taskCount==0){
+                    count=0;
+                    continue;
+                }
+                Integer taskReadLogCount =taskReadLogMapper.selectCountByClassIdAndUserId(agencyClassDto.getId(),userId);
+                if(taskReadLogCount==null){
+                    taskReadLogCount=0;
+                }
+                count=taskCount-taskReadLogCount;
+            }
+            //1对1
+            if(type==2){
+                Integer recordCount = readingRecordMapper.selectCountByClassIdAndTeacherId(agencyClassDto.getId(),userId);
+                if(recordCount==null||recordCount==0){
+                    count=0;
+                    continue;
+                }
+                Integer readingCount = teacherReadingReadLogMapper.selectCountByClassIdAndTeacherId(agencyClassDto.getId(),userId);
+                if(readingCount==null){
+                    readingCount=0;
+                }
+                count=recordCount-readingCount;
+
+            }
+            agencyClassDto.setCount(count);
+        }
         return classDtos;
     }
 

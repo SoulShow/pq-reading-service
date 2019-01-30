@@ -18,4 +18,6 @@ public interface TeacherReadingReadLogMapper {
 
     TeacherReadingReadLog selectByUserIdAndReadingId(@Param("userId")String userId,
                                                      @Param("readingId")Long readingId);
+
+    Integer selectCountByClassIdAndTeacherId(@Param("classId")Long classId,@Param("userId")String userId);
 }

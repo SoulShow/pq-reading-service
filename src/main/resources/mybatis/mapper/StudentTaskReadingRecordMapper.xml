@@ -7,6 +7,7 @@
     <result column="chapter_id" property="chapterId" jdbcType="BIGINT" />
     <result column="user_album_id" property="userAlbumIId" jdbcType="BIGINT" />
     <result column="student_id" property="studentId" jdbcType="BIGINT" />
+    <result column="class_id" property="classId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="book_name" property="bookName" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -30,11 +31,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into pq_student_task_reading_record (task_id, student_id, user_id, 
-      voice_url, img_url, score, play_count,
+      voice_url, img_url, score, play_count,class_id,
       state, created_time, updated_time, user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
       )
     values (#{taskId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
-      #{voiceUrl,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR},#{score,jdbcType=INTEGER}, #{playCount,jdbcType=INTEGER},
+      #{voiceUrl,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR},#{score,jdbcType=INTEGER}, #{playCount,jdbcType=INTEGER},#{classId},
       #{state,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{userAlbumIId},#{isPrivate},
     #{teacherId},#{chapterId},#{name},#{bookName},#{duration}
       )
@@ -57,18 +58,19 @@
       chapter_id = #{chapterId},
       name = #{name},
       book_name = #{bookName},
-      duration=#{duration}
+      duration=#{duration},
+      class_id = #{classId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time, 
-    updated_time, img_url, user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
+    updated_time, img_url, user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
     from pq_student_task_reading_record
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
-    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
     from pq_student_task_reading_record
   </select>
 
@@ -137,7 +139,7 @@
 
   <select id="selectByTeacherId" resultMap="BaseResultMap" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
-    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
     from pq_student_task_reading_record
     where teacher_id = #{teacherId}
     and state = 1
@@ -147,6 +149,14 @@
     select count(id)
     from pq_student_task_reading_record
     where task_id = #{taskId}
+    and state = 1
+  </select>
+
+  <select id="selectCountByClassIdAndTeacherId" resultType="java.lang.Integer" >
+    select count(id)
+    from pq_student_task_reading_record
+    where class_id = #{classId}
+    and user_id = #{userId}
     and state = 1
   </select>
 </mapper>

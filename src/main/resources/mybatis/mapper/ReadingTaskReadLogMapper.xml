@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="task_id" property="taskId" jdbcType="BIGINT" />
     <result column="student_id" property="studentId" jdbcType="BIGINT" />
+    <result column="class_id" property="classId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="state" property="state" jdbcType="BIT" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
@@ -19,10 +20,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into pq_reading_task_read_log (task_id, student_id, user_id, 
-      state, created_time, updated_time
+      state, created_time, updated_time,class_id
       )
     values (#{taskId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
-      #{state,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      #{state,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},
+    #{classId}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.ReadingTaskReadLog" >
@@ -32,16 +34,17 @@
       user_id = #{userId,jdbcType=VARCHAR},
       state = #{state,jdbcType=BIT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      class_id = #{classId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, task_id, student_id, user_id, state, created_time, updated_time
+    select id, task_id, student_id, user_id, state, created_time, updated_time,class_id
     from pq_reading_task_read_log
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, task_id, student_id, user_id, state, created_time, updated_time
+    select id, task_id, student_id, user_id, state, created_time, updated_time,class_id
     from pq_reading_task_read_log
   </select>
 
@@ -65,10 +68,18 @@
   </select>
 
   <select id="selectByUserIdAndTaskId" resultMap="BaseResultMap" >
-    select id, task_id, student_id, user_id, state, created_time, updated_time
+    select id, task_id, student_id, user_id, state, created_time, updated_time,class_id
     from pq_reading_task_read_log
     where task_id = #{taskId}
     and user_id = #{userId}
+    and state = 1
+  </select>
+
+  <select id="selectCountByClassIdAndUserId" resultType="java.lang.Integer" >
+    select count(id)
+    from pq_reading_task_read_log
+    where user_id = #{userId}
+    and class_id = #{classId}
     and state = 1
   </select>
 </mapper>

@@ -16,12 +16,11 @@ public interface ReadingTaskMapper {
 
     int updateByPrimaryKey(ReadingTask record);
 
-    List<ReadingTask> selectByClassId(@Param("classId") Long classId, @Param("offset") int offset,
-                                      @Param("size") int size);
-
-    List<ReadingTask> selectAllByClassId(@Param("classId") Long classId);
-
-    Integer selectCountByClassId(@Param("classId") Long classId);
+    List<ReadingTask> selectByClassIdAndUserId(@Param("classId") Long classId, @Param("userId") String userId,
+                                               @Param("offset") int offset, @Param("size") int size);
 
     List<ReadingTask> selectByUserId(@Param("userId") String userId);
+
+    Integer selectCountByClassIdAndUserId(@Param("classId") Long classId,
+                                          @Param("userId") String userId);
 }

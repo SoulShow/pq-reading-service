@@ -11,6 +11,8 @@ public class StudentTaskReadingRecord {
 
     private Long studentId;
 
+    private Long classId;
+
     private String name;
 
     private String bookName;
@@ -181,5 +183,13 @@ public class StudentTaskReadingRecord {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 }

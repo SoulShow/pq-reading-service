@@ -143,7 +143,7 @@ public class ReadingServiceImpl implements ReadingService {
 
     @Override
     public List<NewReadingDto> getTeacherNewReadingList(Long classId, String userId, int offset, int size) {
-        List<ReadingTask> taskList = readingTaskMapper.selectByClassId(classId, offset, size);
+        List<ReadingTask> taskList = readingTaskMapper.selectByClassIdAndUserId(classId,userId,offset, size);
         List<NewReadingDto> list = new ArrayList<>();
         for (ReadingTask readingTask : taskList) {
             NewReadingDto newReadingDto = new NewReadingDto();
@@ -173,7 +173,7 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public List<NewReadingDto> getStudentNewReadingList(Long studentId, String userId, Long classId, int offset, int size) {
 
-        List<ReadingTask> taskList = readingTaskMapper.selectByClassId(classId, offset, size);
+        List<ReadingTask> taskList = readingTaskMapper.selectByClassIdAndUserId(classId,null, offset, size);
         List<NewReadingDto> list = new ArrayList<>();
         for (ReadingTask readingTask : taskList) {
             NewReadingDto newReadingDto = new NewReadingDto();
@@ -211,7 +211,7 @@ public class ReadingServiceImpl implements ReadingService {
 
     @Override
     public int getUnReadCount(Long classId, String userId, Long studentId) {
-        Integer taskCount = readingTaskMapper.selectCountByClassId(classId);
+        Integer taskCount = readingTaskMapper.selectCountByClassIdAndUserId(classId,userId);
         if (taskCount == null) {
             taskCount = 0;
         }

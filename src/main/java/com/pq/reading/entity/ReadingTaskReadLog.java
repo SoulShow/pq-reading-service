@@ -17,6 +17,8 @@ public class ReadingTaskReadLog {
 
     private Timestamp updatedTime;
 
+    private Long classId;
+
     public Long getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class ReadingTaskReadLog {
 
     public void setUpdatedTime(Timestamp updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 }

@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="reading_record_id" property="readingRecordId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="class_id" property="classId" jdbcType="BIGINT" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
@@ -15,32 +16,40 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pq_teacher_reading_read_log (reading_record_id, user_id, created_time
+    insert into pq_teacher_reading_read_log (reading_record_id, user_id, created_time,class_id
       )
-    values (#{readingRecordId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+    values (#{readingRecordId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},#{classId}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.TeacherReadingReadLog" >
     update pq_teacher_reading_read_log
     set reading_record_id = #{readingRecordId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP}
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      class_id = #{classId}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, reading_record_id, user_id, created_time
+    select id, reading_record_id, user_id, created_time,class_id
     from pq_teacher_reading_read_log
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, reading_record_id, user_id, created_time
+    select id, reading_record_id, user_id, created_time,class_id
     from pq_teacher_reading_read_log
   </select>
 
   <select id="selectByUserIdAndReadingId" resultMap="BaseResultMap" >
-    select id, reading_record_id, user_id, created_time
+    select id, reading_record_id, user_id, created_time,class_id
     from pq_teacher_reading_read_log
     where user_id = #{userId}
     and reading_record_id = #{readingId}
+  </select>
+
+  <select id="selectCountByClassIdAndTeacherId" resultMap="java.lang.Integer" >
+  select count(id)
+  from pq_teacher_reading_read_log
+  where user_id = #{userId}
+  and class_id = #{classId}
   </select>
 </mapper>
