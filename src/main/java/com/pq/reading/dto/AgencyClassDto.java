@@ -9,7 +9,7 @@ public class AgencyClassDto {
 
     private String img;
 
-    private int count;
+    private int status;
 
     public Long getId() {
         return id;
@@ -43,11 +43,11 @@ public class AgencyClassDto {
         this.name = name;
     }
 
-    public int getCount() {
-        return count;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

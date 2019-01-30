@@ -457,7 +457,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         List<StudentTaskReadingRecord> list = readingRecordMapper.selectByTeacherUserIdAndStudentId(userId,result.getData(),offset,size);
 
-        return getReadingList(list,userId);
+        return getReadingList(list,userId,classId);
     }
 
     @Override
@@ -468,7 +468,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         List<StudentTaskReadingRecord> readingRecordList = readingRecordMapper.selectByTaskId(taskId);
         NewReadingListDto newReadingListDto = new NewReadingListDto();
-        List<NewReadingDto> readingDtos = getReadingList(readingRecordList,userId);
+        List<NewReadingDto> readingDtos = getReadingList(readingRecordList,userId,classId);
         newReadingListDto.setList(readingDtos);
         newReadingListDto.setCount(readingDtos.size());
 
@@ -487,7 +487,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         return newReadingListDto;
     }
 
-    private List<NewReadingDto> getReadingList(List<StudentTaskReadingRecord> list, String userId){
+    private List<NewReadingDto> getReadingList(List<StudentTaskReadingRecord> list, String userId,Long classId){
         List<NewReadingDto> readingDtos = new ArrayList<>();
         for(StudentTaskReadingRecord taskReadingRecord:list){
             NewReadingDto newReadingDto = new NewReadingDto();
@@ -505,7 +505,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             newReadingDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
             newReadingDto.setStudentId(taskReadingRecord.getStudentId());
             newReadingDto.setReadingId(taskReadingRecord.getId());
-
+            newReadingDto.setClassId(classId);
             TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,taskReadingRecord.getId());
             newReadingDto.setReadingState(readingReadLog==null?0:1);
             readingDtos.add(newReadingDto);
@@ -614,18 +614,20 @@ public class UserReadingServiceImpl implements UserReadingService {
         int count = 0;
         List<AgencyClassDto> classDtos = result.getData();
         for(AgencyClassDto agencyClassDto:classDtos){
+            agencyClassDto.setStatus(0);
             //新阅读
             if(type==1){
-                Integer taskCount = readingTaskMapper.selectCountByClassIdAndUserId(agencyClassDto.getId(),userId);
-                if(taskCount==null||taskCount==0){
-                    count=0;
-                    continue;
+                List<ReadingTask> list = readingTaskMapper.selectAllByClassIdAndUserId(agencyClassDto.getId(),userId);
+                for(ReadingTask readingTask:list){
+                    List<StudentTaskReadingRecord> readingRecordList = readingRecordMapper.selectByTaskId(readingTask.getId());
+                    for(StudentTaskReadingRecord record :readingRecordList){
+                        TeacherReadingReadLog readLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,record.getId());
+                        if(readLog==null){
+                            agencyClassDto.setStatus(1);
+                            break;
+                        }
+                    }
                 }
-                Integer taskReadLogCount =taskReadLogMapper.selectCountByClassIdAndUserId(agencyClassDto.getId(),userId);
-                if(taskReadLogCount==null){
-                    taskReadLogCount=0;
-                }
-                count=taskCount-taskReadLogCount;
             }
             //1对1
             if(type==2){
@@ -639,9 +641,8 @@ public class UserReadingServiceImpl implements UserReadingService {
                     readingCount=0;
                 }
                 count=recordCount-readingCount;
-
+                agencyClassDto.setStatus(count>0?1:0);
             }
-            agencyClassDto.setCount(count);
         }
         return classDtos;
     }
