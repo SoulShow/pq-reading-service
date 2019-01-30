@@ -22,4 +22,6 @@ public interface ReadingTaskMapper {
     List<ReadingTask> selectAllByClassId(@Param("classId") Long classId);
 
     Integer selectCountByClassId(@Param("classId") Long classId);
+
+    List<ReadingTask> selectByUserId(@Param("userId") String userId);
 }

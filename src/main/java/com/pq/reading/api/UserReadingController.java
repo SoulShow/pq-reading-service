@@ -429,11 +429,10 @@ public class UserReadingController {
 
 	@GetMapping(value = "/teacher/index")
 	@ResponseBody
-	public ReadingResult<TeacherReadingIndexDto> getIndexStatus(@RequestParam("classId") Long classId,
-																@RequestParam("userId") String userId) {
+	public ReadingResult<TeacherReadingIndexDto> getIndexStatus(@RequestParam("userId") String userId) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(userReadingService.getIndexStatus(userId,classId));
+			result.setData(userReadingService.getIndexStatus(userId));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

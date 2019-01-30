@@ -190,10 +190,9 @@ public interface UserReadingService {
     /**
      * 获取老师阅读首页状态
      * @param userId
-     * @param classId
      * @return
      */
-    TeacherReadingIndexDto getIndexStatus(String userId,Long classId);
+    TeacherReadingIndexDto getIndexStatus(String userId);
 
 
     /**

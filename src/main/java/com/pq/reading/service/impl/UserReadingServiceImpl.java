@@ -583,9 +583,9 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public TeacherReadingIndexDto getIndexStatus(String userId,Long classId){
+    public TeacherReadingIndexDto getIndexStatus(String userId){
         TeacherReadingIndexDto readingIndexDto = new TeacherReadingIndexDto();
-        List<ReadingTask> taskList = readingTaskMapper.selectByClassId(classId, 1, 1000);
+        List<ReadingTask> taskList = readingTaskMapper.selectByUserId(userId);
         for (ReadingTask readingTask : taskList) {
             Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(), null);
             if (readCount == null || readCount == 0) {
