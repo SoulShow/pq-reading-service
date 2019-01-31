@@ -77,7 +77,7 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
     @Override
     public List<UserAlbumListDto> getUserAlbumList(String userId, Long studentId){
-        List<BookUserAlbum> list = userAlbumMapper.selectValidAlbum(userId,studentId);
+        List<BookUserAlbum> list = userAlbumMapper.selectValidAlbum(studentId);
         List<UserAlbumListDto> albumListDtoList = new ArrayList<>();
         for(BookUserAlbum bookUserAlbum: list){
             UserAlbumListDto userAlbumListDto = new UserAlbumListDto();

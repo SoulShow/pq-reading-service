@@ -16,5 +16,5 @@ public interface BookUserAlbumMapper {
 
     int updateByPrimaryKey(BookUserAlbum record);
 
-    List<BookUserAlbum> selectValidAlbum(@Param("userId")String userId,@Param("studentId")Long studentId);
+    List<BookUserAlbum> selectValidAlbum(@Param("studentId")Long studentId);
 }
