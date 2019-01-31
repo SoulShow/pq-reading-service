@@ -78,6 +78,7 @@
     select count(id)
     from pq_student_task_reading_record
     where user_album_id = #{albumId}
+    and student_id = #{studentId}
     and state = 1
   </select>
 
