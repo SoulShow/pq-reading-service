@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -590,10 +589,14 @@ public class UserReadingServiceImpl implements UserReadingService {
         TeacherReadingIndexDto readingIndexDto = new TeacherReadingIndexDto();
         List<ReadingTask> taskList = readingTaskMapper.selectByUserId(userId);
         for (ReadingTask readingTask : taskList) {
-            Integer readCount = taskReadLogMapper.selectCountByTaskIdAndStudentId(readingTask.getId(), null);
-            if (readCount == null || readCount == 0) {
-                readingIndexDto.setReadingTaskStatus(1);
-                break;
+            readingIndexDto.setReadingTaskStatus(0);
+            List<StudentTaskReadingRecord> readingRecordList = readingRecordMapper.selectByTaskId(readingTask.getId());
+            for(StudentTaskReadingRecord record :readingRecordList){
+                TeacherReadingReadLog readLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,record.getId());
+                if(readLog==null){
+                    readingIndexDto.setReadingTaskStatus(1);
+                    break;
+                }
             }
         }
         List<StudentTaskReadingRecord> oneToOneList = readingRecordMapper.selectByTeacherId(userId);
