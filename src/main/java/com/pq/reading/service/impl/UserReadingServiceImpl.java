@@ -423,6 +423,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             }
             AgencyStudentDto agencyStudentDto = new AgencyStudentDto();
             agencyStudentDto.setStudentId(studentInfo.getData().getStudentId());
+            agencyStudentDto.setClassId(readingRecord.getClassId());
             agencyStudentDto.setAvatar(studentInfo.getData().getAvatar());
             agencyStudentDto.setClassName(studentInfo.getData().getClassName());
             agencyStudentDto.setName(studentInfo.getData().getName());

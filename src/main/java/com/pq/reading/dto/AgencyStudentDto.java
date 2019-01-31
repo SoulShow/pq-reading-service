@@ -7,6 +7,7 @@ public class AgencyStudentDto {
     private String avatar;
     private String name;
     private int sex;
+    private Long classId;
     private String className;
     private Long readingId;
     private List<ParentDto> parentList;
@@ -66,5 +67,13 @@ public class AgencyStudentDto {
 
     public void setParentList(List<ParentDto> parentList) {
         this.parentList = parentList;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 }
