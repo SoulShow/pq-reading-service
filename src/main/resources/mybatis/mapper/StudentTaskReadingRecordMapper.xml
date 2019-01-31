@@ -111,7 +111,7 @@
   <select id="selectByChapterIdAndStudentList" resultMap="BaseResultMap" >
     select * from pq_student_task_reading_record r where r.play_count =
     (
-    select max(play_count)
+    select max(play_count) as playCount
     from pq_student_task_reading_record
     where state = 1
     and chapter_id = #{chapterId}
