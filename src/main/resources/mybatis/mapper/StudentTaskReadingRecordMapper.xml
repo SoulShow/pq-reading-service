@@ -120,7 +120,7 @@
       <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
     </if>
     and student_id = r.student_id
-    group by playCount
+    group by student_id
     order by play_count desc ,created_time desc
     limit #{offset},#{size}
     )
