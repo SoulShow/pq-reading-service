@@ -109,14 +109,28 @@
   </select>
 
   <select id="selectByChapterIdAndStudentList" resultMap="BaseResultMap" >
-    select * from pq_student_task_reading_record
+    select * from pq_student_task_reading_record r where r.play_count =
+    (
+    select max(play_count)
+    from pq_student_task_reading_record
     where state = 1
     and chapter_id = #{chapterId}
     <if test="studentList !=null">
       and student_id in
       <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
     </if>
+    and student_id = r.student_id
+    group by playCount
     order by play_count desc ,created_time desc
+    limit #{offset},#{size}
+    )
+    and r.state = 1
+    and r.chapter_id = #{chapterId}
+    <if test="studentList !=null">
+      and r.student_id in
+      <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
+    </if>
+    order by r.play_count desc ,r.created_time desc
     limit #{offset},#{size}
   </select>
 
