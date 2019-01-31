@@ -169,8 +169,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId,int isPrivate,int offset,int size){
-        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumIdAndPrivate(userAlbumId, isPrivate,offset,size);
+    public List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId,Long studentId,int isPrivate,int offset,int size){
+        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumIdAndPrivate(userAlbumId, studentId,isPrivate,offset,size);
         return getReadingDto(list);
     }
     @Override

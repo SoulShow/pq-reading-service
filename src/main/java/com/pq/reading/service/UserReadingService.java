@@ -54,12 +54,13 @@ public interface UserReadingService {
     /**
      * 获取专辑阅读列表
      * @param userAlbumId
+     * @param studentId
      * @param isPrivate
      * @param offset
      * @param size
      * @return
      */
-    List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId,int isPrivate,int offset,int size);
+    List<UserAlbumReadingDto> getUserAlbumReadingList(Long userAlbumId,Long studentId,int isPrivate,int offset,int size);
 
     /**
      * 获取个人隐私专辑

@@ -125,6 +125,7 @@ public class UserReadingController {
 	@GetMapping(value = "/student/album/reading/list")
 	@ResponseBody
 	public ReadingResult getUserAlbumReadingList(@RequestParam("albumId") Long albumId,
+												 @RequestParam("studentId") Long studentId,
 												 @RequestParam("isPrivate") int isPrivate,
 												 @RequestParam(value = "page",required = false) Integer page,
 												 @RequestParam(value = "size",required = false) Integer size) {
@@ -137,7 +138,7 @@ public class UserReadingController {
 		}
 		int offset = (page - 1) * size;
 		try{
-			result.setData(userReadingService.getUserAlbumReadingList(albumId,isPrivate,offset,size));
+			result.setData(userReadingService.getUserAlbumReadingList(albumId,studentId,isPrivate,offset,size));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

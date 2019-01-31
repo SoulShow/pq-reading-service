@@ -85,6 +85,7 @@
     select * from pq_student_task_reading_record
     where user_album_id = #{albumId}
     and is_private = #{isPrivate}
+    and student_id = #{studentId}
     and state = 1
     order by created_time desc
     limit #{offset},#{size}

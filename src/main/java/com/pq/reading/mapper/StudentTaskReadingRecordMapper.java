@@ -19,6 +19,7 @@ public interface StudentTaskReadingRecordMapper {
     Integer selectCountByUserAlbumId(@Param("albumId")Long albumId);
 
     List<StudentTaskReadingRecord> selectByUserAlbumIdAndPrivate(@Param("albumId")Long albumId,
+                                                                 @Param("studentId")Long studentId,
                                                                  @Param("isPrivate")int isPrivate,
                                                                  @Param("offset")int offset, @Param("size")int size);
 

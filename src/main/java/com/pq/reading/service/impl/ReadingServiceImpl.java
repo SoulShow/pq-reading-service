@@ -301,7 +301,7 @@ public class ReadingServiceImpl implements ReadingService {
         TaskReadingPlayLog taskReadingPlayLog = new TaskReadingPlayLog();
         taskReadingPlayLog.setReadingRecordId(taskReadingPlayLogDto.getReadingRecordId() == null ?
                 0 : taskReadingPlayLogDto.getReadingRecordId());
-        taskReadingPlayLog.setChapterId(taskReadingPlayLogDto.getChapterId());
+        taskReadingPlayLog.setChapterId(taskReadingPlayLogDto.getChapterId()==null?0:taskReadingPlayLogDto.getChapterId());
         taskReadingPlayLog.setUserId(taskReadingPlayLogDto.getUserId());
         taskReadingPlayLog.setStudentId(taskReadingPlayLogDto.getStudentId() == null ?
                 0 : taskReadingPlayLogDto.getStudentId());
