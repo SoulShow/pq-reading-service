@@ -344,10 +344,10 @@ public class ReadingServiceImpl implements ReadingService {
             RankingDto monthRankingDto = readingPlayLogMapper.selectStudentReadingCountAndIndex(1,studentId,DateUtil.getBeginDayOfMonth(),DateUtil.getLastDayOfMonth());
             RankingDto weekRankingDto = readingPlayLogMapper.selectStudentReadingCountAndIndex(2,studentId,DateUtil.getBeginDayOfWeek(),DateUtil.getLastDayOfWeek());
 
-            studentInfoDto.setWeekCount(weekRankingDto.getCount());
-            studentInfoDto.setWeekIndex(weekRankingDto.getRankIndex());
-            studentInfoDto.setMonthCount(monthRankingDto.getCount());
-            studentInfoDto.setMonthIndex(monthRankingDto.getRankIndex());
+            studentInfoDto.setWeekCount(weekRankingDto==null?0:weekRankingDto.getCount());
+            studentInfoDto.setWeekIndex(weekRankingDto==null?0:weekRankingDto.getRankIndex());
+            studentInfoDto.setMonthCount(monthRankingDto==null?0:monthRankingDto.getCount());
+            studentInfoDto.setMonthIndex(monthRankingDto==null?0:monthRankingDto.getRankIndex());
 
             ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(studentId);
             if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
