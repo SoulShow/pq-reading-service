@@ -10,7 +10,7 @@ public class RankingDto implements Serializable {
     private String studentName;
     private String avatar;
     private String className;
-    private int count;
+    private int count=0;
     private int rankIndex;
 
 

@@ -10,10 +10,10 @@ public class StudentInfoDto implements Serializable {
     private String studentName;
     private String avatar;
     private String className;
-    private int monthIndex;
-    private int monthCount;
-    private int weekIndex;
-    private int weekCount;
+    private int monthIndex=0;
+    private int monthCount=0;
+    private int weekIndex=0;
+    private int weekCount=0;
 
     public Long getStudentId() {
         return studentId;
