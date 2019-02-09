@@ -9,6 +9,14 @@
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <resultMap id="CountResultMap" type="com.pq.reading.dto.RankingDto" >
+    <result column="studentId" property="studentId" jdbcType="BIGINT" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="rankIndex" property="rankIndex" jdbcType="INTEGER" />
+
+  </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from pq_task_reading_play_log
     where id = #{id,jdbcType=BIGINT}
@@ -40,5 +48,39 @@
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, reading_record_id, user_id, created_time,student_id,chapter_id
     from pq_task_reading_play_log
+  </select>
+
+  <select id="selectReadingCount" resultMap="CountResultMap" >
+    select count(l.id) count,r.student_id studentId from pq_task_reading_play_log l, pq_student_task_reading_record r
+    where l.reading_record_id = r.id
+    and created_time &gt;=#{beginDate}
+    and created_time &lt;=#{endDate}
+    group by r.student_id
+    order by count DESC
+    <if test="type==1">
+      limit 0,30
+    </if>
+    <if test="type==2">
+      limit 0,10
+    </if>
+  </select>
+
+  <select id="selectStudentReadingCountAndIndex" resultMap="CountResultMap" >
+  select a.count,(@ranknum:=@ranknum+1) as rankIndex from(
+    select count(l.id) count,r.student_id studentId from pq_task_reading_play_log l, pq_student_task_reading_record r
+    where l.reading_record_id = r.id
+    and created_time &gt;=#{beginDate}
+    and created_time &lt;=#{endDate}
+    group by r.student_id
+    order by count DESC
+    <if test="type==1">
+      limit 0,30
+    </if>
+    <if test="type==2">
+      limit 0,10
+    </if>
+  ) a,
+  (select (@ranknum :=0) ) b
+  where a.studentId = #{studentId}
   </select>
 </mapper>

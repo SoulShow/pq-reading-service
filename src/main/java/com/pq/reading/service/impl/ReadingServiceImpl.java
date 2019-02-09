@@ -1,6 +1,7 @@
 package com.pq.reading.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.pq.common.constants.CommonConstants;
 import com.pq.common.exception.CommonErrors;
 import com.pq.common.util.DateUtil;
 import com.pq.common.util.HttpUtil;
@@ -19,9 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author liutao
@@ -227,7 +227,7 @@ public class ReadingServiceImpl implements ReadingService {
         if (taskCount == null) {
             taskCount = 0;
         }
-        Integer readCount = taskReadLogMapper.selectCountByUserIdAndStudentId(userId, studentId);
+        Integer readCount = taskReadLogMapper.selectCountByStudentId(studentId);
         if (readCount == null) {
             readCount = 0;
         }
@@ -324,4 +324,54 @@ public class ReadingServiceImpl implements ReadingService {
             readingRecordMapper.updateByPrimaryKey(readingRecord);
         }
     }
+    @Override
+    public RankingListDto getRankingList(int type,Long studentId,int role){
+        Date beginDate = null;
+        Date endDate = null;
+        //月排行
+        if(type==1){
+            beginDate =DateUtil.getBeginDayOfMonth();
+            endDate = DateUtil.getLastDayOfMonth();
+        }
+        //周排行
+        if(type==2){
+            beginDate = DateUtil.getBeginDayOfWeek();
+            endDate = DateUtil.getLastDayOfWeek();
+        }
+        RankingListDto rankingListDto = new RankingListDto();
+        if(role==CommonConstants.PQ_LOGIN_ROLE_PARENT){
+            StudentInfoDto studentInfoDto = new StudentInfoDto();
+            RankingDto monthRankingDto = readingPlayLogMapper.selectStudentReadingCountAndIndex(1,studentId,DateUtil.getBeginDayOfMonth(),DateUtil.getLastDayOfMonth());
+            RankingDto weekRankingDto = readingPlayLogMapper.selectStudentReadingCountAndIndex(2,studentId,DateUtil.getBeginDayOfWeek(),DateUtil.getLastDayOfWeek());
+
+            studentInfoDto.setWeekCount(weekRankingDto.getCount());
+            studentInfoDto.setWeekIndex(weekRankingDto.getRankIndex());
+            studentInfoDto.setMonthCount(monthRankingDto.getCount());
+            studentInfoDto.setMonthIndex(monthRankingDto.getRankIndex());
+
+            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(studentId);
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+            }
+
+            studentInfoDto.setStudentId(studentId);
+            studentInfoDto.setStudentName(studentInfo.getData().getName());
+            studentInfoDto.setAvatar(studentInfo.getData().getAvatar());
+            studentInfoDto.setClassName(studentInfo.getData().getClassName());
+            rankingListDto.setStudentInfo(studentInfoDto);
+        }
+        List<RankingDto> list = readingPlayLogMapper.selectReadingCount(type,beginDate,endDate);
+        for(RankingDto rankingDto:list){
+            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(rankingDto.getStudentId());
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+            }
+            rankingDto.setStudentName(studentInfo.getData().getName());
+            rankingDto.setAvatar(studentInfo.getData().getAvatar());
+            rankingDto.setClassName(studentInfo.getData().getClassName());
+        }
+        rankingListDto.setList(list);
+        return rankingListDto;
+    }
+
 }

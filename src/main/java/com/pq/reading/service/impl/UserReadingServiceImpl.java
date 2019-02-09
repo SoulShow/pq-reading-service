@@ -161,11 +161,18 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delUserAlbum(Long userAlbumId){
         BookUserAlbum bookUserAlbum = userAlbumMapper.selectByPrimaryKey(userAlbumId);
         bookUserAlbum.setState(false);
         bookUserAlbum.setUpdatedTime(DateUtil.currentTime());
         userAlbumMapper.updateByPrimaryKey(bookUserAlbum);
+        List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumId(userAlbumId);
+        for(StudentTaskReadingRecord readingRecord:list){
+            readingRecord.setState(false);
+            readingRecord.setUpdatedTime(DateUtil.currentTime());
+            readingRecordMapper.updateByPrimaryKey(readingRecord);
+        }
     }
 
     @Override

@@ -120,11 +120,13 @@
       <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
     </if>
     and student_id = r.student_id
+    and is_private = 0
     group by student_id
     order by play_count desc ,created_time desc
     limit #{offset},#{size}
     )
     and r.state = 1
+    and r.is_private=0
     and r.chapter_id = #{chapterId}
     <if test="studentList !=null">
       and r.student_id in
@@ -173,6 +175,14 @@
     from pq_student_task_reading_record
     where class_id = #{classId}
     and user_id = #{userId}
+    and state = 1
+  </select>
+
+  <select id="selectByUserAlbumId" resultMap="BaseResultMap" >
+    select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
+    from pq_student_task_reading_record
+    where user_album_id = #{albumId}
     and state = 1
   </select>
 </mapper>

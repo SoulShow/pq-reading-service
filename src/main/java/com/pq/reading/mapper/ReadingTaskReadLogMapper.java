@@ -18,8 +18,7 @@ public interface ReadingTaskReadLogMapper {
 
     Integer selectCountByTaskIdAndStudentId(@Param("taskId")Long taskId,@Param("studentId")Long studentId);
 
-    Integer selectCountByUserIdAndStudentId(@Param("userId")String userId,
-                                            @Param("studentId")Long studentId);
+    Integer selectCountByStudentId(@Param("studentId")Long studentId);
 
     ReadingTaskReadLog selectByUserIdAndTaskId(@Param("userId")String userId,
                                                @Param("taskId")Long taskId);

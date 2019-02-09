@@ -107,4 +107,14 @@ public interface ReadingService {
     void chapterOrRecordPlay(TaskReadingPlayLogDto taskReadingPlayLogDto);
 
 
+    /**
+     * 排行榜
+     * @param type
+     * @param studentId
+     * @param role
+     * @return
+     */
+    RankingListDto getRankingList(int type,Long studentId,int role);
+
+
 }

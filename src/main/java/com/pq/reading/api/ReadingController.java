@@ -243,4 +243,23 @@ public class ReadingController {
 		}
 		return result;
 	}
+
+	@GetMapping(value = "/ranking/list")
+	@ResponseBody
+	public ReadingResult rankingList(@RequestParam("type") int type,
+									 @RequestParam(value = "studentId",required = false) Long studentId,
+									 @RequestParam("role") int role) {
+		ReadingResult result = new ReadingResult();
+		try{
+			result.setData(readingService.getRankingList(type,studentId,role));
+		}catch (ReadingException e){
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
 }
