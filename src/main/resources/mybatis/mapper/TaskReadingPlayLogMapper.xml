@@ -53,8 +53,8 @@
   <select id="selectReadingCount" resultMap="CountResultMap" >
     select count(l.id) count,r.student_id studentId from pq_task_reading_play_log l, pq_student_task_reading_record r
     where l.reading_record_id = r.id
-    and created_time &gt;=#{beginDate}
-    and created_time &lt;=#{endDate}
+    and l.created_time &gt;=#{beginDate}
+    and l.created_time &lt;=#{endDate}
     group by r.student_id
     order by count DESC
     <if test="type==1">
@@ -69,8 +69,8 @@
   select a.count,(@ranknum:=@ranknum+1) as rankIndex from(
     select count(l.id) count,r.student_id studentId from pq_task_reading_play_log l, pq_student_task_reading_record r
     where l.reading_record_id = r.id
-    and created_time &gt;=#{beginDate}
-    and created_time &lt;=#{endDate}
+    and l.created_time &gt;=#{beginDate}
+    and l.created_time &lt;=#{endDate}
     group by r.student_id
     order by count DESC
     <if test="type==1">
