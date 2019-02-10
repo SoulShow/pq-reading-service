@@ -222,6 +222,7 @@ public class UserReadingController {
 	@GetMapping(value = "/student/message/list")
 	@ResponseBody
 	public ReadingResult<List<CommentMessageDto>> getCommentMessageList(@RequestParam("studentId") Long studentId,
+																		@RequestParam("classId") Long classId,
 																		@RequestParam(value = "page",required = false) Integer page,
 																		@RequestParam(value = "size",required = false) Integer size) {
 		ReadingResult result = new ReadingResult();
@@ -234,7 +235,7 @@ public class UserReadingController {
 		int offset = (page - 1) * size;
 
 		try{
-			result.setData(userReadingService.getCommentMessageList(studentId,offset,size));
+			result.setData(userReadingService.getCommentMessageList(studentId, classId,offset,size));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

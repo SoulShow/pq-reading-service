@@ -318,7 +318,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         return list;
     }
     @Override
-    public List<CommentMessageDto> getCommentMessageList(Long studentId,int offset,int size){
+    public List<CommentMessageDto> getCommentMessageList(Long studentId,Long classId,int offset,int size){
         List<StudentReadingComment> commentList = readingCommentMapper.selectByStudentId(studentId,offset,size);
 
         List<CommentMessageDto> list = new ArrayList<>();
@@ -328,13 +328,29 @@ public class UserReadingServiceImpl implements UserReadingService {
             commentMessageDto.setOriginatorUserId(readingComment.getOriginatorUserId());
             commentMessageDto.setOriginatorStudentId(readingComment.getOriginatorStudentId());
             commentMessageDto.setOriginatorName(readingComment.getOriginatorName());
+            if(readingComment.getOriginatorStudentId()!=null&&readingComment.getOriginatorStudentId()!=0){
+                ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+                }
+                commentMessageDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
+                commentMessageDto.setClassName(studentInfo.getData().getClassName());
+            }else {
+                ReadingResult<UserDto> result = userFeign.getUserInfo(readingComment.getOriginatorUserId());
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+                }
+                commentMessageDto.setOriginatorAvatar(result.getData().getAvatar());
+                commentMessageDto.setOriginatorName(result.getData().getName());
 
-            ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
-            if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
-                throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
+                ReadingResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
+                if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                    throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+                }
+                commentMessageDto.setClassName(classInfo.getData().getName());
+
             }
-            commentMessageDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
-            commentMessageDto.setClassName(studentInfo.getData().getClassName());
+
             commentMessageDto.setReceiverUserId(readingComment.getReceiverUserId());
             commentMessageDto.setReceiverStudentId(readingComment.getReceiverStudentId());
             commentMessageDto.setReceiverName(readingComment.getReceiverName());

@@ -106,11 +106,12 @@ public interface UserReadingService {
     /**
      * 获取消息列表
      * @param studentId
+     * @param classId
      * @param offset
      * @param size
      * @return
      */
-    List<CommentMessageDto> getCommentMessageList(Long studentId,int offset,int size);
+    List<CommentMessageDto> getCommentMessageList(Long studentId,Long classId,int offset,int size);
 
     /**
      * 点赞
