@@ -244,6 +244,7 @@ public class ReadingServiceImpl implements ReadingService {
 
         BookChapterDetailDto bookChapterDetailDto = new BookChapterDetailDto();
         bookChapterDetailDto.setId(bookChapter.getId());
+        bookChapterDetailDto.setChapterId(bookChapter.getId());
         bookChapterDetailDto.setAuthor(bookChapter.getAuthor());
         bookChapterDetailDto.setName(readingTask.getName());
         bookChapterDetailDto.setBookName(readingTask.getBookName());
