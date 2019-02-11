@@ -12,6 +12,7 @@ public class RankingDto implements Serializable {
     private String className;
     private int count=0;
     private int rankIndex;
+    private Long classId;
 
 
     public Long getStudentId() {
@@ -60,5 +61,13 @@ public class RankingDto implements Serializable {
 
     public void setRankIndex(int rankIndex) {
         this.rankIndex = rankIndex;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 }

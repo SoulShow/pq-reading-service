@@ -369,6 +369,7 @@ public class ReadingServiceImpl implements ReadingService {
             rankingDto.setStudentName(studentInfo.getData().getName());
             rankingDto.setAvatar(studentInfo.getData().getAvatar());
             rankingDto.setClassName(studentInfo.getData().getClassName());
+            rankingDto.setClassId(studentInfo.getData().getClassId());
         }
         rankingListDto.setList(list);
         return rankingListDto;
