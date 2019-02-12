@@ -236,7 +236,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         myReadingDetailDto.setBookName(readingRecord.getBookName());
         myReadingDetailDto.setImg(readingRecord.getImgUrl());
         myReadingDetailDto.setVoiceUrl(readingRecord.getVoiceUrl());
-        myReadingDetailDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
+        myReadingDetailDto.setCreateTime(DateUtil.formatDate(readingRecord.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
         myReadingDetailDto.setDuration(readingRecord.getDuration());
 
         myReadingDetailDto.setAvatar(result.getData().getAvatar());
@@ -525,7 +525,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             newReadingDto.setClassName(studentInfo.getData().getClassName());
             newReadingDto.setUserName(studentInfo.getData().getName());
             newReadingDto.setAvatar(studentInfo.getData().getAvatar());
-            newReadingDto.setCreateTime(DateUtil.formatDate(DateUtil.currentTime(),DateUtil.DEFAULT_TIME_MINUTE));
+            newReadingDto.setCreateTime(DateUtil.formatDate(taskReadingRecord.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
             newReadingDto.setStudentId(taskReadingRecord.getStudentId());
             newReadingDto.setReadingId(taskReadingRecord.getId());
             newReadingDto.setClassId(classId);
