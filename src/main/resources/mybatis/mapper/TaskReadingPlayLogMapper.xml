@@ -66,7 +66,8 @@
   </select>
 
   <select id="selectStudentReadingCountAndIndex" resultMap="CountResultMap" >
-  select a.count,(@ranknum:=@ranknum+1) as rankIndex from(
+    select count,rankIndex from(
+    select a.count as count,(@ranknum:=@ranknum+1) as rankIndex,a.studentId as studentId  from(
     select count(l.id) count,r.student_id studentId from pq_task_reading_play_log l, pq_student_task_reading_record r
     where l.reading_record_id = r.id
     and l.created_time &gt;=#{beginDate}
@@ -78,9 +79,10 @@
     </if>
     <if test="type==2">
       limit 0,10
-    </if>
-  ) a,
-  (select (@ranknum :=0) ) b
-  where a.studentId = #{studentId}
+    </if>) a,
+    (
+    select (@ranknum :=0) ) b
+    ) c
+    where c.studentId = #{studentId}
   </select>
 </mapper>
