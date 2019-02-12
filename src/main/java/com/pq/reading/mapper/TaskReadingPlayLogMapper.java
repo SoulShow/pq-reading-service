@@ -27,4 +27,6 @@ public interface TaskReadingPlayLogMapper {
                                                  @Param("beginDate")Date beginDate,
                                                  @Param("endDate")Date endDate);
 
+    List<TaskReadingPlayLog> selectByReadingId(@Param("readingId") Long readingId);
+
 }

@@ -55,6 +55,7 @@
     where l.reading_record_id = r.id
     and l.created_time &gt;=#{beginDate}
     and l.created_time &lt;=#{endDate}
+    and r.is_private = 0
     group by r.student_id
     order by count DESC
     <if test="type==1">
@@ -72,6 +73,7 @@
     where l.reading_record_id = r.id
     and l.created_time &gt;=#{beginDate}
     and l.created_time &lt;=#{endDate}
+    and r.is_private = 0
     group by r.student_id
     order by count DESC
     <if test="type==1">
@@ -84,5 +86,11 @@
     select (@ranknum :=0) ) b
     ) c
     where c.studentId = #{studentId}
+  </select>
+
+  <select id="selectByReadingId" resultMap="BaseResultMap" >
+    select id, reading_record_id, user_id, created_time,student_id,chapter_id
+    from pq_task_reading_play_log
+    where reading_record_id = #{readingId}
   </select>
 </mapper>

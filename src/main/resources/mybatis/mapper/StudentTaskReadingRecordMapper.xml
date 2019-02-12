@@ -80,6 +80,7 @@
     where user_album_id = #{albumId}
     and student_id = #{studentId}
     and state = 1
+    and is_private=0
   </select>
 
   <select id="selectByUserAlbumIdAndPrivate" resultMap="BaseResultMap" >

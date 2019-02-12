@@ -19,6 +19,8 @@ public class Constants {
     public static final int READING_ALBUM_TYPE_OUTSIDE_READING = 2;
 
     public static final Long PUSH_TEMPLATE_ID_NOTICE_2 = 2L;
+    public static final Long PUSH_TEMPLATE_ID_NOTICE_8 = 8L;
+
 
     public static final String READING_TASK_USER_INFO = "READING_TASK_USER_INFO:";
 

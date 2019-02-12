@@ -55,6 +55,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     @Autowired
     private TeacherReadingReadLogMapper teacherReadingReadLogMapper;
     @Autowired
+    private TaskReadingPlayLogMapper readingPlayLogMapper;
+    @Autowired
     private AgencyFeign agencyFeign;
     @Autowired
     private UserFeign userFeign;
@@ -468,6 +470,12 @@ public class UserReadingServiceImpl implements UserReadingService {
         readingRecord.setState(false);
         readingRecord.setUpdatedTime(DateUtil.currentTime());
         readingRecordMapper.updateByPrimaryKey(readingRecord);
+
+        List<TaskReadingPlayLog> logList = readingPlayLogMapper.selectByReadingId(readingId);
+        for(TaskReadingPlayLog readingPlayLog:logList){
+            readingPlayLogMapper.deleteByPrimaryKey(readingPlayLog.getId());
+        }
+
     }
     @Override
     public List<NewReadingDto> getTeacherOnoToOneList(Long classId,String userId, int offset,int size){
@@ -582,7 +590,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             for(ParentDto parentDto:studentDto.getParentList()){
                 LOGGER.info("家长环信id为：————————————"+parentDto.getHuanxinId());
                 HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_2);
+                paramMap.put("parameterId", Constants.PUSH_TEMPLATE_ID_NOTICE_8);
                 paramMap.put("user", parentDto.getHuanxinId());
                 paramMap.put("form", userDto.getHuanxinId());
                 paramMap.put("teacherName", userDto.getName());
