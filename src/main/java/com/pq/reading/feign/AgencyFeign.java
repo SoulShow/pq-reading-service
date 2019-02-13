@@ -61,5 +61,14 @@ public interface AgencyFeign {
      */
     @RequestMapping(value = "/agency/teacher/class/list", method = RequestMethod.GET)
     ReadingResult<List<AgencyClassDto>> getTeacherClassList(@RequestParam("userId")String userId);
+
+
+    /**
+     * 获取全校学生id
+     * @param classId
+     * @return
+     */
+    @RequestMapping(value = "/agency/student/all/list", method = RequestMethod.GET)
+    ReadingResult<List<Long>> getAllStudentList(@RequestParam(value = "classId") Long classId);
 }
 

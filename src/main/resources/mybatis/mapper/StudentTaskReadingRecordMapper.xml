@@ -112,9 +112,9 @@
   </select>
 
   <select id="selectByChapterIdAndStudentList" resultMap="BaseResultMap" >
-    select * from pq_student_task_reading_record r where r.play_count =
+    select * from pq_student_task_reading_record r where r.id =
     (
-    select max(play_count) as playCount
+    select max(play_count) as playCount,id
     from pq_student_task_reading_record
     where state = 1
     and chapter_id = #{chapterId}
@@ -122,7 +122,6 @@
       and student_id in
       <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
     </if>
-    and student_id = r.student_id
     and is_private = 0
     group by student_id
     order by play_count desc ,created_time desc

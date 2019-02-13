@@ -425,7 +425,11 @@ public class UserReadingServiceImpl implements UserReadingService {
         List<AgencyStudentDto> studentDtos = new ArrayList<>();
         //阅读之星
         if(type==1){
-            studentDtos = getAgencyStudentDtoList(chapterId,null,offset,size);
+            ReadingResult<List<Long>> result = agencyFeign.getAllStudentList(classId);
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+            }
+            studentDtos = getAgencyStudentDtoList(chapterId,result.getData(),offset,size);
         }
         //同班同学
         if(type==2){
