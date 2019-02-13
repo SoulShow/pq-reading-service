@@ -76,7 +76,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         bookUserAlbum.setCreatedTime(DateUtil.currentTime());
         bookUserAlbum.setUpdatedTime(DateUtil.currentTime());
         userAlbumMapper.insert(bookUserAlbum);
-        return bookUserAlbum.getId()
+        return bookUserAlbum.getId();
     }
     @Override
     public List<UserAlbumListDto> getUserAlbumList(String userId, Long studentId){
