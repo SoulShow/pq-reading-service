@@ -37,6 +37,9 @@ spring:
 
   application:
       name: service-reading
+  mvc:
+    async:
+      request-timeout: 20000
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
@@ -88,4 +91,5 @@ php:
 #  client:
 #    register-with-eureka: false
 #    fetch-registry: false
+
 
