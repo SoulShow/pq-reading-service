@@ -37,11 +37,13 @@ public class UserReadingController {
 
 	@GetMapping(value = "/student/album/list")
 	@ResponseBody
-	public ReadingResult getUserAlbumList(@RequestParam("studentId") Long studentId,
+	public ReadingResult getUserAlbumList(@RequestParam(value = "originatorStudentId",required = false)
+													  Long originatorStudentId,
+										  @RequestParam("studentId") Long studentId,
 										  @RequestParam("userId") String userId) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(userReadingService.getUserAlbumList(userId, studentId));
+			result.setData(userReadingService.getUserAlbumList(originatorStudentId,userId, studentId));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

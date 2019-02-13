@@ -20,11 +20,12 @@ public interface UserReadingService {
 
     /**
      * 获取专辑列表
+     * @param originatorStudentId
      * @param userId
      * @param studentId
      * @return
      */
-    List<UserAlbumListDto> getUserAlbumList(String userId,Long studentId);
+    List<UserAlbumListDto> getUserAlbumList(Long originatorStudentId,String userId,Long studentId);
 
     /**
      * 上传阅读

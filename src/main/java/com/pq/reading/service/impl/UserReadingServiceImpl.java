@@ -79,7 +79,12 @@ public class UserReadingServiceImpl implements UserReadingService {
         return bookUserAlbum.getId();
     }
     @Override
-    public List<UserAlbumListDto> getUserAlbumList(String userId, Long studentId){
+    public List<UserAlbumListDto> getUserAlbumList(Long originatorStudentId,String userId, Long studentId){
+        //type==1 同一个人  type==2 不同一个人
+        int type = 1;
+        if(studentId.equals(originatorStudentId)){
+            type=2;
+        }
         List<BookUserAlbum> list = userAlbumMapper.selectValidAlbum(studentId);
         List<UserAlbumListDto> albumListDtoList = new ArrayList<>();
         for(BookUserAlbum bookUserAlbum: list){
@@ -88,7 +93,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             userAlbumListDto.setName(bookUserAlbum.getName());
             userAlbumListDto.setImg(bookUserAlbum.getImg());
             userAlbumListDto.setType(bookUserAlbum.getType());
-            Integer count = readingRecordMapper.selectCountByUserAlbumId(bookUserAlbum.getId(),studentId);
+            Integer count = readingRecordMapper.selectCountByUserAlbumId(bookUserAlbum.getId(),studentId,type);
             userAlbumListDto.setCount(count==null?0:count);
             albumListDtoList.add(userAlbumListDto);
         }

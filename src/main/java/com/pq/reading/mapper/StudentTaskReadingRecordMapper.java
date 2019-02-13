@@ -16,7 +16,8 @@ public interface StudentTaskReadingRecordMapper {
 
     int updateByPrimaryKey(StudentTaskReadingRecord record);
 
-    Integer selectCountByUserAlbumId(@Param("albumId")Long albumId,@Param("studentId")Long studentId);
+    Integer selectCountByUserAlbumId(@Param("albumId")Long albumId,@Param("studentId")Long studentId,
+                                     @Param("type")int type);
 
     List<StudentTaskReadingRecord> selectByUserAlbumIdAndPrivate(@Param("albumId")Long albumId,
                                                                  @Param("studentId")Long studentId,
