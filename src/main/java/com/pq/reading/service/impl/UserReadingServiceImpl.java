@@ -82,9 +82,10 @@ public class UserReadingServiceImpl implements UserReadingService {
     public List<UserAlbumListDto> getUserAlbumList(Long originatorStudentId,String userId, Long studentId){
         //type==1 同一个人  type==2 不同一个人
         int type = 1;
-        if(studentId.equals(originatorStudentId)){
+        if(!studentId.equals(originatorStudentId)){
             type=2;
         }
+
         List<BookUserAlbum> list = userAlbumMapper.selectValidAlbum(studentId);
         List<UserAlbumListDto> albumListDtoList = new ArrayList<>();
         for(BookUserAlbum bookUserAlbum: list){
