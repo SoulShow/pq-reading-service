@@ -172,9 +172,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         userAlbumMapper.updateByPrimaryKey(bookUserAlbum);
         List<StudentTaskReadingRecord> list = readingRecordMapper.selectByUserAlbumId(userAlbumId);
         for(StudentTaskReadingRecord readingRecord:list){
-            readingRecord.setState(false);
-            readingRecord.setUpdatedTime(DateUtil.currentTime());
-            readingRecordMapper.updateByPrimaryKey(readingRecord);
+            delUserReading(readingRecord.getId(),readingRecord.getStudentId());
         }
     }
 
