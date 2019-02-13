@@ -65,7 +65,7 @@ public class UserReadingServiceImpl implements UserReadingService {
 
 
     @Override
-    public void createUserAlbum(UserAlbumDto userAlbumDto){
+    public Long createUserAlbum(UserAlbumDto userAlbumDto){
         BookUserAlbum bookUserAlbum = new BookUserAlbum();
         bookUserAlbum.setName(userAlbumDto.getName());
         bookUserAlbum.setImg(userAlbumDto.getImg());
@@ -76,6 +76,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         bookUserAlbum.setCreatedTime(DateUtil.currentTime());
         bookUserAlbum.setUpdatedTime(DateUtil.currentTime());
         userAlbumMapper.insert(bookUserAlbum);
+        return bookUserAlbum.getId()
     }
     @Override
     public List<UserAlbumListDto> getUserAlbumList(String userId, Long studentId){

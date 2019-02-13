@@ -14,8 +14,9 @@ public interface UserReadingService {
     /**
      * 创建学生专辑
      * @param userAlbumDto
+     * @return
      */
-    void createUserAlbum(UserAlbumDto userAlbumDto);
+    Long createUserAlbum(UserAlbumDto userAlbumDto);
 
     /**
      * 获取专辑列表

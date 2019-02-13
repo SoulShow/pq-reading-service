@@ -23,7 +23,7 @@ public class UserReadingController {
 		ReadingResult result = new ReadingResult();
 
 		try{
-			userReadingService.createUserAlbum(userAlbumDto);
+			result.setData(userReadingService.createUserAlbum(userAlbumDto));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());
