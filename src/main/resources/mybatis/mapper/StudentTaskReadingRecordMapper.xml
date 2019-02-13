@@ -129,6 +129,7 @@
     limit #{offset},#{size}
     )m
     )
+    order by r.play_count desc ,r.created_time desc
 
   </select>
 
