@@ -237,6 +237,9 @@ public class UserReadingServiceImpl implements UserReadingService {
             throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
         }
         StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
+        if(readingRecord.getState()==false){
+            ReadingException.raise(ReadingErrors.READING_RECORD_IS_NOT_EXIST);
+        }
         MyReadingDetailDto myReadingDetailDto = new MyReadingDetailDto();
         myReadingDetailDto.setReadingId(readingId);
         myReadingDetailDto.setName(readingRecord.getName());
