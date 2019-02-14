@@ -92,10 +92,11 @@ php:
 #    register-with-eureka: false
 #    fetch-registry: false
 
-rest:
-  connection:
-    connectionRequestTimeout: 30000
-    connectTimeout: 30000
-    readTimeout: 30000
+### Ribbon 配置
+ribbon:
+  # 连接超时
+  ConnectTimeout: 10000
+  # 响应超时
+  ReadTimeout: 10000
 
 
