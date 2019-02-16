@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pq.reading.entity.ReadingBook" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
     <result column="introduce" property="introduce" jdbcType="VARCHAR" />
     <result column="img" property="img" jdbcType="VARCHAR" />
     <result column="album_id" property="albumId" jdbcType="BIGINT" />
@@ -22,10 +23,10 @@
     </selectKey>
     insert into pq_reading_book (name, introduce, img, 
       album_id, type, state, created_time, 
-      updated_time)
+      updated_time,grade)
     values (#{name,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
       #{albumId,jdbcType=BIGINT}, #{type,jdbcType=BIT}, #{state,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP})
+      #{updatedTime,jdbcType=TIMESTAMP},#{grade})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.ReadingBook" >
     update pq_reading_book
@@ -36,24 +37,25 @@
       type = #{type,jdbcType=BIT},
       state = #{state,jdbcType=BIT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      grade = #{grade}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, name, introduce, img, album_id, type, state, created_time, updated_time
+    select id, name, introduce, img, album_id, type, state, created_time, updated_time,grade
     from pq_reading_book
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, name, introduce, img, album_id, type, state, created_time, updated_time
+    select id, name, introduce, img, album_id, type, state, created_time, updated_time,grade
     from pq_reading_book
   </select>
   <select id="selectByAlbumId" resultMap="BaseResultMap" >
-    select id, name, introduce, img, album_id, type, state, created_time, updated_time
+    select id, name, introduce, img, album_id, type, state, created_time, updated_time,grade
     from pq_reading_book
     where album_id = #{albumId}
     and state = 1
-    order by created_time desc
+    order by grade asc,created_time desc
     limit #{offset},#{size}
   </select>
 </mapper>

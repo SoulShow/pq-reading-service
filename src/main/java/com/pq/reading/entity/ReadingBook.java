@@ -7,6 +7,8 @@ public class ReadingBook {
 
     private String name;
 
+    private int grade;
+
     private String introduce;
 
     private String img;
@@ -91,5 +93,13 @@ public class ReadingBook {
 
     public void setUpdatedTime(Timestamp updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
     }
 }
