@@ -493,6 +493,7 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delUserReading(Long readingId,Long studentId){
         StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingId);
         if(readingRecord == null){
@@ -509,7 +510,12 @@ public class UserReadingServiceImpl implements UserReadingService {
         for(TaskReadingPlayLog readingPlayLog:logList){
             readingPlayLogMapper.deleteByPrimaryKey(readingPlayLog.getId());
         }
-
+        ReadingTaskReadLog readingTaskReadLog = taskReadLogMapper.selectByUserIdAndStudentIdAndTaskId(readingRecord.getUserId(),
+                readingRecord.getStudentId(),readingRecord.getTaskId());
+        if(readingTaskReadLog !=null){
+            //删除阅读任务阅读记录
+            taskReadLogMapper.deleteByPrimaryKey(readingTaskReadLog.getId());
+        }
     }
     @Override
     public List<NewReadingDto> getTeacherOnoToOneList(Long classId,String userId, int offset,int size){
