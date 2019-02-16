@@ -55,7 +55,7 @@
     from pq_reading_book
     where album_id = #{albumId}
     and state = 1
-    order by grade asc,created_time desc
+    order by grade asc,name asc,created_time desc
     limit #{offset},#{size}
   </select>
 </mapper>
