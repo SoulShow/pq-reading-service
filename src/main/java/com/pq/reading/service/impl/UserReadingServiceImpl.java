@@ -20,12 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author liutao
@@ -62,6 +64,8 @@ public class UserReadingServiceImpl implements UserReadingService {
     private UserFeign userFeign;
     @Value("${php.url}")
     private String phpUrl;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Override
@@ -604,6 +608,9 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
     @Override
     public  void unCommitListPush(String userId,Long taskId,Long classId){
+        if(redisTemplate.hasKey(Constants.READING_TASK_USER_INFO+userId+classId+taskId)){
+            ReadingException.raise(ReadingErrors.READING_PUSH_MORE_60_ERROR);
+        }
         AgencyStudentListDto studentListDto = getTeacherUnCommitList( userId, classId, taskId);
         List<AgencyStudentDto> list = studentListDto.getList();
 
@@ -644,6 +651,7 @@ public class UserReadingServiceImpl implements UserReadingService {
                 }
             }
         }
+        redisTemplate.opsForValue().set(Constants.READING_TASK_USER_INFO+userId+classId+taskId,"阅读提醒",60,TimeUnit.MINUTES);
     }
 
     @Override
