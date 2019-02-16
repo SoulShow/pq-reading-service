@@ -68,7 +68,7 @@
   </select>
 
   <select id="selectUnReadCountByStudentIdAndUserId" resultType="java.lang.Integer" >
-    select count (c.id)
+    select count(c.id)
     from pq_student_reading_comment c , pq_student_task_reading_record r
     where c.reading_record_id = r.id
     and (c.receiver_student_id = #{studentId} or r.student_id = #{studentId})
