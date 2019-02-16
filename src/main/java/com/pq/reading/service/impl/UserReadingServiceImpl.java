@@ -682,8 +682,13 @@ public class UserReadingServiceImpl implements UserReadingService {
         List<StudentTaskReadingRecord> oneToOneList = readingRecordMapper.selectByTeacherId(userId);
         for(StudentTaskReadingRecord taskReadingRecord:oneToOneList) {
             TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,taskReadingRecord.getId());
-            readingIndexDto.setOneToOneStatus(readingReadLog==null?1:0);
-            break;
+            if(readingReadLog==null){
+                readingIndexDto.setOneToOneStatus(1);
+                break;
+            }else {
+                readingIndexDto.setOneToOneStatus(0);
+            }
+
         }
         return readingIndexDto;
     }
