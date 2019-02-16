@@ -13,6 +13,7 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="is_read" property="isRead" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -27,12 +28,12 @@
     insert into pq_student_reading_comment (reading_record_id, originator_user_id, 
       originator_name, originator_student_id, receiver_user_id, 
       receiver_name, receiver_student_id, content, 
-      state, created_time, updated_time,is_read
+      state, created_time, updated_time,is_read,type
       )
     values (#{readingRecordId,jdbcType=BIGINT}, #{originatorUserId,jdbcType=VARCHAR}, 
       #{originatorName,jdbcType=VARCHAR}, #{originatorStudentId,jdbcType=BIGINT}, #{receiverUserId,jdbcType=VARCHAR}, 
       #{receiverName,jdbcType=VARCHAR}, #{receiverStudentId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{isRead}
+      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{isRead},#{type}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.StudentReadingComment" >
@@ -48,20 +49,21 @@
       state = #{state,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-      is_read = #{isRead}
+      is_read = #{isRead},
+      type = #{type}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, reading_record_id, originator_user_id, originator_name, originator_student_id, 
     receiver_user_id, receiver_name, receiver_student_id, content, state, created_time, 
-    updated_time,is_read
+    updated_time,is_read,type
     from pq_student_reading_comment
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, reading_record_id, originator_user_id, originator_name, originator_student_id, 
     receiver_user_id, receiver_name, receiver_student_id, content, state, created_time, 
-    updated_time,is_read
+    updated_time,is_read,type
     from pq_student_reading_comment
   </select>
 
@@ -79,15 +81,17 @@
     from pq_student_reading_comment
     where reading_record_id = #{readingId}
     and state = 1
+    and type = 1
   </select>
 
   <select id="selectByReadingId" resultMap="BaseResultMap" >
     select id, reading_record_id, originator_user_id, originator_name, originator_student_id,
     receiver_user_id, receiver_name, receiver_student_id, content, state, created_time,
-    updated_time,is_read
+    updated_time,is_read,type
     from pq_student_reading_comment
     where reading_record_id = #{readingId}
     and state = 1
+    and type = 1
     order by created_time desc
     limit #{offset},#{size}
   </select>

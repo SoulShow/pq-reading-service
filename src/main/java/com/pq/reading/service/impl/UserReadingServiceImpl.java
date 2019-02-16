@@ -381,6 +381,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         return list;
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void praise(PraiseDto praiseDto){
         StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(praiseDto.getReadingId(),
                 praiseDto.getUserId(),praiseDto.getStudentId());
@@ -396,6 +397,19 @@ public class UserReadingServiceImpl implements UserReadingService {
         praise.setCreatedTime(DateUtil.currentTime());
         praise.setUpdatedTime(DateUtil.currentTime());
         praiseMapper.insert(praise);
+
+        StudentReadingComment studentReadingComment = new StudentReadingComment();
+        studentReadingComment.setReadingRecordId(praiseDto.getReadingId());
+        studentReadingComment.setOriginatorUserId(praiseDto.getUserId());
+        studentReadingComment.setOriginatorName(praiseDto.getName());
+        studentReadingComment.setOriginatorStudentId(praiseDto.getStudentId());
+        studentReadingComment.setContent("点赞");
+        studentReadingComment.setIsRead(0);
+        studentReadingComment.setState(1);
+        studentReadingComment.setType(2);
+        studentReadingComment.setCreatedTime(DateUtil.currentTime());
+        studentReadingComment.setUpdatedTime(DateUtil.currentTime());
+        readingCommentMapper.insert(studentReadingComment);
     }
 
     @Override
@@ -424,6 +438,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         studentReadingComment.setContent(commentDto.getContent());
         studentReadingComment.setIsRead(0);
         studentReadingComment.setState(1);
+        studentReadingComment.setType(1);
         studentReadingComment.setCreatedTime(DateUtil.currentTime());
         studentReadingComment.setUpdatedTime(DateUtil.currentTime());
         readingCommentMapper.insert(studentReadingComment);

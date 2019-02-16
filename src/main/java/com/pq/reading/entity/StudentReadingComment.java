@@ -23,6 +23,8 @@ public class StudentReadingComment {
 
     private int isRead;
 
+    private int type;
+
     private Integer state;
 
     private Timestamp createdTime;
@@ -131,5 +133,13 @@ public class StudentReadingComment {
 
     public void setIsRead(int isRead) {
         this.isRead = isRead;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
