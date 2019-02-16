@@ -68,12 +68,13 @@
   </select>
 
   <select id="selectUnReadCountByStudentIdAndUserId" resultType="java.lang.Integer" >
-    select count(id)
-    from pq_student_reading_comment
-    where receiver_user_id = #{userId}
-    and receiver_student_id = #{studentId}
-    and is_read = 0
-    and state = 1
+    select count (c.id)
+    from pq_student_reading_comment c , pq_student_task_reading_record r
+    where c.reading_record_id = r.id
+    and (c.receiver_student_id = #{studentId} or r.student_id = #{studentId})
+    and c.originator_student_id != #{studentId}
+    and c.state = 1
+    and c.is_read=0
   </select>
 
   <select id="selectCountByReadingId" resultType="java.lang.Integer" >

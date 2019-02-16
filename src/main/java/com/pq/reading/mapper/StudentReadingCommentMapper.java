@@ -16,7 +16,7 @@ public interface StudentReadingCommentMapper {
 
     int updateByPrimaryKey(StudentReadingComment record);
 
-    Integer selectUnReadCountByStudentIdAndUserId(@Param("studentId") Long studentId, @Param("userId") String userId);
+    Integer selectUnReadCountByStudentIdAndUserId(@Param("studentId") Long studentId);
 
     Integer selectCountByReadingId(@Param("readingId")Long readingId);
 

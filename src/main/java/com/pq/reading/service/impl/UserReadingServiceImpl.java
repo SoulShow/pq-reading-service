@@ -223,7 +223,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         myReadingDto.setAvatar(result.getData().getAvatar());
         myReadingDto.setUserName(result.getData().getName());
         myReadingDto.setClassName(result.getData().getClassName());
-        Integer count = readingCommentMapper.selectUnReadCountByStudentIdAndUserId(studentId,userId);
+        Integer count = readingCommentMapper.selectUnReadCountByStudentIdAndUserId(studentId);
         myReadingDto.setMessageCount(count==null?0:count);
         return myReadingDto;
     }
