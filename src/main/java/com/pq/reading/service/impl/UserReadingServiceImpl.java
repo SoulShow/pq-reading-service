@@ -452,7 +452,10 @@ public class UserReadingServiceImpl implements UserReadingService {
 
     private List<AgencyStudentDto> getAgencyStudentDtoList(Long chapterId,List<Long> studentList,int offset,int size){
         List<AgencyStudentDto> studentDtos = new ArrayList<>();
+
         List<StudentTaskReadingRecord> list = readingRecordMapper.selectByChapterIdAndStudentList(chapterId,studentList,offset,size);
+
+
         for(StudentTaskReadingRecord readingRecord:list){
             ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingRecord.getStudentId());
             if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
