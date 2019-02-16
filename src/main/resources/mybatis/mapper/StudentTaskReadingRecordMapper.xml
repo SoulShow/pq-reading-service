@@ -120,9 +120,9 @@
     select play_count,id,student_id
     from pq_student_task_reading_record
     where state = 1
-    and  and chapter_id = #{chapterId}
+    and chapter_id = #{chapterId}
     <if test="studentList !=null">
-      and student_id in
+    and student_id in
       <foreach item="item" collection="studentList" separator="," open="(" close=")">#{item}</foreach>
     </if>
     and is_private = 0
