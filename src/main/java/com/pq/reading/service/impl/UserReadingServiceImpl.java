@@ -360,7 +360,6 @@ public class UserReadingServiceImpl implements UserReadingService {
                 commentMessageDto.setClassName(classInfo.getData().getName());
 
             }
-
             commentMessageDto.setReceiverUserId(readingComment.getReceiverUserId());
             commentMessageDto.setReceiverStudentId(readingComment.getReceiverStudentId());
             commentMessageDto.setReceiverName(readingComment.getReceiverName());
@@ -397,6 +396,7 @@ public class UserReadingServiceImpl implements UserReadingService {
         praise.setCreatedTime(DateUtil.currentTime());
         praise.setUpdatedTime(DateUtil.currentTime());
         praiseMapper.insert(praise);
+
 
         StudentReadingComment studentReadingComment = new StudentReadingComment();
         studentReadingComment.setReadingRecordId(praiseDto.getReadingId());
