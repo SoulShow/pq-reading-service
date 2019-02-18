@@ -370,7 +370,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             commentMessageDto.setContent(readingComment.getContent());
             commentMessageDto.setCreatedTime(DateUtil.formatDate(readingComment.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
             commentMessageDto.setIsRead(readingComment.getIsRead());
-
+            commentMessageDto.setType(readingComment.getType());
             StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingComment.getReadingRecordId());
             if(readingRecord==null){
                 ReadingException.raise(ReadingErrors.READING_RECORD_IS_NOT_EXIST);
