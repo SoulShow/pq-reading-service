@@ -236,6 +236,15 @@ public class UserReadingServiceImpl implements UserReadingService {
     public MyReadingDetailDto getUserReadingDetail(String userId, Long studentId,Long readingId,Long commentId,
                                                    String praiseUserId,Long praiseStudentId,int role){
 
+        if(commentId!=null && commentId!=0){
+            StudentReadingComment readingComment = readingCommentMapper.selectByPrimaryKey(commentId);
+            if(readingComment.getIsRead()==0){
+                readingComment.setIsRead(1);
+                readingComment.setCreatedTime(DateUtil.currentTime());
+                readingCommentMapper.updateByPrimaryKey(readingComment);
+            }
+        }
+
         ReadingResult<AgencyStudentDto> result = agencyFeign.getStudentInfo(studentId);
         if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
             throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
@@ -263,14 +272,7 @@ public class UserReadingServiceImpl implements UserReadingService {
 
         Integer commentCount = readingCommentMapper.selectCountByReadingId(readingId);
         myReadingDetailDto.setCommentCount(commentCount==null?0:commentCount);
-        if(commentId!=null && commentId!=0){
-            StudentReadingComment readingComment = readingCommentMapper.selectByPrimaryKey(commentId);
-            if(readingComment.getIsRead()==0){
-                readingComment.setIsRead(1);
-                readingComment.setCreatedTime(DateUtil.currentTime());
-                readingCommentMapper.updateByPrimaryKey(readingComment);
-            }
-        }
+
         StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(readingId,praiseUserId,praiseStudentId);
         myReadingDetailDto.setIsPraise(readingPraise==null?0:1);
 
@@ -326,7 +328,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             studentReadingCommentDto.setReceiverStudentId(readingComment.getReceiverStudentId());
             studentReadingCommentDto.setReceiverName(readingComment.getReceiverName());
             studentReadingCommentDto.setContent(readingComment.getContent());
-            studentReadingCommentDto.setCreatedTime(DateUtil.formatDate(readingComment.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
+            studentReadingCommentDto.setCreatedTime(DateUtil.formatDate(readingComment.getCreatedTime(),DateUtil.DEFAULT_DATETIME_FORMAT));
             list.add(studentReadingCommentDto);
         }
         return list;
