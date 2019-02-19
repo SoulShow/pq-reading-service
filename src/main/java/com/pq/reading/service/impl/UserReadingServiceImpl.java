@@ -301,28 +301,19 @@ public class UserReadingServiceImpl implements UserReadingService {
             studentReadingCommentDto.setOriginatorUserId(readingComment.getOriginatorUserId());
             studentReadingCommentDto.setOriginatorStudentId(readingComment.getOriginatorStudentId());
             studentReadingCommentDto.setOriginatorName(readingComment.getOriginatorName());
-            if(readingComment.getOriginatorStudentId()==null||readingComment.getOriginatorStudentId()==0){
-                ReadingResult<UserDto> result = userFeign.getUserInfo(readingComment.getOriginatorUserId());
-                if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
-                    throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
-                }
-                studentReadingCommentDto.setOriginatorAvatar(result.getData().getAvatar());
-                studentReadingCommentDto.setOriginatorName(result.getData().getName());
 
-                ReadingResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
-                if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
-                    throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
-                }
-                studentReadingCommentDto.setClassName(classInfo.getData().getName());
-
-            }else {
-                ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(readingComment.getOriginatorStudentId());
-                if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
-                    throw new ReadingException(new ReadingErrorCode(studentInfo.getStatus(),studentInfo.getMessage()));
-                }
-                studentReadingCommentDto.setOriginatorAvatar(studentInfo.getData().getAvatar());
-                studentReadingCommentDto.setClassName(studentInfo.getData().getClassName());
+            ReadingResult<UserDto> result = userFeign.getUserInfo(readingComment.getOriginatorUserId());
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
             }
+            studentReadingCommentDto.setOriginatorAvatar(result.getData().getAvatar());
+            studentReadingCommentDto.setOriginatorName(result.getData().getName());
+
+            ReadingResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
+            if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
+                throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
+            }
+            studentReadingCommentDto.setClassName(classInfo.getData().getName());
 
             studentReadingCommentDto.setReceiverUserId(readingComment.getReceiverUserId());
             studentReadingCommentDto.setReceiverStudentId(readingComment.getReceiverStudentId());
