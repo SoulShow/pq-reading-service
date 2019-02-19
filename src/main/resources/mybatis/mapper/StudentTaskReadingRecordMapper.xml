@@ -175,7 +175,7 @@
     select *
     from pq_student_task_reading_record
     where class_id = #{classId}
-    and user_id = #{userId}
+    and teacher_id = #{userId}
     and state = 1
   </select>
 
