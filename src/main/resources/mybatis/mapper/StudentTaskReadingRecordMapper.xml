@@ -171,8 +171,8 @@
     and state = 1
   </select>
 
-  <select id="selectCountByClassIdAndTeacherId" resultType="java.lang.Integer" >
-    select count(id)
+  <select id="selectCountByClassIdAndTeacherId" resultMap="BaseResultMap" >
+    select *
     from pq_student_task_reading_record
     where class_id = #{classId}
     and user_id = #{userId}

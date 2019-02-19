@@ -712,17 +712,14 @@ public class UserReadingServiceImpl implements UserReadingService {
             }
             //1对1
             if(type==2){
-                Integer recordCount = readingRecordMapper.selectCountByClassIdAndTeacherId(agencyClassDto.getId(),userId);
-                if(recordCount==null||recordCount==0){
-                    count=0;
-                    continue;
+                List<StudentTaskReadingRecord> list = readingRecordMapper.selectCountByClassIdAndTeacherId(agencyClassDto.getId(),userId);
+                for(StudentTaskReadingRecord record :list){
+                    TeacherReadingReadLog readLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,record.getId());
+                    if(readLog==null){
+                        agencyClassDto.setStatus(1);
+                        break;
+                    }
                 }
-                Integer readingCount = teacherReadingReadLogMapper.selectCountByClassIdAndTeacherId(agencyClassDto.getId(),userId);
-                if(readingCount==null){
-                    readingCount=0;
-                }
-                count=recordCount-readingCount;
-                agencyClassDto.setStatus(count>0?1:0);
             }
         }
         return classDtos;
