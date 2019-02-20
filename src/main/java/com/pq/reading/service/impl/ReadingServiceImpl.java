@@ -256,7 +256,8 @@ public class ReadingServiceImpl implements ReadingService {
             bookChapterDetailDto.setReadingId(readingRecord.getId());
         }
         bookChapterDetailDto.setCreateTime(DateUtil.formatDate(readingTask.getCreatedTime(),DateUtil.DEFAULT_TIME_MINUTE));
-
+        bookChapterDetailDto.setBase64(readingRecord.getBase64());
+        bookChapterDetailDto.setSuffix(readingRecord.getSuffix());
         ReadingResult<UserDto> userResult = userFeign.getUserInfo(readingTask.getUserId());
         if (!CommonErrors.SUCCESS.getErrorCode().equals(userResult.getStatus())) {
             throw new ReadingException(new ReadingErrorCode(userResult.getStatus(), userResult.getMessage()));

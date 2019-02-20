@@ -124,6 +124,8 @@ public class UserReadingServiceImpl implements UserReadingService {
         studentTaskReadingRecord.setUpdatedTime(DateUtil.currentTime());
         studentTaskReadingRecord.setDuration(userReadingRecordDto.getDuration());
         studentTaskReadingRecord.setClassId(userReadingRecordDto.getClassId());
+        studentTaskReadingRecord.setBase64(userReadingRecordDto.getBase64());
+        studentTaskReadingRecord.setSuffix(userReadingRecordDto.getSuffix());
         BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(userReadingRecordDto.getChapterId());
         studentTaskReadingRecord.setName(bookChapter.getChapter()+"："+bookChapter.getTitle());
         ReadingBook readingBook = readingBookMapper.selectByPrimaryKey(bookChapter.getBookId());
@@ -275,7 +277,8 @@ public class UserReadingServiceImpl implements UserReadingService {
 
         StudentReadingPraise readingPraise = praiseMapper.selectByReadingIdAndUserInfo(readingId,praiseUserId,praiseStudentId);
         myReadingDetailDto.setIsPraise(readingPraise==null?0:1);
-
+        myReadingDetailDto.setBase64(readingRecord.getBase64());
+        myReadingDetailDto.setSuffix(readingRecord.getSuffix());
         if(role==CommonConstants.PQ_LOGIN_ROLE_TEACHER){
             TeacherReadingReadLog teacherReadingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,readingId);
             if(teacherReadingReadLog==null){

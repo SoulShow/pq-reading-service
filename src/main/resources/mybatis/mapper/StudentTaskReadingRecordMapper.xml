@@ -21,6 +21,9 @@
     <result column="state" property="state" jdbcType="BIT" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="base64" property="base64" jdbcType="VARCHAR" />
+    <result column="suffix" property="suffix" jdbcType="VARCHAR" />
+
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from pq_student_task_reading_record
@@ -32,12 +35,13 @@
     </selectKey>
     insert into pq_student_task_reading_record (task_id, student_id, user_id, 
       voice_url, img_url, score, play_count,class_id,
-      state, created_time, updated_time, user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration
+      state, created_time, updated_time, user_album_id,
+    is_private,teacher_id,chapter_id,name,book_name,duration,suffix,base64
       )
     values (#{taskId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
       #{voiceUrl,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR},#{score,jdbcType=INTEGER}, #{playCount,jdbcType=INTEGER},#{classId},
       #{state,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{userAlbumIId},#{isPrivate},
-    #{teacherId},#{chapterId},#{name},#{bookName},#{duration}
+    #{teacherId},#{chapterId},#{name},#{bookName},#{duration},#{suffix},#{base64}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pq.reading.entity.StudentTaskReadingRecord" >
@@ -59,18 +63,22 @@
       name = #{name},
       book_name = #{bookName},
       duration=#{duration},
-      class_id = #{classId}
+      class_id = #{classId},
+      base64 = #{base64},
+      suffix = #{suffix}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time, 
-    updated_time, img_url, user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
+    updated_time, img_url, user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id,
+    base64,suffix
     from pq_student_task_reading_record
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
-    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id,
+    base64,suffix
     from pq_student_task_reading_record
   </select>
 
@@ -158,7 +166,8 @@
 
   <select id="selectByTeacherId" resultMap="BaseResultMap" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
-    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id,
+    base64,suffix
     from pq_student_task_reading_record
     where teacher_id = #{teacherId}
     and state = 1
@@ -181,7 +190,8 @@
 
   <select id="selectByUserAlbumId" resultMap="BaseResultMap" >
     select id, task_id, student_id, user_id, voice_url, score, play_count, state, created_time,
-    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id
+    updated_time, img_url,user_album_id,is_private,teacher_id,chapter_id,name,book_name,duration,class_id,
+    base64,suffix
     from pq_student_task_reading_record
     where user_album_id = #{albumId}
     and state = 1

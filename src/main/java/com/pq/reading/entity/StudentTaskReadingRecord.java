@@ -41,6 +41,10 @@ public class StudentTaskReadingRecord {
 
     private Long chapterId;
 
+    private String suffix;
+
+    private String base64;
+
     public Long getId() {
         return id;
     }
@@ -191,5 +195,21 @@ public class StudentTaskReadingRecord {
 
     public void setClassId(Long classId) {
         this.classId = classId;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
+    public String getBase64() {
+        return base64;
+    }
+
+    public void setBase64(String base64) {
+        this.base64 = base64;
     }
 }
