@@ -240,7 +240,7 @@ public class UserReadingServiceImpl implements UserReadingService {
             StudentReadingComment readingComment = readingCommentMapper.selectByPrimaryKey(commentId);
             if(readingComment.getIsRead()==0){
                 readingComment.setIsRead(1);
-                readingComment.setCreatedTime(DateUtil.currentTime());
+                readingComment.setUpdatedTime(DateUtil.currentTime());
                 readingCommentMapper.updateByPrimaryKey(readingComment);
             }
         }
