@@ -310,7 +310,6 @@ public class UserReadingServiceImpl implements UserReadingService {
                 throw new ReadingException(new ReadingErrorCode(result.getStatus(),result.getMessage()));
             }
             studentReadingCommentDto.setOriginatorAvatar(result.getData().getAvatar());
-            studentReadingCommentDto.setOriginatorName(result.getData().getName());
 
             ReadingResult<AgencyClassDto> classInfo = agencyFeign.getAgencyClassInfo(classId);
             if(!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())){
