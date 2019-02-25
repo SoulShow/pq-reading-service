@@ -56,6 +56,10 @@
     and l.created_time &gt;=#{beginDate}
     and l.created_time &lt;=#{endDate}
     and r.is_private = 0
+    <if test="classIds !=null">
+      and r.class_id in
+      <foreach item="item" collection="classIds" separator="," open="(" close=")">#{item}</foreach>
+    </if>
     group by r.student_id
     order by count DESC
     <if test="type==1">

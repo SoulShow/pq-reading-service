@@ -20,7 +20,8 @@ public interface TaskReadingPlayLogMapper {
 
     List<RankingDto> selectReadingCount(@Param("type")int type,
                                         @Param("beginDate")Date beginDate,
-                                        @Param("endDate")Date endDate);
+                                        @Param("endDate")Date endDate,
+                                        @Param("classIds")List<Long> classIds);
 
     RankingDto selectStudentReadingCountAndIndex(@Param("type")int type,
                                                  @Param("studentId") Long studentId,

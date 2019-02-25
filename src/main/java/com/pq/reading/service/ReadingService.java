@@ -111,10 +111,11 @@ public interface ReadingService {
      * 排行榜
      * @param type
      * @param studentId
+     * @param classId
      * @param role
      * @return
      */
-    RankingListDto getRankingList(int type,Long studentId,int role);
+    RankingListDto getRankingList(int type,Long studentId,Long classId,int role);
 
 
 }

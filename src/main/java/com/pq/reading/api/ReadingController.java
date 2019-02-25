@@ -248,10 +248,11 @@ public class ReadingController {
 	@ResponseBody
 	public ReadingResult rankingList(@RequestParam("type") int type,
 									 @RequestParam(value = "studentId",required = false) Long studentId,
+									 @RequestParam(value = "classId") Long classId,
 									 @RequestParam("role") int role) {
 		ReadingResult result = new ReadingResult();
 		try{
-			result.setData(readingService.getRankingList(type,studentId,role));
+			result.setData(readingService.getRankingList(type,studentId,classId,role));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

@@ -328,7 +328,7 @@ public class ReadingServiceImpl implements ReadingService {
         }
     }
     @Override
-    public RankingListDto getRankingList(int type,Long studentId,int role){
+    public RankingListDto getRankingList(int type,Long studentId,Long classId,int role){
         Date beginDate = null;
         Date endDate = null;
         //月排行
@@ -341,6 +341,7 @@ public class ReadingServiceImpl implements ReadingService {
             beginDate = DateUtil.getBeginDayOfWeek();
             endDate = DateUtil.getLastDayOfWeek();
         }
+
         RankingListDto rankingListDto = new RankingListDto();
         if(role==CommonConstants.PQ_LOGIN_ROLE_PARENT){
             StudentInfoDto studentInfoDto = new StudentInfoDto();
@@ -363,7 +364,12 @@ public class ReadingServiceImpl implements ReadingService {
             studentInfoDto.setClassName(studentInfo.getData().getClassName());
             rankingListDto.setStudentInfo(studentInfoDto);
         }
-        List<RankingDto> list = readingPlayLogMapper.selectReadingCount(type,beginDate,endDate);
+        ReadingResult<List<Long>> result = agencyFeign.getClassIds(classId);
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(), result.getMessage()));
+        }
+
+        List<RankingDto> list = readingPlayLogMapper.selectReadingCount(type,beginDate,endDate,result.getData());
         for(RankingDto rankingDto:list){
             ReadingResult<AgencyStudentDto> studentInfo = agencyFeign.getStudentInfo(rankingDto.getStudentId());
             if(!CommonErrors.SUCCESS.getErrorCode().equals(studentInfo.getStatus())){
