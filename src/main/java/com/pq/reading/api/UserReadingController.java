@@ -95,7 +95,7 @@ public class UserReadingController {
 		ReadingResult result = new ReadingResult();
 
 		try{
-			userReadingService.updateUserAlbum(userAlbumDto);
+			result.setData(userReadingService.updateUserAlbum(userAlbumDto));
 		}catch (ReadingException e){
 			result.setStatus(e.getErrorCode().getErrorCode());
 			result.setMessage(e.getErrorCode().getErrorMsg());

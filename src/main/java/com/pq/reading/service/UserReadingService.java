@@ -44,8 +44,9 @@ public interface UserReadingService {
     /**
      * 更新个人专辑
      * @param userAlbumDto
+     * @return
      */
-    void updateUserAlbum(UserAlbumDto userAlbumDto);
+    Long updateUserAlbum(UserAlbumDto userAlbumDto);
 
     /**
      * 删除个人专辑

@@ -167,12 +167,13 @@ public class UserReadingServiceImpl implements UserReadingService {
     }
 
     @Override
-    public void updateUserAlbum(UserAlbumDto userAlbumDto){
+    public Long updateUserAlbum(UserAlbumDto userAlbumDto){
         BookUserAlbum bookUserAlbum = userAlbumMapper.selectByPrimaryKey(userAlbumDto.getId());
         bookUserAlbum.setName(userAlbumDto.getName());
         bookUserAlbum.setImg(userAlbumDto.getImg());
         bookUserAlbum.setUpdatedTime(DateUtil.currentTime());
         userAlbumMapper.updateByPrimaryKey(bookUserAlbum);
+        return bookUserAlbum.getId();
     }
 
     @Override
