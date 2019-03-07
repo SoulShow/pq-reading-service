@@ -639,6 +639,7 @@ public class UserReadingServiceImpl implements UserReadingService {
                 studentNoticeDto.setWorkId(taskId);
                 studentNoticeDto.setStudent_id(studentDto.getStudentId());
                 studentNoticeDto.setStudent_name(studentDto.getName());
+                paramMap.put("studentName", studentDto.getName());
                 paramMap.put("ext", studentNoticeDto);
 
                 String huanxResult = null;
@@ -658,10 +659,23 @@ public class UserReadingServiceImpl implements UserReadingService {
 
     @Override
     public TeacherReadingIndexDto getIndexStatus(String userId){
+
+        ReadingResult<List<AgencyClassDto>> result = agencyFeign.getTeacherClassList(userId);
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(), result.getMessage()));
+        }
+        List<AgencyClassDto> classDtos = result.getData();
+        List<Long> classIdList = new ArrayList<>();
+        for(AgencyClassDto agencyClassDto:classDtos){
+            classIdList.add(agencyClassDto.getId());
+        }
         TeacherReadingIndexDto readingIndexDto = new TeacherReadingIndexDto();
         List<ReadingTask> taskList = readingTaskMapper.selectByUserId(userId);
         readingIndexDto.setReadingTaskStatus(0);
         for (ReadingTask readingTask : taskList) {
+            if(!classIdList.contains(readingTask.getClassId())){
+                continue;
+            }
             if(readingIndexDto.getReadingTaskStatus()==0){
                 List<StudentTaskReadingRecord> readingRecordList = readingRecordMapper.selectByTaskId(readingTask.getId());
                 for(StudentTaskReadingRecord record :readingRecordList){
@@ -677,6 +691,9 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         List<StudentTaskReadingRecord> oneToOneList = readingRecordMapper.selectByTeacherId(userId);
         for(StudentTaskReadingRecord taskReadingRecord:oneToOneList) {
+            if(!classIdList.contains(taskReadingRecord.getClassId())){
+                continue;
+            }
             TeacherReadingReadLog readingReadLog = teacherReadingReadLogMapper.selectByUserIdAndReadingId(userId,taskReadingRecord.getId());
             if(readingReadLog==null){
                 readingIndexDto.setOneToOneStatus(1);

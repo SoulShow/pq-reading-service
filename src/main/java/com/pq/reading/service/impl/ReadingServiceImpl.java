@@ -123,6 +123,7 @@ public class ReadingServiceImpl implements ReadingService {
                         studentNoticeDto.setWorkId(readingTask.getId());
                         studentNoticeDto.setStudent_id(studentId);
                         studentNoticeDto.setStudent_name(studentInfo.getData().getName());
+                        paramMap.put("studentName", studentInfo.getData().getName());
                         paramMap.put("ext", studentNoticeDto);
 
                         String huanxResult = null;
