@@ -465,6 +465,22 @@ public class UserReadingController {
         }
         return result;
     }
+	@GetMapping(value = "/dynamic")
+	@ResponseBody
+	public ReadingResult getDynamicReading(@RequestParam(value = "readingRecordId") Long readingRecordId) {
+		ReadingResult result = new ReadingResult();
+		try {
+			result.setData(userReadingService.getDynamicReading(readingRecordId));
+		} catch (ReadingException e) {
+			result.setStatus(e.getErrorCode().getErrorCode());
+			result.setMessage(e.getErrorCode().getErrorMsg());
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(CommonErrors.DB_EXCEPTION.getErrorCode());
+			result.setMessage(CommonErrors.DB_EXCEPTION.getErrorMsg());
+		}
+		return result;
+	}
 
 	
 

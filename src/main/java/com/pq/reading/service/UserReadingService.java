@@ -208,5 +208,10 @@ public interface UserReadingService {
      */
     List<AgencyClassDto> getTeacherClassUnReadCount(String userId,int type);
 
-
+    /**
+     * 获取动态阅读
+     * @param readingRecordId
+     * @return
+     */
+    DynamicReadingDto getDynamicReading(Long readingRecordId);
 }

@@ -745,6 +745,22 @@ public class UserReadingServiceImpl implements UserReadingService {
         return classDtos;
     }
 
+    @Override
+    public DynamicReadingDto getDynamicReading(Long readingRecordId){
+        StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByPrimaryKey(readingRecordId);
+        DynamicReadingDto dynamicReadingDto = new DynamicReadingDto();
+        dynamicReadingDto.setName(readingRecord.getName());
+        dynamicReadingDto.setBookName(readingRecord.getBookName());
+        dynamicReadingDto.setImg(readingRecord.getImgUrl());
+        dynamicReadingDto.setReadingId(readingRecord.getId());
+        ReadingResult<AgencyStudentDto> result = agencyFeign.getStudentInfo(readingRecord.getStudentId());
+        if (!CommonErrors.SUCCESS.getErrorCode().equals(result.getStatus())) {
+            throw new ReadingException(new ReadingErrorCode(result.getStatus(), result.getMessage()));
+        }
+        dynamicReadingDto.setStudentName(result.getData().getName());
+        dynamicReadingDto.setClassName(result.getData().getClassName());
+        return dynamicReadingDto;
+    }
 
 
 }
