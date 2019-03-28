@@ -759,6 +759,8 @@ public class UserReadingServiceImpl implements UserReadingService {
         }
         dynamicReadingDto.setStudentName(result.getData().getName());
         dynamicReadingDto.setClassName(result.getData().getClassName());
+        dynamicReadingDto.setClassId(readingRecord.getClassId());
+        dynamicReadingDto.setStudentId(readingRecord.getStudentId());
         return dynamicReadingDto;
     }
 
