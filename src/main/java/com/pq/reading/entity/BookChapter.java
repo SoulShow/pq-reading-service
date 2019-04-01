@@ -1,6 +1,7 @@
 package com.pq.reading.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class BookChapter {
     private Long id;
@@ -18,6 +19,8 @@ public class BookChapter {
     private String voiceUrl;
 
     private String articleUrl;
+
+    private List<String> articleUrlList;
 
     private Integer readCount;
 
@@ -151,5 +154,13 @@ public class BookChapter {
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
+    }
+
+    public List<String> getArticleUrlList() {
+        return articleUrlList;
+    }
+
+    public void setArticleUrlList(List<String> articleUrlList) {
+        this.articleUrlList = articleUrlList;
     }
 }
