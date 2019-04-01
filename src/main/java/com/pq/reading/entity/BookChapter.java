@@ -36,6 +36,8 @@ public class BookChapter {
 
     private String bookName;
 
+    private int type;
+
     public Long getId() {
         return id;
     }
@@ -162,5 +164,13 @@ public class BookChapter {
 
     public void setArticleUrlList(List<String> articleUrlList) {
         this.articleUrlList = articleUrlList;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

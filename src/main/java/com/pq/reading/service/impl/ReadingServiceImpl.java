@@ -72,6 +72,7 @@ public class ReadingServiceImpl implements ReadingService {
             bookChapter.setBookName(bookAlbum.getName() + "·" + readingBook.getName());
             String[] articleUrlList = bookChapter.getArticleUrl().split("\\;");
             bookChapter.setArticleUrlList(Arrays.asList(articleUrlList));
+            bookChapter.setType(bookAlbumMapper.selectByPrimaryKey(readingBook.getAlbumId()).getType());
         }
         return list;
     }
@@ -245,6 +246,8 @@ public class ReadingServiceImpl implements ReadingService {
         }
         BookChapter bookChapter = bookChapterMapper.selectByPrimaryKey(readingTask.getChapterId());
 
+        BookAlbum bookAlbum = bookAlbumMapper.selectByPrimaryKey(readingBookMapper.selectByPrimaryKey(bookChapter.getBookId()).getAlbumId());
+
         BookChapterDetailDto bookChapterDetailDto = new BookChapterDetailDto();
         bookChapterDetailDto.setId(bookChapter.getId());
         bookChapterDetailDto.setChapterId(bookChapter.getId());
@@ -253,6 +256,8 @@ public class ReadingServiceImpl implements ReadingService {
         bookChapterDetailDto.setBookName(readingTask.getBookName());
         bookChapterDetailDto.setArticleUrl(bookChapter.getArticleUrl());
         bookChapterDetailDto.setVoiceUrl(bookChapter.getVoiceUrl());
+        bookChapterDetailDto.setArticleUrlList(Arrays.asList(bookChapter.getArticleUrl().split("\\;")));
+        bookChapterDetailDto.setType(bookAlbum.getType());
         bookChapterDetailDto.setReadCount(bookChapter.getReadCount());
         StudentTaskReadingRecord readingRecord = readingRecordMapper.selectByTaskIdAndStudentId(taskId, studentId);
         if (readingRecord != null) {
