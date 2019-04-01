@@ -286,15 +286,15 @@ public class ReadingServiceImpl implements ReadingService {
     public ChapterSearchListDto searchChapter(String name) {
         ChapterSearchListDto chapterSearchListDto = new ChapterSearchListDto();
         List<BookChapter> chineseList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_CHINESE);
-        setTypeAndArticleUrlList(chineseList);
+        chineseList = setTypeAndArticleUrlList(chineseList);
         chapterSearchListDto.setChineseList(getDetail(chineseList));
 
         List<BookChapter> readingList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_OUTSIDE_READING);
-        setTypeAndArticleUrlList(chineseList);
+        readingList = setTypeAndArticleUrlList(readingList);
         chapterSearchListDto.setReadingList(getDetail(readingList));
 
         List<BookChapter> englishList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_ENGLISH);
-        setTypeAndArticleUrlList(englishList);
+        englishList = setTypeAndArticleUrlList(englishList);
         chapterSearchListDto.setReadingList(getDetail(englishList));
 
         return chapterSearchListDto;
