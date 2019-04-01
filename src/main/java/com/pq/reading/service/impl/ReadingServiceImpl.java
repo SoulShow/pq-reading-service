@@ -286,12 +286,28 @@ public class ReadingServiceImpl implements ReadingService {
     public ChapterSearchListDto searchChapter(String name) {
         ChapterSearchListDto chapterSearchListDto = new ChapterSearchListDto();
         List<BookChapter> chineseList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_CHINESE);
+        setTypeAndArticleUrlList(chineseList);
         chapterSearchListDto.setChineseList(getDetail(chineseList));
+
         List<BookChapter> readingList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_OUTSIDE_READING);
+        setTypeAndArticleUrlList(chineseList);
         chapterSearchListDto.setReadingList(getDetail(readingList));
+
+        List<BookChapter> englishList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_ENGLISH);
+        setTypeAndArticleUrlList(englishList);
+        chapterSearchListDto.setReadingList(getDetail(englishList));
+
         return chapterSearchListDto;
     }
 
+    private List<BookChapter> setTypeAndArticleUrlList(List<BookChapter> list){
+        for(BookChapter bookChapter:list){
+            BookAlbum bookAlbum = bookAlbumMapper.selectByPrimaryKey(readingBookMapper.selectByPrimaryKey(bookChapter.getBookId()).getAlbumId());
+            bookChapter.setArticleUrlList(Arrays.asList(bookChapter.getArticleUrl().split("\\;")));
+            bookChapter.setType(bookAlbum.getType());
+        }
+        return list;
+    }
     private List<BookChapterDetailDto> getDetail(List<BookChapter> list) {
         List<BookChapterDetailDto> detailDtoList = new ArrayList<>();
         for (BookChapter bookChapter : list) {
