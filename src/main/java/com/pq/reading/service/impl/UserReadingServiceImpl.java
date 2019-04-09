@@ -291,6 +291,10 @@ public class UserReadingServiceImpl implements UserReadingService {
                 teacherReadingReadLogMapper.insert(teacherReadingReadLog);
             }
         }
+        myReadingDetailDto.setReadingRecordType(Constants.READING_TASK_TYPE_NORMAL);
+        if(!"0".equals(readingRecord.getTeacherId())&&readingRecord.getTeacherId()!=null){
+            myReadingDetailDto.setReadingRecordType(Constants.READING_TASK_TYPE_ONE_TO_ONE);
+        }
         return myReadingDetailDto;
     }
 
