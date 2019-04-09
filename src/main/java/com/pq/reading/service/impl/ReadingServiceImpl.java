@@ -292,7 +292,7 @@ public class ReadingServiceImpl implements ReadingService {
         chapterSearchListDto.setReadingList(getDetail(readingList));
 
         List<BookChapter> englishList = bookChapterMapper.selectByChapterNameAndType(name, Constants.READING_ALBUM_TYPE_ENGLISH);
-        chapterSearchListDto.setReadingList(getDetail(englishList));
+        chapterSearchListDto.setEnglishList(getDetail(englishList));
 
         return chapterSearchListDto;
     }
